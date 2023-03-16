@@ -12,7 +12,7 @@ class CustomButtonSmall extends StatelessWidget {
   final IconData? icon;
   CustomButtonSmall(
       {this.onPressed,
-      @required this.buttonText,
+      required this.buttonText,
       this.transparent = false,
       this.margin,
       this.width,
