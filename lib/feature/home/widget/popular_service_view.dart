@@ -77,193 +77,157 @@ class PopularServiceView extends GetView<ServiceController> {
                             }
                           }
                         }
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              right: Dimensions.PADDING_SIZE_DEFAULT),
-                          child: Stack(
-                            alignment: Get.find<LocalizationController>().isLtr
-                                ? Alignment.bottomRight
-                                : Alignment.bottomLeft,
-                            children: [
-                              Stack(
+                        return Container(
+                          margin: EdgeInsets.only(
+                              right: Dimensions.PADDING_SIZE_DEFAULT
+                          ),
+                          child: MyRippleButton(
+                              onTap: () => Get.toNamed(
+                                RouteHelper.getServiceRoute(
+                                    service.id!),
+                              ),
+                            child: Container(
+                              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
+                              // padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+                            width: Get.width / 2.3,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.RADIUS_SMALL),
+                                  boxShadow:
+                                      Get.isDarkMode ? null : cardShadow),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    width: Get.width / 2.3,
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context).cardColor,
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.RADIUS_SMALL),
-                                        boxShadow:
-                                            Get.isDarkMode ? null : cardShadow),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(
-                                          Dimensions.PADDING_SIZE_SMALL),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //image and service name
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Stack(
-                                                  children: [
-                                                    ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .all(Radius.circular(
-                                                              Dimensions
-                                                                  .RADIUS_SMALL)),
-                                                      child: CustomImage(
-                                                        image:
-                                                            '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${service.thumbnail}',
-                                                        fit: BoxFit.cover,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.5,
-                                                        height: 135,
-                                                      ),
-                                                    ),
-                                                    _discountModel
-                                                                .discountAmount! >
-                                                            0
-                                                        ? Align(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .all(Dimensions
-                                                                      .PADDING_SIZE_EXTRA_SMALL),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .errorColor,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          Dimensions
-                                                                              .RADIUS_DEFAULT),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          Dimensions
-                                                                              .RADIUS_SMALL),
-                                                                ),
-                                                              ),
-                                                              child:
-                                                                  Directionality(
-                                                                textDirection:
-                                                                    TextDirection
-                                                                        .rtl,
-                                                                child: Text(
-                                                                  PriceConverter
-                                                                      .percentageOrAmount(
-                                                                          '${_discountModel.discountAmount}',
-                                                                          '${_discountModel.discountAmountType}'),
-                                                                  style: ubuntuRegular
-                                                                      .copyWith(
-                                                                          color:
-                                                                              Colors.white),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : SizedBox(),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      Dimensions
-                                                          .PADDING_SIZE_RADIUS),
-                                                  child: Text(service.name!,
-                                                      style: ubuntuMedium.copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeDefault),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.center),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      Dimensions
-                                                          .PADDING_SIZE_MINI),
-                                                  child: Text(
-                                                    service.shortDescription!,
-                                                    style: ubuntuLight.copyWith(
-                                                        fontSize: Dimensions
-                                                            .fontSizeExtraSmall,
-                                                        color: Theme.of(context)
-                                                            .disabledColor),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
+                                  Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius
+                                            .all(Radius.circular(
+                                                Dimensions
+                                                    .RADIUS_SMALL)),
+                                        child: CustomImage(
+                                          image:
+                                              '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${service.thumbnail}',
+                                          fit: BoxFit.cover,
+                                          width: MediaQuery.of(
+                                                      context)
+                                                  .size
+                                                  .width,
+                                          height: 135,
+                                        ),
+                                      ),
+                                      _discountModel
+                                                  .discountAmount! >
+                                              0
+                                          ? Align(
+                                              alignment: Alignment
+                                                  .centerLeft,
+                                              child: Container(
+                                                padding: EdgeInsets
+                                                    .all(Dimensions
+                                                        .PADDING_SIZE_EXTRA_SMALL),
+                                                decoration:
+                                                    BoxDecoration(
+                                                  color: Theme.of(
+                                                          context)
+                                                      .errorColor,
+                                                  borderRadius:
+                                                      BorderRadius
+                                                          .only(
+                                                    bottomRight: Radius
+                                                        .circular(
+                                                            Dimensions
+                                                                .RADIUS_DEFAULT),
+                                                    topLeft: Radius
+                                                        .circular(
+                                                            Dimensions
+                                                                .RADIUS_SMALL),
                                                   ),
                                                 ),
-                                              ],
+                                                child:
+                                                    Directionality(
+                                                  textDirection:
+                                                      TextDirection
+                                                          .rtl,
+                                                  child: Text(
+                                                    PriceConverter
+                                                        .percentageOrAmount(
+                                                            '${_discountModel.discountAmount}',
+                                                            '${_discountModel.discountAmountType}'),
+                                                    style: ubuntuRegular
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3,),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(service.name!,
+                                            style: ubuntuMedium.copyWith(
+                                                fontSize: Dimensions
+                                                    .fontSizeDefault),
+                                            maxLines: 1,
+                                            overflow:
+                                            TextOverflow.ellipsis,
+                                            textAlign:
+                                            TextAlign.center),
+                                        SizedBox(height: 1,),
+                                        Text(
+                                          service.shortDescription!,
+                                          style: ubuntuLight.copyWith(
+                                              fontSize: Dimensions
+                                                  .fontSizeExtraSmall,
+                                              color: Theme.of(context)
+                                                  .disabledColor),
+                                          maxLines: 2,
+                                          overflow:
+                                          TextOverflow.ellipsis,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        SizedBox(height: 2,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            CommonSubmitButton(
+                                              text: 'Book Now'.tr,
+                                              fontSize: Dimensions.fontSizeSmall,
+                                              onTap:  () => showModalBottomSheet(
+                                                  context: context,
+                                                  useRootNavigator: true,
+                                                  isScrollControlled: true,
+                                                  builder: (context) =>
+                                                      ServiceCenterDialog(
+                                                        service: service,
+                                                      ),
+                                                  backgroundColor:
+                                                  Colors.transparent),
+
                                             ),
-                                          ]),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Positioned.fill(
-                                    child: RippleButton(
-                                      onTap: () => Get.toNamed(
-                                        RouteHelper.getServiceRoute(
-                                            service.id!),
-                                      ),
-                                    ),
-                                  ),
+                                  )
+
                                 ],
                               ),
-                              Positioned(
-                                bottom: 4.0,
-                                right: 4.0,
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                        alignment:
-                                            AlignmentDirectional.bottomEnd,
-                                        child: SizedBox(
-                                          height: 30.0,
-                                          width: 100.0,
-                                          child: CustomButtonSmall(
-                                            buttonText: 'Book Now'.tr,
-                                          ),
-                                        )),
-                                    Positioned.fill(
-                                      child: CustomButtonSmall(
-                                        buttonText: 'Book Now'.tr,
-                                        onPressed: () => showModalBottomSheet(
-                                            context: context,
-                                            useRootNavigator: true,
-                                            isScrollControlled: true,
-                                            builder: (context) =>
-                                                ServiceCenterDialog(
-                                                  service: service,
-                                                ),
-                                            backgroundColor:
-                                                Colors.transparent),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
-                  SizedBox(
-                    height: Dimensions.PADDING_SIZE_DEFAULT,
-                  )
                 ],
               ),
             );
@@ -277,6 +241,23 @@ class PopularServiceView extends GetView<ServiceController> {
     );
   }
 }
+
+/* MyCustomButtonSmall(
+                                      height: 25,
+                                      margin: EdgeInsets.zero,
+                                      width: 100,
+                                      buttonText: 'Book Now'.tr,
+                                      onPressed: () => showModalBottomSheet(
+                                          context: context,
+                                          useRootNavigator: true,
+                                          isScrollControlled: true,
+                                          builder: (context) =>
+                                              ServiceCenterDialog(
+                                                service: service,
+                                              ),
+                                          backgroundColor:
+                                          Colors.transparent),
+                                    ),*/
 
 class PopularServiceShimmer extends StatelessWidget {
   final bool enabled;
