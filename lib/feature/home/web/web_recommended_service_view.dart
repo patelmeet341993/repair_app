@@ -126,68 +126,69 @@ class ServiceModelView extends StatelessWidget {
       }
     }
     return Container(
+      padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
         boxShadow: Get.isDarkMode ? null : cardShadow,
       ),
       child: Row(children: [
-        Stack(children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Dimensions.PADDING_SIZE_SMALL,
-              vertical: Dimensions.PADDING_SIZE_SMALL,
-            ),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  child: CustomImage(
-                    image:
-                        '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${serviceList[index].thumbnail}',
-                    height: 111,
-                    width: 90,
-                    fit: BoxFit.cover,
-                  ),
+        Container(
+          // padding: EdgeInsets.symmetric(
+          //   horizontal: Dimensions.PADDING_SIZE_SMALL,
+          //   vertical: Dimensions.PADDING_SIZE_SMALL,
+          // ),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                child: CustomImage(
+                  image:
+                      '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${serviceList[index].thumbnail}',
+                  height: 111,
+                  width: 90,
+                  fit: BoxFit.cover,
                 ),
-                if (discountAmount != null &&
-                    discountAmountType != null &&
-                    discountAmount! > 0)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        padding:
-                            EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).errorColor,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft:
-                                Radius.circular(Dimensions.RADIUS_DEFAULT),
-                            topRight: Radius.circular(Dimensions.RADIUS_SMALL),
-                          ),
+              ),
+              if (discountAmount != null &&
+                  discountAmountType != null &&
+                  discountAmount! > 0)
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      padding:
+                          EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).errorColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft:
+                              Radius.circular(Dimensions.RADIUS_DEFAULT),
+                          topRight: Radius.circular(Dimensions.RADIUS_SMALL),
                         ),
-                        child: Text(
-                          PriceConverter.percentageOrAmount(
-                              '$discountAmount', discountAmountType!),
-                          style: ubuntuMedium.copyWith(
-                              color: Theme.of(context).primaryColorLight),
-                        ),
+                      ),
+                      child: Text(
+                        PriceConverter.percentageOrAmount(
+                            '$discountAmount', discountAmountType!),
+
+                        style: ubuntuMedium.copyWith(
+                            color: Theme.of(context).primaryColorLight),
                       ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
-        ]),
+        ),
+        SizedBox(width: 15,),
         Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: Dimensions.PADDING_SIZE_SMALL,
-                vertical: Dimensions.PADDING_SIZE_MINI),
+          child: Container(
+            // padding: EdgeInsets.symmetric(
+            //     horizontal: Dimensions.PADDING_SIZE_SMALL,
+            //     vertical: Dimensions.PADDING_SIZE_MINI),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
                     serviceList[index].name!,
@@ -196,14 +197,17 @@ class ServiceModelView extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                  SizedBox(height:2),
+                  //SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                   RatingBar(
                     rating:
                         double.parse(serviceList[index].avgRating.toString()),
                     size: 15,
                     ratingCount: serviceList[index].ratingCount,
                   ),
-                  SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                  SizedBox(height:2),
+
+                 // SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                   Text(
                     serviceList[index].shortDescription!,
                     style: ubuntuLight.copyWith(
@@ -212,26 +216,38 @@ class ServiceModelView extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                  SizedBox(height:2),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(""),
-                      SizedBox(
-                        height: 30.0,
-                        width: 100.0,
-                        child: CustomButtonSmall(
-                          buttonText: 'Book Now'.tr,
-                          onPressed: () {
-                            Get.toNamed(
-                              RouteHelper.getServiceRoute(
-                                  serviceList![index].id!),
-                              arguments: ServiceDetailsScreen(
-                                  serviceID: serviceList![index].id!),
-                            );
-                          },
-                        ),
-                      )
+                      CommonSubmitButton(
+                        text: 'Book Now'.tr,
+                        fontSize: Dimensions.fontSizeSmall,
+                        onTap:  (){
+                          Get.toNamed(
+                            RouteHelper.getServiceRoute(
+                                serviceList![index].id!),
+                            arguments: ServiceDetailsScreen(
+                                serviceID: serviceList![index].id!),
+                          );
+                        }
+
+                      ),
+                      // SizedBox(
+                      //  // height: 30.0,
+                      //   width: 100.0,
+                      //   child: CustomButtonSmall(
+                      //     buttonText: 'Book Now'.tr,
+                      //     onPressed: () {
+                      //       Get.toNamed(
+                      //         RouteHelper.getServiceRoute(
+                      //             serviceList![index].id!),
+                      //         arguments: ServiceDetailsScreen(
+                      //             serviceID: serviceList![index].id!),
+                      //       );
+                      //     },
+                      //   ),
+                      // )
                     ],
                   ),
                 ]),

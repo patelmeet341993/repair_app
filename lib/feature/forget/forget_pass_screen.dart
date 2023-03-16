@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:repair/components/footer_base_view.dart';
 import 'package:repair/components/menu_drawer.dart';
 import 'package:repair/components/web_shadow_wrap.dart';
@@ -78,9 +79,10 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                             Row(
                               children: [
                                 CodePickerWidget(
-                                  onChanged: (CountryCode countryCode) =>
+                                  onChanged: (dynamic countryCode) =>
                                       authController.countryDialCode =
                                           countryCode.dialCode!,
+
                                   initialSelection:
                                       authController.countryDialCode,
                                   favorite: [authController.countryDialCode],
@@ -109,7 +111,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                                       countryDialCode: authController
                                           .countryDialCode,
                                       onCountryChanged:
-                                          (CountryCode countryCode) =>
+                                          (dynamic countryCode) =>
                                               authController.countryDialCode =
                                                   countryCode.dialCode!,
                                       onValidate: (String? value) {

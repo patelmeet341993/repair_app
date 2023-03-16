@@ -12,12 +12,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (ResponsiveHelper.isMobilePhone()) {
     HttpOverrides.global = new MyHttpOverrides();
     await FlutterDownloader.initialize();
   }
   setPathUrlStrategy();
-  WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isWeb) {
     await Firebase.initializeApp(
         options: FirebaseOptions(
@@ -27,7 +27,7 @@ Future<void> main() async {
       projectId: 'demandium-16b0f',
       storageBucket: "demandium-16b0f.appspot.com",
     ));
-    await FacebookAuth.instance.webInitialize(
+    await FacebookAuth.instance.webAndDesktopInitialize(
       appId: "637072917840079",
       cookie: true,
       xfbml: true,

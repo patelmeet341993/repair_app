@@ -238,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Row(
           children: [
             CodePickerWidget(
-              onChanged: (CountryCode countryCode) => authController
+              onChanged: (dynamic countryCode) => authController
                   .countryDialCodeForSignup = countryCode.dialCode!,
               initialSelection: authController.countryDialCodeForSignup,
               favorite: [authController.countryDialCodeForSignup],

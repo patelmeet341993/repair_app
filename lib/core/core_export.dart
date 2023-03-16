@@ -1,6 +1,5 @@
 export 'dart:async';
 export 'dart:io';
-export 'package:country_code_picker/country_code.dart';
 export 'package:repair/feature/auth/controller/auth_controller.dart';
 export 'package:repair/controller/localization_controller.dart';
 export 'package:repair/feature/splash/controller/splash_controller.dart';

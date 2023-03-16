@@ -90,7 +90,7 @@ class _EditProfileGeneralInfoState extends State<EditProfileGeneralInfo> {
                         focusNode: _phoneWithCountry,
                         countryDialCode: Get.find<EditProfileTabController>()
                             .countryDialCode,
-                        onCountryChanged: (CountryCode countryCode) =>
+                        onCountryChanged: (dynamic countryCode) =>
                             Get.find<EditProfileTabController>()
                                 .countryDialCode = countryCode.dialCode!,
                       ),

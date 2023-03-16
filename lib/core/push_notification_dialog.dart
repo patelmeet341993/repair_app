@@ -25,8 +25,8 @@ class _NewRequestDialogState extends State<PushNotificationDialog> {
   }
 
   void _startAlarm() async {
-    AudioCache _audio = AudioCache();
-    _audio.play('notification.wav');
+    AudioPlayer _audio1 = AudioPlayer();
+    _audio1.play(AssetSource('notification.wav'));
   }
 
   @override
