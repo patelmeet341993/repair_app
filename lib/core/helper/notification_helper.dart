@@ -10,11 +10,25 @@ class NotificationHelper {
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     var androidInitialize =
         new AndroidInitializationSettings('notification_icon');
-    var iOSInitialize = new IOSInitializationSettings();
+   // var iOSInitialize = new IOSInitializationSettings();
+    var iOSInitialize = new  DarwinInitializationSettings();
     var initializationsSettings = new InitializationSettings(
         android: androidInitialize, iOS: iOSInitialize);
     flutterLocalNotificationsPlugin.initialize(initializationsSettings,
-        onSelectNotification: (String? payload) async {
+        onDidReceiveNotificationResponse:  (NotificationResponse notificationResponse)  {
+          String payload = notificationResponse.payload ?? '';
+          printLog("payload:${payload}");
+          try {
+            if (payload != null && payload.isNotEmpty) {
+              Get.toNamed(
+                  RouteHelper.getBookingDetailsScreen(payload, 'fromNotification'));
+            } else {
+              Get.toNamed(RouteHelper.getNotificationRoute());
+            }
+          } catch (e) {}
+          return null;
+        },
+        /*onSelectNotification: (String? payload) async {
       printLog("payload:$payload");
       try {
         if (payload != null && payload.isNotEmpty) {
@@ -25,7 +39,8 @@ class NotificationHelper {
         }
       } catch (e) {}
       return;
-    });
+    }*/
+    );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       printLog(

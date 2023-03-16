@@ -20,7 +20,7 @@ class CustomTextField extends StatefulWidget {
   final Function(String text)? onChanged;
   final String? countryDialCode;
   final String? suffixIconUrl;
-  final Function(CountryCode countryCode)? onCountryChanged;
+  final Function(dynamic countryCode)? onCountryChanged;
   final String? Function(String?)? onValidate;
 
   CustomTextField({
