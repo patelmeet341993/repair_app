@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:repair/components/ripple_button.dart';
 import 'package:repair/components/service_center_dialog.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:touch_ripple_effect/touch_ripple_effect.dart';
 
 class PopularServiceView extends GetView<ServiceController> {
   @override
@@ -81,21 +82,30 @@ class PopularServiceView extends GetView<ServiceController> {
                           margin: EdgeInsets.only(
                               right: Dimensions.PADDING_SIZE_DEFAULT
                           ),
+                          decoration: BoxDecoration(
+
+                              // color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.RADIUS_SMALL),
+                              boxShadow: Get.isDarkMode ? null : cardShadow
+                          ),
+
                           child: MyRippleButton(
-                              onTap: () => Get.toNamed(
-                                RouteHelper.getServiceRoute(
-                                    service.id!),
-                              ),
+                            onTap: () => Get.toNamed(
+                              RouteHelper.getServiceRoute(
+                                  service.id!),
+                            ),
                             child: Container(
                               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
-                              // padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                             width: Get.width / 2.3,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
+                                 color: Colors.white,
+
+                                  // color: Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(
                                       Dimensions.RADIUS_SMALL),
-                                  boxShadow:
-                                      Get.isDarkMode ? null : cardShadow),
+                                  //boxShadow: Get.isDarkMode ? null : cardShadow
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
