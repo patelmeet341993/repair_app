@@ -1,4 +1,5 @@
 import '../../../core/core_export.dart';
+import '../../../utils/parsing_helper.dart';
 
 class ServiceModel {
   String? responseCode;
@@ -174,7 +175,7 @@ class Service {
     orderCount = json['order_count'];
     isActive = json['is_active'];
     ratingCount = json['rating_count'];
-    avgRating = json['avg_rating'].toDouble();
+    avgRating = ParsingHelper.parseDoubleMethod(json['avg_rating']);
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     variationsAppFormat = json['variations_app_format'] != null

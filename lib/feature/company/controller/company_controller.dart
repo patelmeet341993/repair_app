@@ -19,12 +19,12 @@ class CompanyController extends GetxController implements GetxService {
   int? _offset = 1;
 
   List<Data>? get companyContent => _companyContent;
-  bool get isLoading => _isLoading;
   int? get pageSize => _pageSize;
+  int? get offset => _offset;
+  bool get isLoading => _isLoading;
   bool? get isSearching => _isSearching;
   String? get type => _type;
   String? get searchText => _searchText;
-  int? get offset => _offset;
 
   final ScrollController scrollController = ScrollController();
 
