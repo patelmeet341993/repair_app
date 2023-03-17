@@ -7,8 +7,11 @@ import 'package:repair/feature/company/view/additional_issue_screen.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 
+import '../controller/company_controller.dart';
+
 class CompanyScreen extends StatefulWidget {
   final String serviceID;
+
   const CompanyScreen({Key? key, required this.serviceID}) : super(key: key);
 
   @override
@@ -30,12 +33,10 @@ class _CompanyScreenState extends State<CompanyScreen> {
   @override
   void initState() {
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         int pageSize = Get.find<CompanyTabController>().pageSize ?? 0;
         if (Get.find<CompanyTabController>().offset! < pageSize) {
-          Get.find<CompanyTabController>().getServiceReview(
-              widget.serviceID, Get.find<CompanyTabController>().offset! + 1);
+          Get.find<CompanyTabController>().getServiceReview(widget.serviceID, Get.find<CompanyTabController>().offset! + 1);
         }
       }
     });
@@ -129,8 +130,8 @@ class _CompanyScreenState extends State<CompanyScreen> {
           ]),
       // CustomAppBar(centerTitle: false, title: 'Select Companies'.tr,showCart: true,),
       body: GetBuilder<CompanyDetailsController>(initState: (state) {
-        Get.find<CompanyDetailsController>()
-            .getServiceDetails(widget.serviceID);
+        Get.find<CompanyDetailsController>().getServiceDetails(widget.serviceID);
+        Get.find<CompanyDetailsController>().getCompanyList(Get.find<CompanyController>().offset ?? 1, false, widget.serviceID);
       }, builder: (serviceController) {
         if (serviceController.service != null) {
           if (serviceController.service!.id != null) {
@@ -138,17 +139,10 @@ class _CompanyScreenState extends State<CompanyScreen> {
             Discount _discount = PriceConverter.discountCalculation(service!);
             double _lowestPrice = 0.0;
             if (service.variationsAppFormat!.zoneWiseVariations != null) {
-              _lowestPrice = service
-                  .variationsAppFormat!.zoneWiseVariations![0].price!
-                  .toDouble();
-              for (var i = 0;
-                  i < service.variationsAppFormat!.zoneWiseVariations!.length;
-                  i++) {
-                if (service.variationsAppFormat!.zoneWiseVariations![i].price! <
-                    _lowestPrice) {
-                  _lowestPrice = service
-                      .variationsAppFormat!.zoneWiseVariations![i].price!
-                      .toDouble();
+              _lowestPrice = service.variationsAppFormat!.zoneWiseVariations![0].price!.toDouble();
+              for (var i = 0; i < service.variationsAppFormat!.zoneWiseVariations!.length; i++) {
+                if (service.variationsAppFormat!.zoneWiseVariations![i].price! < _lowestPrice) {
+                  _lowestPrice = service.variationsAppFormat!.zoneWiseVariations![i].price!.toDouble();
                 }
               }
             }
@@ -156,23 +150,15 @@ class _CompanyScreenState extends State<CompanyScreen> {
               children: [
                 Expanded(
                     child: FooterBaseView(
-                  isScrollView:
-                      ResponsiveHelper.isMobile(context) ? false : true,
+                  isScrollView: ResponsiveHelper.isMobile(context) ? false : true,
                   child: SizedBox(
                     width: Dimensions.WEB_MAX_WIDTH,
                     child: DefaultTabController(
-                      length: Get.find<CompanyDetailsController>()
-                                  .service!
-                                  .faqs!
-                                  .length >
-                              0
-                          ? 3
-                          : 2,
+                      length: Get.find<CompanyDetailsController>().service!.faqs!.length > 0 ? 3 : 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (!ResponsiveHelper.isMobile(context) &&
-                              !ResponsiveHelper.isTab(context))
+                          if (!ResponsiveHelper.isMobile(context) && !ResponsiveHelper.isTab(context))
                             SizedBox(
                               height: Dimensions.PADDING_SIZE_DEFAULT,
                             ),
@@ -182,50 +168,31 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.all(
-                                        (!ResponsiveHelper.isMobile(context) &&
-                                                !ResponsiveHelper.isTab(
-                                                    context))
-                                            ? Radius.circular(8)
-                                            : Radius.circular(0.0)),
+                                        (!ResponsiveHelper.isMobile(context) && !ResponsiveHelper.isTab(context)) ? Radius.circular(8) : Radius.circular(0.0)),
                                     child: Stack(
                                       children: [
                                         Center(
                                           child: Container(
                                             width: Dimensions.WEB_MAX_WIDTH,
-                                            height: ResponsiveHelper.isDesktop(
-                                                    context)
-                                                ? 280
-                                                : 150,
+                                            height: ResponsiveHelper.isDesktop(context) ? 280 : 150,
                                             child: CustomImage(
-                                              image:
-                                                  '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${service.coverImage}',
+                                              image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${service.coverImage}',
                                             ),
                                           ),
                                         ),
                                         Center(
                                           child: Container(
                                             width: Dimensions.WEB_MAX_WIDTH,
-                                            height: ResponsiveHelper.isDesktop(
-                                                    context)
-                                                ? 280
-                                                : 150,
-                                            decoration: BoxDecoration(
-                                                color: Colors.black
-                                                    .withOpacity(0.6)),
+                                            height: ResponsiveHelper.isDesktop(context) ? 280 : 150,
+                                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.6)),
                                           ),
                                         ),
                                         Container(
                                           width: Dimensions.WEB_MAX_WIDTH,
-                                          height: ResponsiveHelper.isDesktop(
-                                                  context)
-                                              ? 280
-                                              : 150,
+                                          height: ResponsiveHelper.isDesktop(context) ? 280 : 150,
                                           child: Center(
                                               child: Text(service.name ?? '',
-                                                  style: ubuntuMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeExtraLarge,
-                                                      color: Colors.white))),
+                                                  style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: Colors.white))),
                                         ),
                                       ],
                                     ),
@@ -239,7 +206,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                 child: Column(
                               children: [
                                 FilterchipWidget(
-                                  chipName: itemList1,
+                                  chipName: serviceController.companyContent ?? [],
                                   serviceID: '',
                                 ),
                               ],
@@ -261,8 +228,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     radius: Dimensions.RADIUS_DEFAULT,
                     buttonText: 'Proceed to Add Details',
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (BuildContext context) {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                         return AdditionalIssueScreen();
                       }));
                     },
@@ -282,6 +248,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
       }),
     );
   }
+
   // var details;
   // void searchlabel(String query){
   //   final suggestion = itemList1.where((item) {
@@ -311,10 +278,9 @@ class _CompanyScreenState extends State<CompanyScreen> {
 
 class FilterchipWidget extends StatefulWidget {
   final String serviceID;
-  final List<CompanyDetailsModel> chipName;
-  const FilterchipWidget(
-      {Key? key, required this.chipName, required this.serviceID})
-      : super(key: key);
+  final List<Data> chipName;
+
+  const FilterchipWidget({Key? key, required this.chipName, required this.serviceID}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _FilterchipWidgetState();
@@ -334,252 +300,147 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: widget.chipName.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                              padding: EdgeInsets.only(top: 5.0),
-                              //padding: EdgeInsets.all(10),
-                              child: Stack(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+            Expanded(
+                child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: widget.chipName.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          padding: EdgeInsets.only(top: 5.0),
+                          //padding: EdgeInsets.all(10),
+                          child: Stack(
+                            children: <Widget>[
+                              Positioned(
+                                bottom: 80.0,
+                                right: 5.0,
+                                child: TextButton(
+                                  child: Text("View Profile", style: TextStyle(fontSize: 12.0, color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+                                  onPressed: () {
+                                    // Get.toNamed(RouteHelper.getSelectedCompanyRoute(
+                                    //     company_image: widget.chipName[index].companyIcon,
+                                    // ));
+                                  },
+                                ),
+                              ),
+                              Column(
                                 children: <Widget>[
-                                  Positioned(
-                                    bottom: 80.0,
-                                    right: 5.0,
-                                    child: TextButton(
-                                      child: Text("View Profile",
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              color: Colors.blueAccent,
-                                              fontWeight: FontWeight.bold)),
-                                      onPressed: () {
-                                        // Get.toNamed(RouteHelper.getSelectedCompanyRoute(
-                                        //     company_image: widget.chipName[index].companyIcon,
-                                        // ));
-                                      },
-                                    ),
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.0,
-                                                top: 5.0,
-                                                bottom: 5.0),
-                                            child: Positioned(
-                                                child: Container(
-                                              height: Dimensions
-                                                  .PAGES_BOTTOM_PADDING,
-                                              width: Dimensions
-                                                  .PAGES_BOTTOM_PADDING,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  color: Colors.grey),
-                                              child: Image.asset(
-                                                Images.companyLogo,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
+                                        child: Positioned(
+                                            child: Container(
+                                          height: Dimensions.PAGES_BOTTOM_PADDING,
+                                          width: Dimensions.PAGES_BOTTOM_PADDING,
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
+                                          child: Image.asset(
+                                            Images.companyLogo,
+                                            fit: BoxFit.cover,
                                           ),
-                                          Padding(
-                                              padding: EdgeInsets.all(Dimensions
-                                                  .PADDING_SIZE_EXTRA_SMALL)),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                        )),
+                                      ),
+                                      Padding(padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL)),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_MINI),
+                                            child: Text(
+                                              "${widget.chipName[index].companyName}",
+                                              style: ubuntuRegular.copyWith(
+                                                  fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
+                                                  fontWeight: FontWeight.bold),
+                                              maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 240,
+                                            padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_MINI),
+                                            child: Text(
+                                              "${widget.chipName[index].aboutCompany}",
+                                              style: ubuntuRegular.copyWith(
+                                                  fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
+                                                  fontWeight: FontWeight.w500),
+                                              maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_MINI),
+                                            child: Text(
+                                              "${widget.chipName[index].orderCount}",
+                                              style: ubuntuRegular.copyWith(
+                                                  fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold),
+                                              maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Row(
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.all(
-                                                    Dimensions
-                                                        .PADDING_SIZE_MINI),
-                                                child: Text(
-                                                  "widget.chipName[index].companyName",
-                                                  style: ubuntuRegular.copyWith(
-                                                      fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width <
-                                                              300
-                                                          ? Dimensions
-                                                              .fontSizeExtraSmall
-                                                          : Dimensions
-                                                              .fontSizeSmall,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  maxLines:
-                                                      MediaQuery.of(context)
-                                                                  .size
-                                                                  .width <
-                                                              300
-                                                          ? 1
-                                                          : 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_MINI),
+                                                child: Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
                                                 ),
                                               ),
                                               Container(
-                                                width: 240,
-                                                padding: const EdgeInsets.all(
-                                                    Dimensions
-                                                        .PADDING_SIZE_MINI),
+                                                padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_MINI),
                                                 child: Text(
-                                                  "widget.chipName[index].description",
+                                                  "${widget.chipName[index].avgRating}",
                                                   style: ubuntuRegular.copyWith(
-                                                      fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width <
-                                                              300
-                                                          ? Dimensions
-                                                              .fontSizeExtraSmall
-                                                          : Dimensions
-                                                              .fontSizeSmall,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                  maxLines:
-                                                      MediaQuery.of(context)
-                                                                  .size
-                                                                  .width <
-                                                              300
-                                                          ? 1
-                                                          : 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(
-                                                    Dimensions
-                                                        .PADDING_SIZE_MINI),
-                                                child: Text(
-                                                  "widget.chipName[index].order",
-                                                  style: ubuntuRegular.copyWith(
-                                                      fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width <
-                                                              300
-                                                          ? Dimensions
-                                                              .fontSizeExtraSmall
-                                                          : Dimensions
-                                                              .fontSizeSmall,
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  maxLines:
-                                                      MediaQuery.of(context)
-                                                                  .size
-                                                                  .width <
-                                                              300
-                                                          ? 1
-                                                          : 2,
-                                                  textAlign: TextAlign.center,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                            .all(
-                                                        Dimensions
-                                                            .PADDING_SIZE_MINI),
-                                                    child: Icon(
-                                                      Icons.star,
+                                                      fontSize:
+                                                          MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
                                                       color: Colors.amber,
-                                                    ),
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_MINI),
+                                                child: Text(
+                                                  "(${widget.chipName[index].ratingCount})",
+                                                  style: ubuntuRegular.copyWith(
+                                                    fontSize:
+                                                        MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
                                                   ),
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                            .all(
-                                                        Dimensions
-                                                            .PADDING_SIZE_MINI),
-                                                    child: Text(
-                                                      "widget.chipName[index].rating",
-                                                      style: ubuntuRegular.copyWith(
-                                                          fontSize: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width <
-                                                                  300
-                                                              ? Dimensions
-                                                                  .fontSizeExtraSmall
-                                                              : Dimensions
-                                                                  .fontSizeSmall,
-                                                          color: Colors.amber,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                            .all(
-                                                        Dimensions
-                                                            .PADDING_SIZE_MINI),
-                                                    child: Text(
-                                                      "(0)",
-                                                      style: ubuntuRegular
-                                                          .copyWith(
-                                                        fontSize: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width <
-                                                                300
-                                                            ? Dimensions
-                                                                .fontSizeExtraSmall
-                                                            : Dimensions
-                                                                .fontSizeSmall,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                                ),
                                               )
                                             ],
                                           )
                                         ],
                                       )
                                     ],
-                                  ),
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Positioned(
-                                      bottom: 1.0,
-                                      right: 5.0,
-                                      child: SizedBox(
-                                        height: 25,
-                                        width: 90,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            setState(() =>
-                                                _isSelected = !_isSelected);
-                                          },
-                                          child: _isSelected
-                                              ? Text("Selected")
-                                              : Text("Select"),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: _isSelected
-                                                ? Colors.green
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .primary, // This is what you need!
-                                          ),
-                                        ),
-                                      ))
+                                  )
                                 ],
-                              ));
-                        }))
-              ]),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Positioned(
+                                  bottom: 1.0,
+                                  right: 5.0,
+                                  child: SizedBox(
+                                    height: 25,
+                                    width: 90,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        setState(() => _isSelected = !_isSelected);
+                                      },
+                                      child: _isSelected ? Text("Selected") : Text("Select"),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: _isSelected ? Colors.green : Theme.of(context).colorScheme.primary, // This is what you need!
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ));
+                    }))
+          ]),
         ),
       ),
     ));
