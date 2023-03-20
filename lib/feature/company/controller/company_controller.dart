@@ -46,7 +46,7 @@ class CompanyController extends GetxController implements GetxService {
   Future<void> getCompanyList(int offset, bool reload) async {
     _offset = offset;
     if (_companyContent == null || reload) {
-      Response response = await companyRepo.getCompanyList(offset);
+      Response response = await companyRepo.getCompanyList(offset,"");
       if (response.statusCode == 200) {
         _companyContent = [];
         response.body['content']['data'].forEach((company) {

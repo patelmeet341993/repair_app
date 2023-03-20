@@ -11,8 +11,9 @@ import '../controller/company_controller.dart';
 
 class CompanyScreen extends StatefulWidget {
   final String serviceID;
+  final String subCategoryId;
 
-  const CompanyScreen({Key? key, required this.serviceID}) : super(key: key);
+  const CompanyScreen({Key? key, required this.serviceID, required this.subCategoryId}) : super(key: key);
 
   @override
   State<CompanyScreen> createState() => _CompanyScreenState();
@@ -29,6 +30,8 @@ class _CompanyScreenState extends State<CompanyScreen> {
   bool isRatingDescending = false;
   late String item1;
   late String item2;
+  bool checkedValue = false;
+
 
   @override
   void initState() {
@@ -131,7 +134,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
       // CustomAppBar(centerTitle: false, title: 'Select Companies'.tr,showCart: true,),
       body: GetBuilder<CompanyDetailsController>(initState: (state) {
         Get.find<CompanyDetailsController>().getServiceDetails(widget.serviceID);
-        Get.find<CompanyDetailsController>().getCompanyList(Get.find<CompanyController>().offset ?? 1, false, widget.serviceID);
+        Get.find<CompanyDetailsController>().getCompanyList(Get.find<CompanyController>().offset ?? 1, false, widget.serviceID,widget.subCategoryId);
       }, builder: (serviceController) {
         if (serviceController.service != null) {
           if (serviceController.service!.id != null) {
@@ -261,8 +264,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
   //   });
   //   print(details);
   // }
-
-  bool checkedValue = false;
 
   Widget selectIcon(int index) {
     return Checkbox(

@@ -104,7 +104,7 @@ class RouteHelper {
   static String getSearchResultRoute({String? queryText}) =>
       '$searchScreen?query=${queryText ?? ''}';
   static String getServiceRoute(String id) => '$service?id=$id';
-  static String getCompanyRoute(String id) => '$companies?id=$id';
+  static String getCompanyRoute(String id, String subCategoryId) => '$companies?id=$id&subCategoryId=$subCategoryId';
   static String getSelectedCompanyRoute({required String company_image}) =>
       '$selectedCompanies';
   static String getAdditionalIssueRoute() => '$additionalIssue';
@@ -314,7 +314,7 @@ class RouteHelper {
         page: () {
           return getRoute(Get.arguments != null
               ? Get.arguments
-              : CompanyScreen(serviceID: Get.parameters['id']!));
+              : CompanyScreen(serviceID: Get.parameters['id']!, subCategoryId: Get.parameters["subCategoryId"] ?? "",));
         }),
     GetPage(name: profile, page: () => getRoute(ProfileScreen())),
     GetPage(

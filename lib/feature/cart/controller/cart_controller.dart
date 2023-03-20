@@ -172,7 +172,7 @@ class CartController extends GetxController implements GetxService {
     update();
   }
 
-  void addDataToCart(String? id) {
+  void addDataToCart(String? id, String subCategoryId) {
     if (_cartList.length > 0 &&
         _initialCartList.first.subCategoryId != _cartList.first.subCategoryId) {
       Get.back();
@@ -190,8 +190,8 @@ class CartController extends GetxController implements GetxService {
           _cartTotalCost();
           update();
           onDemandToast("successfully_added_to_cart".tr, Colors.green);
-          Get.toNamed(RouteHelper.getCompanyRoute(id!),
-              arguments: CompanyScreen(serviceID: id!));
+          Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
+              arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
         },
       ));
     } else {
@@ -199,12 +199,12 @@ class CartController extends GetxController implements GetxService {
       _cartTotalCost();
       update();
       onDemandToast("successfully_added_to_cart".tr, Colors.green);
-      Get.toNamed(RouteHelper.getCompanyRoute(id!),
-          arguments: CompanyScreen(serviceID: id!));
+      Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
+          arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
     }
   }
 
-  Future<void> addCartToServer(String? id) async {
+  Future<void> addCartToServer(String? id, String subCategoryId) async {
     _isLoading = true;
     update();
     _replaceCartList();
@@ -219,8 +219,8 @@ class CartController extends GetxController implements GetxService {
           Get.back();
         },
         onYesPressed: () async {
-          Get.toNamed(RouteHelper.getCompanyRoute(id!),
-              arguments: CompanyScreen(serviceID: id));
+          Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
+              arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
           Get.dialog(
             CustomLoader(),
             barrierDismissible: false,
@@ -235,8 +235,8 @@ class CartController extends GetxController implements GetxService {
           onDemandToast("successfully_added_to_cart".tr, Colors.green);
           clearCartList();
           await getCartListFromServer();
-          Get.toNamed(RouteHelper.getCompanyRoute(id!),
-              arguments: CompanyScreen(serviceID: id));
+          Get.toNamed(RouteHelper.getCompanyRoute(id,subCategoryId),
+              arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
         },
       ));
     } else {
@@ -249,8 +249,8 @@ class CartController extends GetxController implements GetxService {
       _isLoading = false;
       onDemandToast("successfully_added_to_cart".tr, Colors.green);
       clearCartList();
-      Get.toNamed(RouteHelper.getCompanyRoute(id!),
-          arguments: CompanyScreen(serviceID: id));
+      Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
+          arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
     }
     update();
   }
