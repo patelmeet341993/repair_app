@@ -30,6 +30,7 @@ class MyRippleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  TouchRippleEffect(
+      onTap: onTap,
       rippleColor: Colors.black26,
       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
       backgroundColor: Colors.white ,
