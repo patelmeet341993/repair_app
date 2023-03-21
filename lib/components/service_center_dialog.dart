@@ -369,13 +369,13 @@ class _ProductBottomSheetState extends State<ServiceCenterDialog> {
                                               .isLoggedIn()) {
                                             await cartController
                                                 .addCartToServer(
-                                                    widget.service?.id);
+                                                    widget.service?.id, widget.service?.subCategoryId ?? "");
                                             await cartController
                                                 .getCartListFromServer();
                                             // Get.back();
                                           } else {
                                             cartController.addDataToCart(
-                                                widget.service?.id);
+                                                widget.service?.id, widget.service?.subCategoryId ?? "");
                                             //cartController.addDataInCart();
                                           }
                                         }

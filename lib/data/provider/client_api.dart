@@ -62,12 +62,15 @@ class ApiClient extends GetxService {
   Future<Response> postData(String? uri, dynamic body,
       {Map<String, String>? headers}) async {
     printLog('====> API Call: $uri\nHeader: $_mainHeaders');
+    printLog('====> Request body: $body');
     Http.Response _response = await Http.post(
       Uri.parse(appBaseUrl! + uri!),
       body: jsonEncode(body),
       headers: headers ?? _mainHeaders,
     ).timeout(Duration(seconds: timeoutInSeconds));
     try {
+
+
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
@@ -100,6 +103,8 @@ class ApiClient extends GetxService {
     _request.fields.addAll(body);
     Http.Response _response =
         await Http.Response.fromStream(await _request.send());
+
+
     return handleResponse(_response, uri);
   }
 
@@ -107,8 +112,11 @@ class ApiClient extends GetxService {
       String? uri, Map<String, String> body, List<MultipartBody>? multipartBody,
       {Map<String, String>? headers}) async {
     try {
+      printLog('====> ApiCall: $uri');
+
       Http.MultipartRequest _request =
           Http.MultipartRequest('POST', Uri.parse(appBaseUrl! + uri!));
+
       _request.headers.addAll(headers ?? _mainHeaders);
       for (MultipartBody multipart in multipartBody!) {
         if (kIsWeb) {
@@ -132,8 +140,12 @@ class ApiClient extends GetxService {
         }
       }
       _request.fields.addAll(body);
+      printLog('====> request: $_request');
+
       Http.Response _response =
           await Http.Response.fromStream(await _request.send());
+
+
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
@@ -143,11 +155,15 @@ class ApiClient extends GetxService {
   Future<Response> putData(String? uri, dynamic body,
       {Map<String, String>? headers}) async {
     try {
+      printLog('====> ApiCall: $url');
+
       Http.Response _response = await Http.put(
         Uri.parse(appBaseUrl! + uri!),
         body: jsonEncode(body),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
+
+
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
@@ -171,6 +187,7 @@ class ApiClient extends GetxService {
     dynamic _body;
     try {
       _body = jsonDecode(response.body);
+      printLog('====> Response: $_body');
     } catch (e) {}
     Response _response = Response(
       body: _body != null ? _body : response.body,
@@ -204,6 +221,7 @@ class ApiClient extends GetxService {
     if (Foundation.kDebugMode) {
       // debugPrint('====> API Response: [${_response.statusCode}] $uri\n${_response.body}');
     }
+
     return _response;
   }
 }

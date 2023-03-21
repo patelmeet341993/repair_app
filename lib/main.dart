@@ -1,3 +1,4 @@
+import 'package:repair/data/provider/company_provider.dart';
 import 'package:repair/feature/company/model/company_model.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -88,30 +89,35 @@ class MyApp extends StatelessWidget {
           return (GetPlatform.isWeb &&
                   splashController.configModel.content == null)
               ? SizedBox()
-              : GetMaterialApp(
-                  title: AppConstants.APP_NAME,
-                  debugShowCheckedModeBanner: false,
-                  navigatorKey: Get.key,
-                  scrollBehavior: MaterialScrollBehavior().copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.mouse,
-                      PointerDeviceKind.touch
-                    },
+              : MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<CompanyProvider>(create: (_) => CompanyProvider(),),
+                ],
+                child: GetMaterialApp(
+                    title: AppConstants.APP_NAME,
+                    debugShowCheckedModeBanner: false,
+                    navigatorKey: Get.key,
+                    scrollBehavior: MaterialScrollBehavior().copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.mouse,
+                        PointerDeviceKind.touch
+                      },
+                    ),
+                    initialBinding: InitialBinding(),
+                    theme: themeController.darkTheme ? dark : light,
+                    locale: localizeController.locale,
+                    translations: Messages(languages: languages),
+                    fallbackLocale: Locale(
+                        AppConstants.languages[0].languageCode!,
+                        AppConstants.languages[0].countryCode),
+                    initialRoute: GetPlatform.isWeb
+                        ? RouteHelper.getInitialRoute()
+                        : RouteHelper.getSplashRoute(bookingID),
+                    getPages: RouteHelper.routes,
+                    defaultTransition: Transition.topLevel,
+                    transitionDuration: Duration(milliseconds: 500),
                   ),
-                  initialBinding: InitialBinding(),
-                  theme: themeController.darkTheme ? dark : light,
-                  locale: localizeController.locale,
-                  translations: Messages(languages: languages),
-                  fallbackLocale: Locale(
-                      AppConstants.languages[0].languageCode!,
-                      AppConstants.languages[0].countryCode),
-                  initialRoute: GetPlatform.isWeb
-                      ? RouteHelper.getInitialRoute()
-                      : RouteHelper.getSplashRoute(bookingID),
-                  getPages: RouteHelper.routes,
-                  defaultTransition: Transition.topLevel,
-                  transitionDuration: Duration(milliseconds: 500),
-                );
+              );
         });
       });
     });

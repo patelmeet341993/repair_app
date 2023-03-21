@@ -48,21 +48,30 @@ class CompanyDetailsController extends GetxController {
     update();
   }
 
-  Future<void> getCompanyList(int offset, bool reload, String serviceID) async {
+  Future<void> getCompanyList(int offset, bool reload, String serviceID, String subCategoryId) async {
+
+    print("in get company list");
     _offset = offset;
     try {
       if (_companyContent == null || reload) {
-        Response response = await companyRepo!.getCompanyList(offset);
+        print("===> subCategoryId: ${subCategoryId}");
+
+        Response response = await companyRepo!.getCompanyList(offset, subCategoryId);
         print("===> Response: ${response.body}");
+        // print("===> Request: ${response.request}");
         if (response.statusCode == 200) {
           _companyContent = [];
           // _service = Service.fromJson(response.body['content']);
           printLog('====> _service: ${_service?.id}');
 
-          response.body['content']['data'].forEach((company) {
-            _companyContent!.add(Data.fromJson(company));
+          response.body['content'].forEach((element){
+            // ['data'].forEach((company) {
+            // if(element != null || element.length != 0) {
+              _companyContent!.add(Data.fromJson(element[0]));
+            // }
+            // });
           });
-          _pageSize = response.body['content']['last_page'];
+          // _pageSize = response.body['content']['last_page'];
         } else {
           ApiChecker.checkApi(response);
         }

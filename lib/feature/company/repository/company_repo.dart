@@ -6,8 +6,8 @@ class CompanyRepo extends GetxService {
   final ApiClient apiClient;
   CompanyRepo({required this.apiClient});
 
-  Future<Response> getCompanyList(int offset) async {
+  Future<Response> getCompanyList(int offset, String subCategoryId) async {
     return await apiClient
-        .getData('${AppConstants.COMPANY_LIST}?offset=$offset&limit=20');
+        .getData('${AppConstants.COMPANY_LIST}?offset=$offset&limit=20&subcategory_id=$subCategoryId');
   }
 }

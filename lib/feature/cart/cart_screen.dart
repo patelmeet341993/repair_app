@@ -6,15 +6,14 @@ import 'package:repair/feature/cart/widget/cart_product_widget.dart';
 
 class CartScreen extends StatelessWidget {
   final fromNav;
+
   CartScreen({@required this.fromNav});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
-      appBar: CustomAppBar(
-          title: 'cart'.tr,
-          isBackButtonExist: (ResponsiveHelper.isDesktop(context) || !fromNav)),
+      appBar: CustomAppBar(title: 'cart'.tr, isBackButtonExist: (ResponsiveHelper.isDesktop(context) || !fromNav)),
       body: SafeArea(
         child: GetBuilder<CartController>(
           initState: (state) {
@@ -39,89 +38,52 @@ class CartScreen extends StatelessWidget {
                           } else {
                             if (cartController.cartList.length > 0) {
                               return Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(
-                                              Dimensions.PADDING_SIZE_DEFAULT),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "${cartController.cartList.length} ${'services_in_cart'.tr}",
-                                                style: ubuntuMedium.copyWith(
-                                                  fontSize: Dimensions
-                                                      .fontSizeDefault,
-                                                ),
-                                              ),
-                                            ],
+                                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "${cartController.cartList.length} ${'services_in_cart'.tr}",
+                                            style: ubuntuMedium.copyWith(
+                                              fontSize: Dimensions.fontSizeDefault,
+                                            ),
                                           ),
-                                        ),
-                                        GridView.builder(
-                                          key: UniqueKey(),
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisSpacing:
-                                                Dimensions.PADDING_SIZE_LARGE,
-                                            mainAxisSpacing: ResponsiveHelper
-                                                    .isDesktop(context)
-                                                ? Dimensions.PADDING_SIZE_LARGE
-                                                : Dimensions.PADDING_SIZE_MINI,
-                                            childAspectRatio:
-                                                ResponsiveHelper.isMobile(
-                                                        context)
-                                                    ? 5
-                                                    : 6,
-                                            crossAxisCount:
-                                                ResponsiveHelper.isMobile(
-                                                        context)
-                                                    ? 1
-                                                    : cartController.cartList
-                                                                .length >
-                                                            1
-                                                        ? 2
-                                                        : 1,
-                                            mainAxisExtent:
-                                                ResponsiveHelper.isMobile(
-                                                        context)
-                                                    ? 115
-                                                    : 125,
-                                          ),
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              cartController.cartList.length,
-                                          itemBuilder: (context, index) {
-                                            return cartController
-                                                        .cartList[index]
-                                                        .service !=
-                                                    null
-                                                ? CartServiceWidget(
-                                                    cart: cartController
-                                                        .cartList[index],
-                                                    cartIndex: index)
-                                                : SizedBox();
-                                          },
-                                        ),
-                                        SizedBox(
-                                            height:
-                                                Dimensions.PADDING_SIZE_SMALL),
-                                      ]),
-                                  if (ResponsiveHelper.isWeb() &&
-                                      !ResponsiveHelper.isTab(context) &&
-                                      !ResponsiveHelper.isMobile(context))
+                                        ],
+                                      ),
+                                    ),
+                                    GridView.builder(
+                                      key: UniqueKey(),
+                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
+                                        mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_LARGE : Dimensions.PADDING_SIZE_MINI,
+                                        childAspectRatio: ResponsiveHelper.isMobile(context) ? 5 : 6,
+                                        crossAxisCount: ResponsiveHelper.isMobile(context)
+                                            ? 1
+                                            : cartController.cartList.length > 1
+                                                ? 2
+                                                : 1,
+                                        mainAxisExtent: ResponsiveHelper.isMobile(context) ? 115 : 125,
+                                      ),
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: cartController.cartList.length,
+                                      itemBuilder: (context, index) {
+                                        return cartController.cartList[index].service != null
+                                            ? CartServiceWidget(cart: cartController.cartList[index], cartIndex: index)
+                                            : SizedBox();
+                                      },
+                                    ),
+                                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                                  ]),
+                                  if (ResponsiveHelper.isWeb() && !ResponsiveHelper.isTab(context) && !ResponsiveHelper.isMobile(context))
                                     cartController.cartList.length > 0
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(
-                                              horizontal: Dimensions
-                                                  .PADDING_SIZE_DEFAULT,
+                                              horizontal: Dimensions.PADDING_SIZE_DEFAULT,
                                             ),
                                             child: Column(
                                               children: [
@@ -131,31 +93,19 @@ class CartScreen extends StatelessWidget {
                                                   child: Center(
                                                     child: RichText(
                                                       maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      overflow: TextOverflow.ellipsis,
                                                       text: TextSpan(
                                                         text: 'total_price'.tr,
-                                                        style: ubuntuRegular
-                                                            .copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeLarge,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1!
-                                                                  .color,
+                                                        style: ubuntuRegular.copyWith(
+                                                          fontSize: Dimensions.fontSizeLarge,
+                                                          color: Theme.of(context).textTheme.bodyText1!.color,
                                                         ),
                                                         children: [
                                                           TextSpan(
-                                                            text:
-                                                                ' ${PriceConverter.convertPrice(cartController.totalPrice)}',
-                                                            style: ubuntuBold
-                                                                .copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .errorColor,
-                                                              fontSize: Dimensions
-                                                                  .fontSizeLarge,
+                                                            text: ' ${PriceConverter.convertPrice(cartController.totalPrice)}',
+                                                            style: ubuntuBold.copyWith(
+                                                              color: Theme.of(context).errorColor,
+                                                              fontSize: Dimensions.fontSizeLarge,
                                                             ),
                                                           )
                                                         ],
@@ -165,36 +115,19 @@ class CartScreen extends StatelessWidget {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.symmetric(
-                                                    vertical: Dimensions
-                                                        .PADDING_SIZE_SMALL,
+                                                    vertical: Dimensions.PADDING_SIZE_SMALL,
                                                   ),
                                                   child: CustomButton(
                                                     height: 50,
                                                     width: Get.width,
-                                                    radius: Dimensions
-                                                        .RADIUS_DEFAULT,
-                                                    buttonText:
-                                                        'proceed_to_checkout'
-                                                            .tr,
+                                                    radius: Dimensions.RADIUS_DEFAULT,
+                                                    buttonText: 'proceed_to_checkout'.tr,
                                                     onPressed: () {
-                                                      if (Get.find<
-                                                              AuthController>()
-                                                          .isLoggedIn()) {
-                                                        Get.find<
-                                                                CheckOutController>()
-                                                            .updateState(PageState
-                                                                .orderDetails);
-                                                        Get.toNamed(RouteHelper
-                                                            .getCheckoutRoute(
-                                                                RouteHelper
-                                                                    .checkout,
-                                                                'orderDetails',
-                                                                'null'));
+                                                      if (Get.find<AuthController>().isLoggedIn()) {
+                                                        Get.find<CheckOutController>().updateState(PageState.orderDetails);
+                                                        Get.toNamed(RouteHelper.getCheckoutRoute(RouteHelper.checkout, 'orderDetails', 'null'));
                                                       } else {
-                                                        Get.toNamed(RouteHelper
-                                                            .getSignInRoute(
-                                                                RouteHelper
-                                                                    .main));
+                                                        Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
                                                       }
                                                     },
                                                   ),
@@ -217,9 +150,7 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if ((ResponsiveHelper.isTab(context) ||
-                        ResponsiveHelper.isMobile(context)) &&
-                    cartController.cartList.length > 0)
+                if ((ResponsiveHelper.isTab(context) || ResponsiveHelper.isMobile(context)) && cartController.cartList.length > 0)
                   Column(
                     children: [
                       Divider(
@@ -241,11 +172,7 @@ class CartScreen extends StatelessWidget {
                                 style: ubuntuRegular.copyWith(
                                   fontSize: Dimensions.fontSizeLarge,
                                   fontWeight: FontWeight.w400,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color!
-                                      .withOpacity(.6),
+                                  color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(.6),
                                 ),
                               ),
                               Text(
@@ -271,13 +198,10 @@ class CartScreen extends StatelessWidget {
                           buttonText: 'proceed_to_checkout'.tr,
                           onPressed: () {
                             if (Get.find<AuthController>().isLoggedIn()) {
-                              Get.find<CheckOutController>()
-                                  .updateState(PageState.orderDetails);
-                              Get.toNamed(RouteHelper.getCheckoutRoute(
-                                  'cart', 'orderDetails', 'null'));
+                              Get.find<CheckOutController>().updateState(PageState.orderDetails);
+                              Get.toNamed(RouteHelper.getCheckoutRoute('cart', 'orderDetails', 'null'));
                             } else {
-                              Get.toNamed(
-                                  RouteHelper.getSignInRoute(RouteHelper.main));
+                              Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
                             }
                           },
                         ),
