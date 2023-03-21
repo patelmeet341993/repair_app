@@ -62,6 +62,7 @@ class ApiClient extends GetxService {
   Future<Response> postData(String? uri, dynamic body,
       {Map<String, String>? headers}) async {
     printLog('====> API Call: $uri\nHeader: $_mainHeaders');
+    printLog('====> Request body: $body');
     Http.Response _response = await Http.post(
       Uri.parse(appBaseUrl! + uri!),
       body: jsonEncode(body),

@@ -1,5 +1,7 @@
+import 'package:provider/provider.dart';
 import 'package:repair/components/footer_base_view.dart';
 import 'package:repair/components/menu_drawer.dart';
+import 'package:repair/data/provider/company_provider.dart';
 import 'package:repair/feature/company/controller/company_details_controller.dart';
 import 'package:repair/feature/company/controller/company_details_tab_controller.dart';
 import 'package:repair/feature/company/model/company_model.dart';
@@ -31,7 +33,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
   late String item1;
   late String item2;
   bool checkedValue = false;
-
 
   @override
   void initState() {
@@ -134,7 +135,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
       // CustomAppBar(centerTitle: false, title: 'Select Companies'.tr,showCart: true,),
       body: GetBuilder<CompanyDetailsController>(initState: (state) {
         Get.find<CompanyDetailsController>().getServiceDetails(widget.serviceID);
-        Get.find<CompanyDetailsController>().getCompanyList(Get.find<CompanyController>().offset ?? 1, false, widget.serviceID,widget.subCategoryId);
+        Get.find<CompanyDetailsController>().getCompanyList(Get.find<CompanyController>().offset ?? 1, false, widget.serviceID, widget.subCategoryId);
       }, builder: (serviceController) {
         if (serviceController.service != null) {
           if (serviceController.service!.id != null) {
@@ -209,6 +210,10 @@ class _CompanyScreenState extends State<CompanyScreen> {
                                 child: Column(
                               children: [
                                 FilterchipWidget(
+                                  onSelectTap: () {
+                                    // CompanyProvider companyProvider = Provider.of(context,listen: false);
+                                    // companyProvider.setSelectedCompany(serviceController.companyContent.)
+                                  },
                                   chipName: serviceController.companyContent ?? [],
                                   serviceID: '',
                                 ),
@@ -279,9 +284,11 @@ class _CompanyScreenState extends State<CompanyScreen> {
 
 class FilterchipWidget extends StatefulWidget {
   final String serviceID;
+  final Function()? onSelectTap;
   final List<Data> chipName;
+  bool isSelected = false;
 
-  const FilterchipWidget({Key? key, required this.chipName, required this.serviceID}) : super(key: key);
+  FilterchipWidget({Key? key, required this.chipName, required this.serviceID, this.onSelectTap, this.isSelected = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _FilterchipWidgetState();
@@ -290,149 +297,161 @@ class FilterchipWidget extends StatefulWidget {
 class _FilterchipWidgetState extends State<FilterchipWidget> {
   var _isSelected = false;
   late int indexes;
+  CompanyProvider? companyProvider;
 
   @override
   Widget build(BuildContext context) {
+    companyProvider = Provider.of(context, listen: false);
     return Expanded(
         child: Padding(
-          padding: const EdgeInsets.only(top: Dimensions.PADDING_SIZE_SMALL),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-            Expanded(
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: widget.chipName.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_RADIUS).copyWith(bottom: Dimensions.PADDING_SIZE_RADIUS),
-                        child: Card(
-                          elevation: 2,
-                          child: Container(
-                              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                                boxShadow: Get.isDarkMode ? null : cardShadow,
+      padding: const EdgeInsets.only(top: Dimensions.PADDING_SIZE_SMALL),
+      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+        Expanded(
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: widget.chipName.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_RADIUS).copyWith(bottom: Dimensions.PADDING_SIZE_RADIUS),
+                    child: Card(
+                      elevation: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                          boxShadow: Get.isDarkMode ? null : cardShadow,
+                        ),
+                        //padding: EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: Dimensions.PAGES_BOTTOM_PADDING,
+                              width: Dimensions.PAGES_BOTTOM_PADDING,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
+                              child: Image.asset(
+                                Images.companyLogo,
+                                fit: BoxFit.cover,
                               ),
-                              //padding: EdgeInsets.all(10),
-                              child:Row(
-                                children: [
-                                  Container(
-                                    height: Dimensions.PAGES_BOTTOM_PADDING,
-                                    width: Dimensions.PAGES_BOTTOM_PADDING,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
-                                    child: Image.asset(
-                                      Images.companyLogo,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12,),
-                                  Expanded(
-                                    child: Container(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${widget.chipName[index].companyName}",
-                                                  style: ubuntuRegular.copyWith(
-                                                      fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
-                                                      fontWeight: FontWeight.bold),
-                                                  maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              SizedBox( width: 3,),
-                                              //Spacer(),
-                                              InkWell(
-                                                onTap: (){
-                                                  // Get.toNamed(RouteHelper.getSelectedCompanyRoute(
-                                                  //     company_image: widget.chipName[index].companyIcon,
-                                                  // ));
-                                                },
-                                                child: Text(
-                                                  "View Profile",
-                                                   style: TextStyle(fontSize: 12.0, color: Colors.blueAccent, fontWeight: FontWeight.bold)
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 3,),
-                                          Text(
-                                            "${widget.chipName[index].aboutCompany} ",
-                                            style: ubuntuRegular.copyWith(
-                                                fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
-                                                fontWeight: FontWeight.w500),
-                                            maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          SizedBox(height: 3,),
-                                          Text(
-                                            " ${widget.chipName[index].orderCount}",
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Expanded(
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "${widget.chipName[index].companyName}",
                                             style: ubuntuRegular.copyWith(
                                                 fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
-                                                color: Colors.green,
                                                 fontWeight: FontWeight.bold),
                                             maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
-                                            textAlign: TextAlign.center,
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                        ),
+                                        SizedBox(
+                                          width: 3,
+                                        ),
+                                        //Spacer(),
+                                        InkWell(
+                                          onTap: () {
+                                            // Get.toNamed(RouteHelper.getSelectedCompanyRoute(
+                                            //     company_image: widget.chipName[index].companyIcon,
+                                            // ));
+                                          },
+                                          child: Text("View Profile", style: TextStyle(fontSize: 12.0, color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      "${widget.chipName[index].aboutCompany} ",
+                                      style: ubuntuRegular.copyWith(
+                                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
+                                          fontWeight: FontWeight.w500),
+                                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      " ${widget.chipName[index].orderCount}",
+                                      style: ubuntuRegular.copyWith(
+                                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 2.0),
+                                          child: Row(
                                             children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 2.0),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                      size: 20,
-                                                    ),
-                                                    Text(
-                                                      " ${widget.chipName[index].avgRating}",
-                                                      style: ubuntuRegular.copyWith(
-                                                          fontSize:
-                                                          MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
-                                                          color: Colors.amber,
-                                                          fontWeight: FontWeight.bold),
-                                                    ),
-                                                    Text(
-                                                      "(${widget.chipName[index].ratingCount})",
-                                                      style: ubuntuRegular.copyWith(
-                                                        fontSize:
-                                                        MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
-                                                      ),
-                                                    ),
-                                                  ],
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                                size: 20,
+                                              ),
+                                              Text(
+                                                " ${widget.chipName[index].avgRating}",
+                                                style: ubuntuRegular.copyWith(
+                                                    fontSize:
+                                                        MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
+                                                    color: Colors.amber,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "(${widget.chipName[index].ratingCount})",
+                                                style: ubuntuRegular.copyWith(
+                                                  fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
                                                 ),
                                               ),
-                                              Spacer(),
-                                              CommonSubmitButton(
-                                                text:  _isSelected ?"Selected":"Select",
-                                                fontSize: Dimensions.fontSizeSmall,
-                                                horizontalPadding: 25,
-                                                onTap:  (){
-                                                  setState(() => _isSelected = !_isSelected);
-                                                },
-                                              ),
-
                                             ],
-                                          )
-
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        CommonSubmitButton(
+                                          text: _isSelected ? "Selected" : "Select",
+                                          fontSize: Dimensions.fontSizeSmall,
+                                          horizontalPadding: 25,
+                                          onTap: () {
+                                            bool isSelected = companyProvider?.getSelectedCompany.contains(widget.chipName[index].id) ?? false;
+                                            if (isSelected) {
+                                              companyProvider?.removeCompanyId(widget.chipName[index].id ?? "");
+                                            } else {
+                                              companyProvider?.setSelectedCompany(widget.chipName[index].id ?? "");
+                                            }
+                                            print("selected Company : ${companyProvider?.getSelectedCompany}");
+                                            setState(() {});
+                                          },
+                                          isSelected: companyProvider?.getSelectedCompany.contains(widget.chipName[index].id) ?? false,
+                                          //     (){
+                                          //   setState(() => _isSelected = !_isSelected);
+                                          // },
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
+                            )
+                          ],
+                        ),
 
-                              /*child: Stack(
+                        /*child: Stack(
                                 children: <Widget>[
                                   Positioned(
                                     bottom: 80.0,
@@ -562,11 +581,11 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                       ))
                                 ],
                               )*/
-                          ),
-                        ),
-                      );
-                    }))
-          ]),
-        ));
+                      ),
+                    ),
+                  );
+                }))
+      ]),
+    ));
   }
 }

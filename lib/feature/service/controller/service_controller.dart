@@ -159,8 +159,13 @@ class ServiceController extends GetxController implements GetxService {
       if (!isWithPagination) {
         _subCategoryBasedServiceList = [];
       }
-      _subCategoryBasedServiceList!
-          .addAll(ServiceModel.fromJson(response.body).content!.serviceList!);
+      if(ServiceModel.fromJson(response.body).content != null) {
+        _subCategoryBasedServiceList!
+            .addAll(ServiceModel
+            .fromJson(response.body)
+            .content!
+            .serviceList!);
+      }
     } else {
       ApiChecker.checkApi(response);
     }

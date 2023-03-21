@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:provider/provider.dart';
 import 'package:repair/components/custom_snackbar.dart';
 import 'package:repair/core/helper/responsive_helper.dart';
 import 'package:repair/core/helper/route_helper.dart';
 import 'package:repair/data/provider/checker_api.dart';
+import 'package:repair/data/provider/company_provider.dart';
 import 'package:repair/feature/cart/controller/cart_controller.dart';
 import 'package:repair/feature/checkout/controller/checkout_controller.dart';
 import 'package:repair/feature/location/controller/location_controller.dart';
@@ -14,22 +18,30 @@ enum BookingStatusTabs { all, pending, accepted, ongoing, completed, canceled }
 
 class ServiceBookingController extends GetxController implements GetxService {
   final ServiceBookingRepo serviceBookingRepo;
+
   ServiceBookingController({required this.serviceBookingRepo});
 
   bool _isPlacedOrdersuccessfully = false;
+
   bool get isPlacedOrdersuccessfully => _isPlacedOrdersuccessfully;
   List<BookingModel>? _bookingList;
+
   List<BookingModel>? get bookingList => _bookingList;
   int _offset = 1;
+
   int? get offset => _offset;
   BookingContent? _bookingContent;
+
   BookingContent? get bookingContent => _bookingContent;
 
   int _bookingListPageSize = 0;
   int _bookingListCurrentPage = 0;
+
   int get bookingListPageSize => _bookingListPageSize;
+
   int get bookingListCurrentPage => _bookingListCurrentPage;
   BookingStatusTabs _selectedBookingStatus = BookingStatusTabs.all;
+
   BookingStatusTabs get selectedBookingStatus => _selectedBookingStatus;
 
   @override
@@ -55,29 +67,39 @@ class ServiceBookingController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> placeBookingRequest(
-      {required String paymentMethod,
-      required String userID,
-      required String serviceAddressId,
-      required String schedule}) async {
+  Future<void> placeBookingRequest({
+    required BuildContext context,
+    required String paymentMethod,
+    required String userID,
+    required String serviceAddressId,
+    required String schedule}) async {
+    CompanyProvider companyProvider = Provider.of<CompanyProvider>(context, listen: false);
+    String providerIds = companyProvider.getSelectedCompany.join(",");
+    print("providerIds, $providerIds");
     String zoneId =
-        Get.find<LocationController>().getUserAddress()!.zoneId.toString();
+    Get.find<LocationController>().getUserAddress()!.zoneId.toString();
     Response response = await serviceBookingRepo.placeBookingRequest(
-      paymentMethod: paymentMethod,
-      userId: userID,
-      schedule: schedule,
-      serviceAddressID: serviceAddressId,
-      zoneId: zoneId,
+        paymentMethod: paymentMethod,
+        userId: userID,
+        schedule: schedule,
+        serviceAddressID: serviceAddressId,
+        zoneId: zoneId,
+        providerSelectedIds: providerIds
     );
-
+    print("response, ${response.body}");
     if (response.statusCode == 200) {
+      CompanyProvider companyProvider = Provider.of(context, listen: false);
+      companyProvider.clearSelectedCompany();
       _isPlacedOrdersuccessfully = true;
       Get.find<CheckOutController>().updateState(PageState.complete);
 
       ///navigate replace
       if (ResponsiveHelper.isWeb())
         Get.toNamed(RouteHelper.getCheckoutRoute(
-            'cart', Get.find<CheckOutController>().currentPage.name, "null"));
+            'cart', Get
+            .find<CheckOutController>()
+            .currentPage
+            .name, "null"));
       customSnackBar('service_booking_successfully'.tr,
           isError: false, margin: 55);
       Get.find<CartController>().getCartListFromServer();
@@ -85,11 +107,10 @@ class ServiceBookingController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getAllBookingService(
-      {required int offset,
-      required String bookingStatus,
-      required bool isFromPagination,
-      bool fromMenu = false}) async {
+  Future<void> getAllBookingService({required int offset,
+    required String bookingStatus,
+    required bool isFromPagination,
+    bool fromMenu = false}) async {
     print("inside_get_all_booking_service");
     _offset = offset;
     if (!isFromPagination) {
@@ -99,7 +120,7 @@ class ServiceBookingController extends GetxController implements GetxService {
         offset: offset, bookingStatus: bookingStatus);
     if (response.statusCode == 200) {
       ServiceBookingList _serviceBookingModel =
-          ServiceBookingList.fromJson(response.body);
+      ServiceBookingList.fromJson(response.body);
       if (!isFromPagination) {
         _bookingList = [];
       }
