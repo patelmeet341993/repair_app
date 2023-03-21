@@ -26,15 +26,22 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(centerTitle: false, title: 'Selected Image'),
+      backgroundColor: Colors.black,
+       appBar: CustomAppBar(centerTitle: false, title: 'Video'),
       body: FutureBuilder(
         future: _video,
         builder: (context, snsapshot) {
           if (snsapshot.connectionState == ConnectionState.done) {
-            return Container(
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
+            return SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: VideoPlayer(_videoPlayerController),
+                  ),
+                ],
               ),
             );
           } else {

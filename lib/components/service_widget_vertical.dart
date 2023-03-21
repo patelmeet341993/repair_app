@@ -65,6 +65,7 @@ class ServiceWidgetVertical extends StatelessWidget {
           padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL).copyWith(bottom: 4),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
+           // color: Colors.red,
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
           //  boxShadow: Get.isDarkMode ? null : cardShadow,
           ),
@@ -115,21 +116,23 @@ class ServiceWidgetVertical extends StatelessWidget {
               ),
               SizedBox(height: 3,),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
                     service.name!,
                     style: ubuntuMedium.copyWith(
-                        fontSize: Dimensions.fontSizeSmall),
-                    maxLines: 2,
+                        fontSize: Dimensions
+                            .fontSizeDefault),
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 2,),
+                  SizedBox(height: 3,),
                   Text(
                     service.shortDescription!,
                     style: ubuntuLight.copyWith(
-                        fontSize: Dimensions.fontSizeExtraSmall,
+                        fontSize: Dimensions
+                        .fontSizeExtraSmall,
                         color: Theme.of(context).disabledColor),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
