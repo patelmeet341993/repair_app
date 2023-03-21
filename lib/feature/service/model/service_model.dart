@@ -117,6 +117,8 @@ class ServiceContent {
 
 class Service {
   String? id;
+  int? groupId;
+  int? langId;
   String? name;
   String? shortDescription;
   String? description;
@@ -140,6 +142,8 @@ class Service {
 
   Service(
       {this.id,
+        this.langId,
+        this.groupId,
         this.name,
         this.shortDescription,
         this.description,
@@ -164,6 +168,8 @@ class Service {
 
   Service.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    groupId = json['group_id'];
+    langId = json['lang_id'];
     name = json['name'];
     shortDescription = json['short_description'];
     description = json['description'];
@@ -215,6 +221,8 @@ class Service {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['group_id'] = this.groupId;
+    data['lang_id'] = this.langId;
     data['name'] = this.name;
     data['short_description'] = this.shortDescription;
     data['description'] = this.description;

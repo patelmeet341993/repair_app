@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../service/model/service_model.dart';
+
 class CategoryModel {
   String? id;
   String? parentId;
@@ -12,6 +14,8 @@ class CategoryModel {
   String? updatedAt;
   var serviceCount;
   GlobalKey? globalKey;
+  List<Service>? services;
+
 
   CategoryModel(
       {this.id,
@@ -25,6 +29,7 @@ class CategoryModel {
         this.updatedAt,
         this.serviceCount,
         this.globalKey,
+        this.services
       });
 
   CategoryModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +44,12 @@ class CategoryModel {
     updatedAt = json['updated_at'];
     serviceCount = json['services_count'];
     globalKey = GlobalKey(debugLabel: json['id']);
+    if (json['services'] != null) {
+      services = <Service>[];
+      json['services'].forEach((v) {
+        services!.add(new Service.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +64,9 @@ class CategoryModel {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['services_count'] = this.serviceCount;
+    if (this.services != null) {
+      data['services'] = this.services!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
