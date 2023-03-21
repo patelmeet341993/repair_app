@@ -35,7 +35,7 @@ class PopularServiceView extends GetView<ServiceController> {
                   SizedBox(
                     height: Get.find<LocalizationController>().isLtr
                         ? ResponsiveHelper.isMobile(context)
-                            ? 250
+                            ? 245
                             : 260
                         : 260,
                     child: ListView.builder(

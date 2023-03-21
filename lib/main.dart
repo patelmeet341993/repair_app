@@ -1,4 +1,6 @@
 import 'package:repair/data/provider/company_provider.dart';
+import 'package:repair/data/provider/company_provider.dart';
+import 'package:repair/feature/company/model/company_model.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';

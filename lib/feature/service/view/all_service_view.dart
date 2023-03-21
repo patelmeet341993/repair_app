@@ -300,7 +300,7 @@ class _AllServiceViewState extends State<AllServiceView> {
                                 : ResponsiveHelper.isTab(context)
                                     ? 3
                                     : 5,
-                            mainAxisExtent: 240,
+                            mainAxisExtent: 225,
                           ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
