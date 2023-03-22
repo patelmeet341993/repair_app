@@ -64,7 +64,7 @@ class ServiceWidgetVertical extends StatelessWidget {
         },
         child: Container(
          // margin: EdgeInsets.only(right: Dimensions.PADDING_SIZE_DEFAULT),
-          padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL).copyWith(bottom: 4),
+          padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS).copyWith(bottom: 4),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
            // color: Colors.red,
@@ -117,84 +117,89 @@ class ServiceWidgetVertical extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 3,),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    service.name!,
-                    style: ubuntuMedium.copyWith(
-                        fontSize: Dimensions
-                            .fontSizeDefault),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 3,),
-                  Text(
-                    service.shortDescription!,
-                    style: ubuntuLight.copyWith(
-                        fontSize: Dimensions
-                        .fontSizeExtraSmall,
-                        color: Theme.of(context).disabledColor),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 4,),
-                  //add to cart button
-                  if (fromType != 'fromCampaign')
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        CommonSubmitButton(
+              Expanded(
+                child: Container(
+                  // color: Colors.red,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        service.name!,
+                        style: ubuntuMedium.copyWith(
+                            fontSize: Dimensions
+                                .fontSizeDefault),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                      //SizedBox(height: 3,),
+                      Text(
+                        service.shortDescription!,
+                        style: ubuntuLight.copyWith(
+                            fontSize: Dimensions
+                            .fontSizeExtraSmall,
+                            color: Theme.of(context).disabledColor),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                      ),
+                     // SizedBox(height: 4,),
+                      //add to cart button
+                      if (fromType != 'fromCampaign')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                          CommonSubmitButton(
                           text: 'Book Nows'.tr,
-                          fontSize: Dimensions.fontSizeSmall,
-                          onTap:  () {
-                            Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
-                                arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
-                          }
+    fontSize: Dimensions.fontSizeSmall,
+    onTap:  () {
+    Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
+    arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
+    }
 
-                              // showModalBottomSheet(
-                              // useRootNavigator: true,
-                              // isScrollControlled: true,
-                              // backgroundColor: Colors.transparent,
-                              // context: context,
-                              // builder: (context) =>
-                              //     ServiceCenterDialog(service: service)),
+    // showModalBottomSheet(
+    // useRootNavigator: true,
+    // isScrollControlled: true,
+    // backgroundColor: Colors.transparent,
+    // context: context,
+    // builder: (context) =>
+    //     ServiceCenterDialog(service: service)),
 
+    ),
+                          ],
                         ),
-                      ],
-                    ),
-                  /*  Stack(
-                      children: [
-                        Align(
-                            alignment: AlignmentDirectional.bottomEnd,
-                            child: SizedBox(
-                              height: 30.0,
-                              width: 100.0,
+                      /*  Stack(
+                          children: [
+                            Align(
+                                alignment: AlignmentDirectional.bottomEnd,
+                                child: SizedBox(
+                                  height: 30.0,
+                                  width: 100.0,
+                                  child: CustomButtonSmall(
+                                    buttonText: 'Book Now'.tr,
+                                  ),
+                                )),
+                            Positioned.fill(
                               child: CustomButtonSmall(
-                                buttonText: 'Book Now'.tr,
-                              ),
-                            )),
-                        Positioned.fill(
-                          child: CustomButtonSmall(
-                              buttonText: 'Book Now'.tr,
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    useRootNavigator: true,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    context: context,
-                                    builder: (context) =>
-                                        ServiceCenterDialog(service: service));
-                              }),
-                        )
-                      ],
-                    ),*/
+                                  buttonText: 'Book Now'.tr,
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        useRootNavigator: true,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        context: context,
+                                        builder: (context) =>
+                                            ServiceCenterDialog(service: service));
+                                  }),
+                            )
+                          ],
+                        ),*/
 
 
 
-                ],
+                    ],
+                  ),
+                ),
               ),
 
             ],
