@@ -25,16 +25,15 @@ class ServiceInformation extends StatelessWidget {
                   right: Dimensions.PADDING_SIZE_DEFAULT),
               width: Get.width,
               color: Theme.of(context).hoverColor,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                child: Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 7,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,12 +88,14 @@ class ServiceInformation extends StatelessWidget {
                                   size: 15,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
-                                Text(
-                                  addressModel.address!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ubuntuRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall),
+                                Expanded(
+                                  child: Text(
+                                    addressModel.address!,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: ubuntuRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall),
+                                  ),
                                 ),
                               ],
                             ),

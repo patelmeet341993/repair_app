@@ -3,6 +3,8 @@ import 'package:repair/components/ripple_button.dart';
 import 'package:repair/components/service_center_dialog.dart';
 import 'package:repair/core/core_export.dart';
 
+import '../feature/company/view/company_screen.dart';
+
 class ServiceWidgetVertical extends StatelessWidget {
   final Service service;
   final bool isAvailable;
@@ -145,15 +147,20 @@ class ServiceWidgetVertical extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         CommonSubmitButton(
-                          text: 'Book Now'.tr,
+                          text: 'Book Nows'.tr,
                           fontSize: Dimensions.fontSizeSmall,
-                          onTap:  () =>  showModalBottomSheet(
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              context: context,
-                              builder: (context) =>
-                                  ServiceCenterDialog(service: service)),
+                          onTap:  () {
+                            Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
+                                arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
+                          }
+
+                              // showModalBottomSheet(
+                              // useRootNavigator: true,
+                              // isScrollControlled: true,
+                              // backgroundColor: Colors.transparent,
+                              // context: context,
+                              // builder: (context) =>
+                              //     ServiceCenterDialog(service: service)),
 
                         ),
                       ],
