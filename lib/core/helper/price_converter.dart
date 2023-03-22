@@ -10,7 +10,7 @@ class PriceConverter {
         currencySymbol = cc.symbol!;
       }
     });
-    return currencySymbol;
+    return "$currencySymbol ";
   }
 
   static String convertPrice(double? price,
