@@ -9,7 +9,7 @@ class CompanyController extends GetxController implements GetxService {
 
   CompanyController({required this.companyRepo});
 
-  List<Data>? _companyContent;
+  List<CompanyData>? _companyContent;
 
   bool _isLoading = false;
   int? _pageSize;
@@ -18,7 +18,7 @@ class CompanyController extends GetxController implements GetxService {
   String? _searchText = '';
   int? _offset = 1;
 
-  List<Data>? get companyContent => _companyContent;
+  List<CompanyData>? get companyContent => _companyContent;
   int? get pageSize => _pageSize;
   int? get offset => _offset;
   bool get isLoading => _isLoading;
@@ -50,7 +50,7 @@ class CompanyController extends GetxController implements GetxService {
       if (response.statusCode == 200) {
         _companyContent = [];
         response.body['content']['data'].forEach((company) {
-          _companyContent!.add(Data.fromJson(company));
+          _companyContent!.add(CompanyData.fromJson(company));
         });
         _pageSize = response.body['content']['last_page'];
       } else {
