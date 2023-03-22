@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+import 'package:repair/data/provider/company_provider.dart';
 import 'package:repair/feature/company/view/company_screen.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
@@ -204,7 +206,7 @@ class CartController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> addCartToServer(String? id, String subCategoryId) async {
+  Future<void> addCartToServer(String? id, String subCategoryId, BuildContext context) async {
     _isLoading = true;
     update();
     _replaceCartList();
@@ -219,8 +221,10 @@ class CartController extends GetxController implements GetxService {
           Get.back();
         },
         onYesPressed: () async {
-          Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
-              arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
+          Get.offAndToNamed(RouteHelper.getCartRoute());
+
+          // Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
+          //     arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
           Get.dialog(
             CustomLoader(),
             barrierDismissible: false,
@@ -235,8 +239,9 @@ class CartController extends GetxController implements GetxService {
           onDemandToast("successfully_added_to_cart".tr, Colors.green);
           clearCartList();
           await getCartListFromServer();
-          Get.toNamed(RouteHelper.getCompanyRoute(id,subCategoryId),
-              arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
+          Get.toNamed(RouteHelper.getCartRoute());
+          // Get.toNamed(RouteHelper.getCompanyRoute(id,subCategoryId),
+          //     arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
         },
       ));
     } else {
@@ -249,8 +254,9 @@ class CartController extends GetxController implements GetxService {
       _isLoading = false;
       onDemandToast("successfully_added_to_cart".tr, Colors.green);
       clearCartList();
-      Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
-          arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
+      Get.toNamed(RouteHelper.getCartRoute());
+      // Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
+      //     arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
     }
     update();
   }
@@ -304,12 +310,17 @@ class CartController extends GetxController implements GetxService {
   }
 
   Future<void> addToCartApi(CartModel cartModel) async {
+    BuildContext context = Get.key.currentContext!;
+    CompanyProvider companyProvider = Provider.of(context,listen:false);
+    String providerIds = companyProvider.getSelectedCompany.join(",");
+    print("providerIds, $providerIds");
     await cartRepo.addToCartListToServer(CartModelBody(
       serviceId: cartModel.service!.id,
       categoryId: cartModel.categoryId,
       variantKey: cartModel.variantKey,
       quantity: cartModel.quantity.toString(),
       subCategoryId: cartModel.subCategoryId,
+      providerSelectedIds: providerIds
     ));
   }
 
