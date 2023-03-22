@@ -1,26 +1,19 @@
-import 'dart:io';
 import 'package:repair/feature/company/view/VideoScreen.dart';
-import 'package:repair/components/custom_app_bar.dart';
-import 'package:repair/components/custom_button.dart';
 import 'package:repair/components/menu_drawer.dart';
 import 'package:repair/core/core_export.dart';
-import 'package:repair/core/helper/responsive_helper.dart';
 import 'package:repair/feature/company/view/detail_screen.dart';
-import 'package:repair/utils/dimensions.dart';
-import 'package:repair/utils/images.dart';
-import 'package:repair/utils/styles.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
 import 'package:get/get_utils/get_utils.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../components/service_center_dialog.dart';
+
 class AdditionalIssueScreen extends StatefulWidget {
-  const AdditionalIssueScreen({Key? key}) : super(key: key);
+  final Service? service;
+  const AdditionalIssueScreen({Key? key, this.service}) : super(key: key);
 
   @override
   State<AdditionalIssueScreen> createState() => _AdditionalIssueScreenState();
@@ -401,7 +394,14 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
                       radius: Dimensions.RADIUS_DEFAULT,
                       buttonText: 'proceed_to_checkout'.tr,
                       onPressed: () {
-                        Get.toNamed(RouteHelper.getCartRoute());
+                        showModalBottomSheet(
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (context) =>
+                            ServiceCenterDialog(service: widget.service));
+                        // Get.toNamed(RouteHelper.getCartRoute());
                       },
                     ),
                   ),
