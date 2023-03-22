@@ -4,6 +4,8 @@ import 'package:repair/components/service_center_dialog.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:touch_ripple_effect/touch_ripple_effect.dart';
 
+import '../../company/view/company_screen.dart';
+
 class PopularServiceView extends GetView<ServiceController> {
   @override
   Widget build(BuildContext context) {
@@ -212,16 +214,21 @@ class PopularServiceView extends GetView<ServiceController> {
                                             CommonSubmitButton(
                                               text: 'Book Now'.tr,
                                               fontSize: Dimensions.fontSizeSmall,
-                                              onTap:  () => showModalBottomSheet(
-                                                  context: context,
-                                                  useRootNavigator: true,
-                                                  isScrollControlled: true,
-                                                  builder: (context) =>
-                                                      ServiceCenterDialog(
-                                                        service: service,
-                                                      ),
-                                                  backgroundColor:
-                                                  Colors.transparent),
+                                              onTap:  () {
+                                                Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
+                                                    arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
+
+                                              }
+                                                  // showModalBottomSheet(
+                                                  // context: context,
+                                                  // useRootNavigator: true,
+                                                  // isScrollControlled: true,
+                                                  // builder: (context) =>
+                                                  //     ServiceCenterDialog(
+                                                  //       service: service,
+                                                  //     ),
+                                                  // backgroundColor:
+                                                  // Colors.transparent),
 
                                             ),
                                           ],
