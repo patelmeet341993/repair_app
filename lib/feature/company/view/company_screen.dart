@@ -244,7 +244,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return AdditionalIssueScreen();
+                                    return AdditionalIssueScreen(service: service,);
                                   },
                                 ),
                               );
@@ -296,7 +296,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
 class FilterchipWidget extends StatefulWidget {
   final String serviceID;
   final Function()? onSelectTap;
-  final List<CompanyModel.Data> chipName;
+  final List<CompanyModel.CompanyData> chipName;
   bool isSelected = false;
 
   FilterchipWidget({Key? key, required this.chipName, required this.serviceID, this.onSelectTap, this.isSelected = false}) : super(key: key);
@@ -394,16 +394,18 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                         //Spacer(),
                                         InkWell(
                                           onTap: () {
-                                            // Navigator.of(context).push(
-                                            //   MaterialPageRoute(
-                                            //     builder: (BuildContext context) {
-                                            //       return CompanyDetailsScreen(
-                                            //           company_image: "${getImageBaseUrl()}${widget.chipName[index].logo ?? " "}",
-                                            //           company_name: "${widget.chipName[index].companyName}",
-                                            //           company_rating: "${widget.chipName[index].avgRating}");
-                                            //     },
-                                            //   ),
-                                            // );
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (BuildContext context) {
+                                                  return CompanyDetailsScreen(
+                                                      company_image: "${getImageBaseUrl()}${widget.chipName[index].logo ?? " "}",
+                                                      companyData: widget.chipName[index],
+                                                      company_name: "${widget.chipName[index].companyName}",
+                                                      company_rating: "${widget.chipName[index].avgRating}");
+
+                                                },
+                                              ),
+                                            );
                                             // Get.toNamed(RouteHelper.getSelectedCompanyRoute(
                                             //     company_image: "${getImageBaseUrl()}${widget.chipName[index].logo ?? " "}",
                                             // ));
@@ -427,7 +429,7 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                       height: 3,
                                     ),
                                     Text(
-                                      " ${widget.chipName[index].orderCount}",
+                                      "${widget.chipName[index].orderCount} Successful Orders",
                                       style: ubuntuRegular.copyWith(
                                           fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
                                           color: Colors.green,

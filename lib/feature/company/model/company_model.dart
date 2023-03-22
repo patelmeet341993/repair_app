@@ -92,7 +92,7 @@ String contentToJson(Content data) => json.encode(data.toJson());
 class Content {
   Content({
     int? currentPage,
-    List<Data>? data,
+    List<CompanyData>? data,
     String? firstPageUrl,
     int? from,
     int? lastPage,
@@ -125,7 +125,7 @@ class Content {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(CompanyData.fromJson(v));
       });
     }
     _firstPageUrl = json['first_page_url'];
@@ -146,7 +146,7 @@ class Content {
     _total = json['total'];
   }
   int? _currentPage;
-  List<Data>? _data;
+  List<CompanyData>? _data;
   String? _firstPageUrl;
   int? _from;
   int? _lastPage;
@@ -160,7 +160,7 @@ class Content {
   int? _total;
   Content copyWith({
     int? currentPage,
-    List<Data>? data,
+    List<CompanyData>? data,
     String? firstPageUrl,
     int? from,
     int? lastPage,
@@ -189,7 +189,7 @@ class Content {
         total: total ?? _total,
       );
   int? get currentPage => _currentPage;
-  List<Data>? get data => _data;
+  List<CompanyData>? get data => _data;
   String? get firstPageUrl => _firstPageUrl;
   int? get from => _from;
   int? get lastPage => _lastPage;
@@ -310,11 +310,11 @@ class Links {
 /// owner : {"id":"eb994476-c070-484c-8dae-8e5394e350b4","first_name":"Testfirst","last_name":"Testlast","email":"testcomapny@gmail.com","phone":"91776655443","identification_number":"ABCD12345678","identification_type":"driving_licence","identification_image":["2023-02-27-63fc3ef156826.png","2023-02-27-63fc3ef1598a1.png"],"date_of_birth":null,"gender":"male","profile_image":"default.png","fcm_token":null,"is_phone_verified":0,"is_email_verified":0,"phone_verified_at":null,"email_verified_at":null,"is_active":1,"user_type":"provider-admin","remember_token":null,"deleted_at":null,"created_at":"2023-02-27T04:56:09.000000Z","updated_at":"2023-02-27T05:05:59.000000Z"}
 /// zone : {"id":"bd565e2a-9072-403f-bdcf-ad2cce73bf43","group_id":1,"country_id":"cda4ae0f-b677-49b6-bb08-739ce4ca949d","name":"All Area in kuwait","coordinates":[{"lat":40.681479988598,"lng":27.900406752335},{"lat":40.011637507133,"lng":104.18946925233},{"lat":-4.2576611649406,"lng":103.48634425233},{"lat":4.5227731433747,"lng":28.603531752335},{"lat":40.681479988598,"lng":27.900406752335}],"lang_id":1,"is_active":1,"created_at":"2022-12-16T17:36:23.000000Z","updated_at":"2023-03-01T07:28:57.000000Z"}
 
-Data dataFromJson(String str) => Data.fromJson(json.decode(str));
-String dataToJson(Data data) => json.encode(data.toJson());
+CompanyData dataFromJson(String str) => CompanyData.fromJson(json.decode(str));
+String dataToJson(CompanyData data) => json.encode(data.toJson());
 
-class Data {
-  Data({
+class CompanyData {
+  CompanyData({
     String? id,
     String? userId,
     String? companyName,
@@ -388,7 +388,7 @@ class Data {
     _zone = zone;
   }
 
-  Data.fromJson(dynamic json) {
+  CompanyData.fromJson(dynamic json) {
     _id = json['id'];
     _userId = json['user_id'];
     _companyName = json['company_name'];
@@ -460,7 +460,7 @@ class Data {
   int? _bookingsCount;
   Owner? _owner;
   Zone? _zone;
-  Data copyWith({
+  CompanyData copyWith({
     String? id,
     String? userId,
     String? companyName,
@@ -497,7 +497,7 @@ class Data {
     Owner? owner,
     Zone? zone,
   }) =>
-      Data(
+      CompanyData(
         id: id ?? _id,
         userId: userId ?? _userId,
         companyName: companyName ?? _companyName,

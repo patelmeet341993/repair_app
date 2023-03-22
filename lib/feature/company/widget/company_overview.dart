@@ -1,10 +1,12 @@
 import 'package:repair/components/web_shadow_wrap.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/company/model/company_model.dart';
 
 class CompanyOverview extends StatelessWidget {
   final String description;
-  const CompanyOverview({Key? key, required this.description})
+  CompanyData? companyData;
+  CompanyOverview({Key? key, required this.description, this.companyData})
       : super(key: key);
 
   @override
@@ -55,13 +57,13 @@ class CompanyOverview extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Hawally,",
+                      "${companyData?.aboutCompany},",
                       style: ubuntuRegular.copyWith(
                           fontSize: MediaQuery.of(context).size.width < 300
                               ? Dimensions.fontSizeLarge
                               : Dimensions.fontSizeLarge,
                           fontWeight: FontWeight.w400),
-                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 4,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -71,7 +73,7 @@ class CompanyOverview extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Tel: 25865314 / 25879612",
+                      "Tel: ${companyData?.companyPhone}",
                       style: ubuntuRegular.copyWith(
                           fontSize: MediaQuery.of(context).size.width < 300
                               ? Dimensions.fontSizeLarge
@@ -97,46 +99,46 @@ class CompanyOverview extends StatelessWidget {
                   SizedBox(
                     height: 50,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Work We Done:",
-                      style: ubuntuRegular.copyWith(
-                          fontSize: MediaQuery.of(context).size.width < 300
-                              ? Dimensions.fontSizeLarge
-                              : Dimensions.fontSizeLarge,
-                          fontWeight: FontWeight.bold),
-                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Image.asset(
-                            Images.r1,
-                            width: 170,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Image.asset(
-                            Images.r1,
-                            width: 170,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Text(
+                  //     "Work We Done:",
+                  //     style: ubuntuRegular.copyWith(
+                  //         fontSize: MediaQuery.of(context).size.width < 300
+                  //             ? Dimensions.fontSizeLarge
+                  //             : Dimensions.fontSizeLarge,
+                  //         fontWeight: FontWeight.bold),
+                  //     maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                  //     overflow: TextOverflow.ellipsis,
+                  //   ),
+                  // ),
+                  // Row(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: [
+                  //     Container(
+                  //       padding: EdgeInsets.all(5.0),
+                  //       child: Card(
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(10.0)),
+                  //         child: Image.asset(
+                  //           Images.r1,
+                  //           width: 170,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       padding: EdgeInsets.all(5.0),
+                  //       child: Card(
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(10.0)),
+                  //         child: Image.asset(
+                  //           Images.r1,
+                  //           width: 170,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // )
                 ],
               )),
         ),
