@@ -136,20 +136,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           Positioned(
                                             child: Align(
                                               alignment: Alignment.center,
-                                              child: GestureDetector(
-                                                  child: GestureDetector(
-                                                child: Container(
-                                                  height: 55,
-                                                  width: 55,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(50),
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          image: AssetImage(
-                                                            Images.paymentSelected,
-                                                          ))),
-                                                ),
-                                              )),
+                                              child: Container(
+                                              height: 55,
+                                              width: 55,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(50),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: AssetImage(
+                                                      Images.paymentSelected,
+                                                    ))),
+                                              ),
                                             ),
                                           ),
                                         if (controller.currentPage == PageState.complete || widget.pageState == 'complete')
@@ -158,20 +155,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             left: Get.find<LocalizationController>().isLtr ? null : 0,
                                             top: 0,
                                             bottom: 0,
-                                            child: GestureDetector(
-                                                child: GestureDetector(
-                                              child: Container(
-                                                height: 55,
-                                                width: 55,
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(50),
-                                                    image: DecorationImage(
-                                                        fit: BoxFit.fill,
-                                                        image: AssetImage(
-                                                          Images.completeSelected,
-                                                        ))),
-                                              ),
-                                            )),
+                                            child: Container(
+                                            height: 55,
+                                            width: 55,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50),
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: AssetImage(
+                                                    Images.completeSelected,
+                                                  ))),
+                                            ),
                                           ),
                                       ],
                                     ),

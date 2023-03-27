@@ -75,6 +75,9 @@ class AppConstants {
   static const String SEND_MESSAGE = '/api/v1/customer/chat/send-message';
   static const String PAGES = '/api/v1/customer/config/pages';
   static const String SUBSCRIPTION_URI = '/api/v1/newsletter/subscribe';
+  static const String UPLOADIMAGE = '/api/v1/customer/cart/uploadImg';
+  static const String UPLOADVIDEO = '/api/v1/customer/cart/uploadVideos';
+  static const String UPLOADPDF = '/api/v1/customer/cart/uploadPDF';
 
   static List<ChooseUsModel> whyChooseUsList = [
     ChooseUsModel(icon: Images.landingTrusted, title: 'trusted_by_customers_and_store_owners'),

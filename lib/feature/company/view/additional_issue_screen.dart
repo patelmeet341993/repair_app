@@ -13,6 +13,7 @@ import '../../../components/service_center_dialog.dart';
 
 class AdditionalIssueScreen extends StatefulWidget {
   final Service? service;
+
   const AdditionalIssueScreen({Key? key, this.service}) : super(key: key);
 
   @override
@@ -23,7 +24,6 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
   final scaffoldState = GlobalKey<ScaffoldState>();
 
   FilePickerResult? result;
-  PlatformFile? selectedfiles;
   List<File>? pfiles;
 
   final ImagePicker imgpicker = ImagePicker();
@@ -31,12 +31,58 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
   List<XFile>? imageList = [];
   List<XFile>? dummyImageList = [];
   File? videoList;
+  PlatformFile? selectedfiles;
   XFile? pdf;
+  int _indexs = 0;
+  bool isVideoLoading = false, isPdfLoading = false;
+
+  XFile? selectedVideo;
+  bool isVideo = false;
+  ImagePicker _picker = ImagePicker();
+  VideoPlayerController? _videoPlayerController;
+  File? videoFile;
+  var thumbnailFile;
+  String _fileText = "";
+  late CartController cartController;
+
+  Future<void> getVideo(ImageSource imageSource) async {
+    try {
+      XFile? _video = await _picker.pickVideo(source: ImageSource.gallery);
+      videoFile = File(_video!.path);
+      if (videoFile != null) {
+        thumbnailFile = await VideoCompress.getFileThumbnail(videoFile?.path ?? "", quality: 50);
+        setState(() {});
+        _videoPlayerController = VideoPlayerController.file(videoFile!);
+        print("Video file path : ${File(_video.path)}");
+        print("Thumbnail : $thumbnailFile");
+      }
+    } catch (e, s) {
+      print("Error in the getVideo method in additionissuescren $e");
+      print(s);
+    }
+  }
+
+  void selectPdf() async {
+    result = await FilePicker.platform.pickFiles();
+    selectedfiles = result!.files.first;
+
+    if (result != null) {
+      pfiles = result!.paths.map((path) => File(path!)).toList();
+      setState(() {
+        if (selectedfiles != null) {
+          _fileText = selectedfiles!.name.toString();
+        } else {
+          _fileText = pfiles.toString();
+        }
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     pfiles = [];
+    cartController = Get.find<CartController>();
   }
 
   @override
@@ -56,325 +102,59 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10,vertical: 15),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
 
                     //height: MediaQuery.of(context).size.height / 1.3,
-                   // padding: EdgeInsets.all(5.0),
+                    // padding: EdgeInsets.all(5.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 5),
-                                    child: Text(
-                                      "Add Photos (optional)",
-                                      style: ubuntuRegular.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                          fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width <
-                                                  300
-                                              ? Dimensions
-                                                  .fontSizeExtraSmall
-                                              : Dimensions
-                                                  .fontSizeDefault),
-                                      maxLines: MediaQuery.of(context)
-                                                  .size
-                                                  .width <
-                                              300
-                                          ? 1
-                                          : 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        height: 110,
-                                        width: 110,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.0)),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              selectImages(
-                                                  imgpicker, imageList);
-                                            },
-                                            icon: Image.asset(
-                                              Images.addImage,
-                                              width: Dimensions
-                                                  .PADDING_FOR_CHATTING_BUTTON,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      if (imageList!.length > 0) Flexible(
-                                        child: Container(
-                                            height: 100,
-                                            child: getImageList(imageList)),
-                                      )
-                                      // if (imageList!.length > 0) ...[
-                                      //   Container(
-                                      //     height: 110,
-                                      //     width: 110,
-                                      //     child: Card(
-                                      //       shape: RoundedRectangleBorder(
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(
-                                      //                   10.0)),
-                                      //       child: baseimage(imageList),
-                                      //     ),
-                                      //   ),
-                                      // ]
-
-                                    ],
-                                  ),
-                                ]),
-                          ),
+                        addPhotosWidget(),
+                        SizedBox(
+                          height: 5,
                         ),
-                        SizedBox(height: 5,),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 5),
-                                        child: Text(
-                                          "Add Videos (optional)",
-                                          style: ubuntuRegular.copyWith(
-                                            fontWeight: FontWeight.w700,
-                                              fontSize: MediaQuery.of(
-                                                              context)
-                                                          .size
-                                                          .width <
-                                                      300
-                                                  ? Dimensions
-                                                      .fontSizeExtraSmall
-                                                  : Dimensions
-                                                      .fontSizeDefault),
-                                          maxLines: MediaQuery.of(context)
-                                                      .size
-                                                      .width <
-                                                  300
-                                              ? 1
-                                              : 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                            height: 110,
-                                            width: 110,
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0)),
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  getVideo(
-                                                      ImageSource.gallery);
-                                                },
-                                                icon: Image.asset(
-                                                  Images.addVideo,
-                                                  width: Dimensions
-                                                      .PADDING_FOR_CHATTING_BUTTON,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          if (videofile != null)
-                                            showvideo(thumbnailFile)
-
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ]),
-                          ),
+                        videoWidget(),
+                        SizedBox(
+                          height: 5,
                         ),
-                        SizedBox(height: 5,),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 5),
-                                    child: Text(
-                                      "Add PDF (optional)",
-                                      style: ubuntuRegular.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                          fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width <
-                                                  300
-                                              ? Dimensions
-                                                  .fontSizeExtraSmall
-                                              : Dimensions
-                                                  .fontSizeDefault),
-                                      maxLines: MediaQuery.of(context)
-                                                  .size
-                                                  .width <
-                                              300
-                                          ? 1
-                                          : 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        height: 110,
-                                        width: 110,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.0)),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              selectPdf();
-                                            },
-                                            icon: Image.asset(
-                                              Images.addImage,
-                                              width: Dimensions
-                                                  .PADDING_FOR_CHATTING_BUTTON,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      (selectedfiles == null)
-                                          ? Container()
-                                          : Center(
-                                              child: GestureDetector(
-                                                child: Container(
-                                                  height: 110,
-                                                  width: 110,
-                                                  child: Card(
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    10.0)),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.all(
-                                                              10.0),
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          OpenFile.open(selectedfiles!.path);
-                                                        },
-                                                        child: Text(_fileText.toString()),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                    ],
-                                  )
-                                    ],
-                                  ),
-                                ]),
-                          ),
+                        getPdfWidget(),
+                        SizedBox(
+                          height: 5,
                         ),
-                        SizedBox(height: 5,),
                         Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Container(
                             padding: EdgeInsets.all(10),
-                            child: Column(
+                            child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
+                                children: [
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 2).copyWith(bottom: 10),
                                     child: Text(
                                       "Add Additional Details",
                                       style: ubuntuRegular.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width <
-                                                  300
-                                              ? Dimensions
-                                                  .fontSizeExtraSmall
-                                              : Dimensions
-                                                  .fontSizeDefault),
-                                      maxLines: MediaQuery.of(context)
-                                                  .size
-                                                  .width <
-                                              300
-                                          ? 1
-                                          : 3,
+                                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault),
+                                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   Container(
                                     child: TextFormField(
                                       decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(
-                                                    8.0),
-                                            borderSide: BorderSide(
-                                                color:
-                                                    Color(0xFEEDEDED))),
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(color: Color(0xFEEDEDED))),
                                       ),
                                       maxLines: 2,
                                     ),
                                   ),
-                                    ],
-                                  ),
-                                ]),
+                                ],
+                              ),
+                            ]),
                           ),
                         ),
                       ],
@@ -395,12 +175,11 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
                       buttonText: 'proceed_to_checkout'.tr,
                       onPressed: () {
                         showModalBottomSheet(
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (context) =>
-                            ServiceCenterDialog(service: widget.service));
+                            useRootNavigator: true,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) => ServiceCenterDialog(service: widget.service));
                         // Get.toNamed(RouteHelper.getCartRoute());
                       },
                     ),
@@ -412,54 +191,348 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
         ));
   }
 
-  void selectImages(ImagePicker? imgpicker, List<XFile>? list) async {
-    final List<XFile>? selectedImages = await imgpicker!.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      setState(() {
-        list!.addAll(selectedImages);
-      });
-    }
-    print("Image list Length:" + list!.length.toString());
+  Widget addPhotosWidget() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Row(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 5),
+                child: Text(
+                  "Add Photos (optional)",
+                  style: ubuntuRegular.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault),
+                  maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Get.find<CartController>().isLoading
+                  ? CircularProgressIndicator()
+                  : Container(
+                      height: 25,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: MaterialButton(
+                          minWidth: 20,
+                          onPressed: imageList?.isEmpty ?? true
+                              ? null
+                              : () async {
+                                  cartController.setIsLoading(true);
+                                  setState(() {});
+                                  bool isSuccess = await Get.find<CartController>().uploadFiles();
+                                  if (isSuccess) {
+                                    imageList?.clear();
+                                    setState(() {});
+                                  }
+                                  cartController.setIsLoading(false);
+                                  setState(() {});
+                                },
+                          child: Text(
+                            "Upload",
+                            style: ubuntuMedium.copyWith(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                          color: Theme.of(context).colorScheme.primary,
+                          disabledColor: Colors.grey,
+                        ),
+                      ),
+                    ),
+            ],
+          ),
+          SizedBox(height: 8,),
+          Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 105,
+                width: 105,
+                child: Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                  child: IconButton(
+                    onPressed: () async {
+                      await cartController.pickMultipleImage(false);
+                      imageList = cartController.pickedImageFile;
+                      setState(() {});
+                    },
+                    icon: Image.asset(
+                      Images.addImage,
+                      width: Dimensions.PADDING_FOR_CHATTING_BUTTON,
+                    ),
+                  ),
+                ),
+              ),
+              if (imageList!.length > 0)
+                Flexible(
+                  child: Container(height: 110, child: getImageList(imageList)),
+                )
+            ],
+          ),
+        ]),
+      ),
+    );
   }
 
-  XFile? selectedVideo;
-  bool isVideo = false;
-  ImagePicker _picker = ImagePicker();
-  VideoPlayerController? _videoPlayerController;
-  var videofile;
-  var thumbnailFile;
-
-  Future<void> getVideo(ImageSource imageSource) async {
-    XFile? _vido = await _picker.pickVideo(source: ImageSource.gallery);
-    videofile = File(_vido!.path);
-    if (videofile != null) {
-      thumbnailFile =
-          await VideoCompress.getFileThumbnail(videofile.path, quality: 50);
-      setState(() {});
-      _videoPlayerController = VideoPlayerController.file(videofile);
-      print("Video file path : ${File(_vido.path)}");
-      print("Thumbnail : $thumbnailFile");
-    }
+  Widget videoWidget() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 5),
+                      child: Text(
+                        "Add Videos (optional)",
+                        style: ubuntuRegular.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault),
+                        maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    isVideoLoading
+                        ? CircularProgressIndicator()
+                        : Container(
+                            height: 25,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: MaterialButton(
+                                minWidth: 20,
+                                onPressed: videoFile == null
+                                    ? null
+                                    : () async {
+                                        isVideoLoading = true;
+                                        setState(() {});
+                                        bool isSuccess = await cartController
+                                            .uploadVideoOrDocument(files: [XFile(videoFile?.path ?? "")], keyName: "service_video", isVideo: true);
+                                        if(isSuccess){
+                                          videoFile = null;
+                                        }
+                                        isVideoLoading = false;
+                                        setState(() {});
+                                      },
+                                child: Text(
+                                  "Upload",
+                                  style: ubuntuMedium.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                color: Theme.of(context).colorScheme.primary,
+                                disabledColor: Colors.grey,
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+                SizedBox(height: 8,),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      height: 110,
+                      width: 110,
+                      child: Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                        child: IconButton(
+                          onPressed: () {
+                            getVideo(ImageSource.gallery);
+                          },
+                          icon: Image.asset(
+                            Images.addVideo,
+                            width: Dimensions.PADDING_FOR_CHATTING_BUTTON,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (videoFile != null) showvideo(thumbnailFile)
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  String _fileText = "";
-  void selectPdf() async {
-    result = await FilePicker.platform.pickFiles();
-    selectedfiles = result!.files.first;
-
-    if (result != null) {
-      pfiles = result!.paths.map((path) => File(path!)).toList();
-      setState(() {
-        if(selectedfiles != null){
-          _fileText = selectedfiles!.name.toString();
-        }else{
-          _fileText = pfiles.toString();
-        }
-      });
-    }
+  Widget getPdfWidget() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5).copyWith(bottom: 5),
+                      child: Text(
+                        "Add PDF (optional)",
+                        style: ubuntuRegular.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault),
+                        maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    isPdfLoading
+                        ? CircularProgressIndicator()
+                        : Container(
+                            height: 25,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: MaterialButton(
+                                minWidth: 20,
+                                onPressed: selectedfiles == null
+                                    ? null
+                                    : () async {
+                                        isPdfLoading = true;
+                                        setState(() {});
+                                        bool isSuccess = await cartController
+                                            .uploadVideoOrDocument(files: [XFile(selectedfiles?.path ?? "")], keyName: "service_pdf", isVideo: false);
+                                        if(isSuccess){
+                                          selectedfiles = null;
+                                        }
+                                        isPdfLoading = false;
+                                        setState(() {});
+                                        // cartController.uploadFiles();
+                                      },
+                                child: Text(
+                                  "Upload",
+                                  style: ubuntuMedium.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                color: Theme.of(context).colorScheme.primary,
+                                disabledColor: Colors.grey,
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+                SizedBox(height: 8,),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      height: 110,
+                      width: 110,
+                      child: Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                        child: IconButton(
+                          onPressed: () {
+                            selectPdf();
+                          },
+                          icon: Image.asset(
+                            Images.addImage,
+                            width: Dimensions.PADDING_FOR_CHATTING_BUTTON,
+                          ),
+                        ),
+                      ),
+                    ),
+                    (selectedfiles == null)
+                        ? Container()
+                        : Center(
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile.open(selectedfiles!.path);
+                                  },
+                                  child: Container(
+                                    height: 110,
+                                    width: 110,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.picture_as_pdf),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              _fileText.toString(),
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -5,
+                                  right: -1,
+                                  child: InkWell(
+                                    onTap: () {
+                                      selectedfiles = null;
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                        padding: EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                        child: Icon(
+                                          Icons.clear,
+                                          color: Colors.white,
+                                          size: 15,
+                                        )),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
-
-  int _indexs = 0;
 
   // show images
   Widget baseimage(List<XFile>? list) {
@@ -482,19 +555,13 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
           scale: index == _indexs ? 1 : 0.9,
           child: GestureDetector(
             onDoubleTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsScreen(
-                          imagepath: imageList!.elementAt(index).path)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(imagepath: imageList!.elementAt(index).path)));
               print("Image path : ${imageList!.elementAt(index).path}");
             },
             onTap: () {
               print("image delete");
               // WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                imageList!.removeAt(index);
-              });
+
               // });
             },
             child: Container(
@@ -504,7 +571,7 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
               ),
               // height: MediaQuery.of(context).size.height / 11,
               // width: MediaQuery.of(context).size.width * 1.5,
-              height:100,
+              height: 100,
               width: 110,
             ),
           ),
@@ -514,75 +581,114 @@ class _AdditionalIssueScreenState extends State<AdditionalIssueScreen> {
   }
 
   Widget showvideo(File paths) {
-    return Container(
-      height: 110,
-      width: 110,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: GestureDetector(
-            child: Image.file(File(thumbnailFile.path)),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 110,
+          width: 110,
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: GestureDetector(
+                child: Image.file(File(thumbnailFile.path)),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => VideoScreen(videoPath: videoFile!.path)));
+                  print("Image path : ${videoFile?.path}");
+                }),
+          ),
+        ),
+        Positioned(
+          top: -5,
+          right: -1,
+          child: InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          VideoScreen(videoPath: videofile!.path)));
-              print("Image path : ${videofile.path}");
-            }),
-      ),
+              videoFile = null;
+              setState(() {});
+            },
+            child: Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                child: Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                  size: 15,
+                )),
+          ),
+        )
+      ],
     );
   }
 
-
-
-  Widget getImageList(List<XFile>? list){
+  Widget getImageList(List<XFile>? list) {
     return ListView.builder(
-      shrinkWrap: true,
+        shrinkWrap: true,
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         scrollDirection: Axis.horizontal,
         itemCount: list!.length,
-        itemBuilder: (context,index){
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailsScreen(
-                        imagepath: imageList!.elementAt(index).path)));
-            print("Image path : ${imageList!.elementAt(index).path}");
-          },
-          onDoubleTap: () {
-            print("image delete");
-            // WidgetsBinding.instance.addPostFrameCallback((_) {
-            setState(() {
-              imageList!.removeAt(index);
-            });
-            // });
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              //padding: EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10)
+        itemBuilder: (context, index) {
+          return Stack(
+            clipBehavior: Clip.none,
+            fit: StackFit.passthrough,
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(imagepath: imageList!.elementAt(index).path)));
+                  print("Image path : ${imageList!.elementAt(index).path}");
+                },
+                // onDoubleTap: () {
+                //   print("image delete");
+                //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+                //   setState(() {
+                //     imageList!.removeAt(index);
+                //   });
+                //   // });
+                // },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    // padding: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.file(
+                        File(list[index].path),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // height: MediaQuery.of(context).size.height / 11,
+                    // width: MediaQuery.of(context).size.width * 1.5,
+                    width: 105,
+                    height: 105,
+                  ),
+                ),
               ),
-              child: Image.file(
-                File(list[index].path),
-                fit: BoxFit.contain,
-
-              ),
-              // height: MediaQuery.of(context).size.height / 11,
-              // width: MediaQuery.of(context).size.width * 1.5,
-             width: 110,
-            ),
-          ),
-        );
-        }
-    );
-
+              Positioned(
+                top: -5,
+                right: -1,
+                child: InkWell(
+                  onTap: () {
+                    cartController.pickMultipleImage(true, index: index);
+                    setState(() {});
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      child: Icon(
+                        Icons.clear,
+                        color: Colors.white,
+                        size: 15,
+                      )),
+                ),
+              )
+            ],
+          );
+        });
   }
-
-
 }

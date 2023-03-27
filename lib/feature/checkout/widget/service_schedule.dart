@@ -28,8 +28,7 @@ class ServiceSchedule extends GetView<ScheduleController> {
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 7,
-                      child: Row(
+                        child: Row(
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

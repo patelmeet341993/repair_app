@@ -1,30 +1,15 @@
-import 'package:repair/components/custom_app_bar.dart';
-import 'package:repair/components/custom_image.dart';
 import 'package:repair/components/footer_base_view.dart';
 import 'package:repair/components/menu_drawer.dart';
 import 'package:repair/core/helper/decorated_tab_bar.dart';
-import 'package:repair/core/helper/price_converter.dart';
-import 'package:repair/core/helper/responsive_helper.dart';
-import 'package:repair/feature/coupon/model/coupon_model.dart';
-import 'package:repair/feature/root/view/no_data_screen.dart';
 
 import 'package:repair/feature/company/controller/company_details_controller.dart';
 import 'package:repair/feature/company/controller/company_details_tab_controller.dart';
 import 'package:repair/feature/company/model/company_model.dart' as companyModel;
-import 'package:repair/feature/service/model/service_model.dart';
 import 'package:repair/feature/company/widget/company_overview.dart';
-import 'package:repair/feature/service/widget/empty_review_widget.dart';
 import 'package:repair/feature/service/widget/service_details_faq_section.dart';
-import 'package:repair/feature/service/widget/service_details_review.dart';
-import 'package:repair/feature/splash/controller/splash_controller.dart';
-import 'package:repair/utils/dimensions.dart';
-import 'package:repair/utils/images.dart';
-import 'package:repair/utils/styles.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core_export.dart';
-import '../../../data/model/response/config_model.dart';
 
 // import '../controller/company_details_controller.dart' as company_details_controller;
 // import '../controller/company_details_tab_controller.dart' as company_details_tab_Controller;
@@ -262,24 +247,23 @@ class CompanyDetailsScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
-                      child: Positioned(
-                          child: Container(
-                            height: Dimensions.PAGES_BOTTOM_PADDING,
-                            width: Dimensions.PAGES_BOTTOM_PADDING,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: CachedNetworkImage(
-                                imageUrl: "${getImageBaseUrl()}${companyData?.logo ?? " "}",
-                                errorWidget: (BuildContext context, img, _) {
-                                  return Image.asset(
-                                    Images.placeholder,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              ),
-                            )
-                          )),
+                      child: Container(
+                        height: Dimensions.PAGES_BOTTOM_PADDING,
+                        width: Dimensions.PAGES_BOTTOM_PADDING,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: CachedNetworkImage(
+                            imageUrl: "${getImageBaseUrl()}${companyData?.logo ?? " "}",
+                            errorWidget: (BuildContext context, img, _) {
+                              return Image.asset(
+                                Images.placeholder,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                        )
+                      ),
                     ),
                     Padding(padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL)),
                     Expanded(
