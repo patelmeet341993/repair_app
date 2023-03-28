@@ -2,14 +2,15 @@ import 'package:provider/provider.dart';
 import 'package:repair/components/footer_base_view.dart';
 import 'package:repair/components/menu_drawer.dart';
 import 'package:repair/data/provider/company_provider.dart';
-import 'package:repair/feature/company/controller/company_details_controller.dart';
-import 'package:repair/feature/company/controller/company_details_tab_controller.dart';
-import 'package:repair/feature/company/model/company_model.dart';
+import 'package:repair/feature/company/model/company_model.dart' as CompanyModel;
 import 'package:repair/feature/company/view/additional_issue_screen.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/company/view/company_details_screen.dart';
 
 import '../controller/company_controller.dart';
+import '../controller/company_details_controller.dart';
+import '../controller/company_details_tab_controller.dart';
 
 class CompanyScreen extends StatefulWidget {
   final String serviceID;
@@ -25,7 +26,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
   final ScrollController scrollController = ScrollController();
   final scaffoldState = GlobalKey<ScaffoldState>();
 
-  late List<CompanyDetailsModel> itemList1 = [];
+  late List<CompanyModel.CompanyDetailsModel> itemList1 = [];
 
   bool isDescending = false;
   bool isAlphabetsSorting = false;
@@ -150,6 +151,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                 }
               }
             }
+
             return Column(
               children: [
                 Expanded(
@@ -225,23 +227,32 @@ class _CompanyScreenState extends State<CompanyScreen> {
                     ),
                   ),
                 )),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: Dimensions.PADDING_SIZE_DEFAULT,
-                    right: Dimensions.PADDING_SIZE_DEFAULT,
-                    bottom: Dimensions.PADDING_SIZE_SMALL,
-                  ),
-                  child: CustomButton(
-                    width: Get.width,
-                    radius: Dimensions.RADIUS_DEFAULT,
-                    buttonText: 'Proceed to Add Details',
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
-                        return AdditionalIssueScreen();
-                      }));
-                    },
-                  ),
-                ),
+                Consumer<CompanyProvider>(builder: (context, CompanyProvider provider, _) {
+                  bool isSelectedCompany = provider.getSelectedCompany.isNotEmpty;
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: Dimensions.PADDING_SIZE_DEFAULT,
+                      right: Dimensions.PADDING_SIZE_DEFAULT,
+                      bottom: Dimensions.PADDING_SIZE_SMALL,
+                    ),
+                    child: CustomButton(
+                      width: Get.width,
+                      radius: Dimensions.RADIUS_DEFAULT,
+                      buttonText: 'Proceed to Add Details',
+                      onPressed: isSelectedCompany
+                          ? () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return AdditionalIssueScreen(service: service,);
+                                  },
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
+                  );
+                }),
               ],
             );
           } else {
@@ -285,7 +296,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
 class FilterchipWidget extends StatefulWidget {
   final String serviceID;
   final Function()? onSelectTap;
-  final List<Data> chipName;
+  final List<CompanyModel.CompanyData> chipName;
   bool isSelected = false;
 
   FilterchipWidget({Key? key, required this.chipName, required this.serviceID, this.onSelectTap, this.isSelected = false}) : super(key: key);
@@ -298,6 +309,15 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
   var _isSelected = false;
   late int indexes;
   CompanyProvider? companyProvider;
+
+  String getImageBaseUrl() {
+    String imageBaseUrl = "";
+    imageBaseUrl = (Get.find<SplashController>().configModel.content ?? Content()).imageBaseUrl ?? "";
+    if (imageBaseUrl.isNotEmpty) {
+      imageBaseUrl += "/provider/logo/";
+    }
+    return imageBaseUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -326,14 +346,27 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                         child: Row(
                           children: [
                             Container(
-                              height: Dimensions.PAGES_BOTTOM_PADDING,
-                              width: Dimensions.PAGES_BOTTOM_PADDING,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
-                              child: Image.asset(
-                                Images.companyLogo,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                                height: Dimensions.PAGES_BOTTOM_PADDING,
+                                width: Dimensions.PAGES_BOTTOM_PADDING,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.grey),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: "${getImageBaseUrl()}${widget.chipName[index].logo ?? " "}",
+                                    errorWidget: (BuildContext context, img, _) {
+                                      return Image.asset(
+                                        Images.placeholder,
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                  ),
+                                )
+
+                                // Image.asset(
+                                //   Images.companyLogo,
+                                //   fit: BoxFit.cover,
+                                // ),
+                                ),
                             SizedBox(
                               width: 12,
                             ),
@@ -361,8 +394,20 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                         //Spacer(),
                                         InkWell(
                                           onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (BuildContext context) {
+                                                  return CompanyDetailsScreen(
+                                                      company_image: "${getImageBaseUrl()}${widget.chipName[index].logo ?? " "}",
+                                                      companyData: widget.chipName[index],
+                                                      company_name: "${widget.chipName[index].companyName}",
+                                                      company_rating: "${widget.chipName[index].avgRating}");
+
+                                                },
+                                              ),
+                                            );
                                             // Get.toNamed(RouteHelper.getSelectedCompanyRoute(
-                                            //     company_image: widget.chipName[index].companyIcon,
+                                            //     company_image: "${getImageBaseUrl()}${widget.chipName[index].logo ?? " "}",
                                             // ));
                                           },
                                           child: Text("View Profile", style: TextStyle(fontSize: 12.0, color: Colors.blueAccent, fontWeight: FontWeight.bold)),
@@ -384,7 +429,7 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                       height: 3,
                                     ),
                                     Text(
-                                      " ${widget.chipName[index].orderCount}",
+                                      "${widget.chipName[index].orderCount} Successful Orders",
                                       style: ubuntuRegular.copyWith(
                                           fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
                                           color: Colors.green,

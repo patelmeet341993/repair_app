@@ -8,16 +8,11 @@ class CategorySubCategoryScreen extends StatefulWidget {
   final String categoryID;
   final String categoryName;
   final String subCategoryIndex;
-  CategorySubCategoryScreen(
-      {Key? key,
-      required this.categoryID,
-      required this.categoryName,
-      required this.subCategoryIndex})
-      : super(key: key);
+
+  CategorySubCategoryScreen({Key? key, required this.categoryID, required this.categoryName, required this.subCategoryIndex}) : super(key: key);
 
   @override
-  State<CategorySubCategoryScreen> createState() =>
-      _CategorySubCategoryScreenState();
+  State<CategorySubCategoryScreen> createState() => _CategorySubCategoryScreenState();
 }
 
 class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
@@ -28,9 +23,7 @@ class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
   void initState() {
     Get.find<CategoryController>().getCategoryList(1, false);
     subCategoryIndex = widget.subCategoryIndex;
-    Get.find<CategoryController>().getSubCategoryList(
-        widget.categoryID, int.parse(widget.subCategoryIndex),
-        shouldUpdate: false);
+    Get.find<CategoryController>().getSubCategoryList(widget.categoryID, int.parse(widget.subCategoryIndex), shouldUpdate: false);
     if (!ResponsiveHelper.isWeb()) moved();
     super.initState();
   }
@@ -39,11 +32,7 @@ class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
     Future.delayed(Duration(seconds: 1), () {
       try {
         Scrollable.ensureVisible(
-          Get.find<CategoryController>()
-              .categoryList!
-              .elementAt(int.parse(subCategoryIndex!))
-              .globalKey!
-              .currentContext!,
+          Get.find<CategoryController>().categoryList!.elementAt(int.parse(subCategoryIndex!)).globalKey!.currentContext!,
           duration: Duration(seconds: 1),
         );
       } catch (e) {}
@@ -71,8 +60,7 @@ class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: (categoryController.categoryList != null &&
-                          !categoryController.isSearching!)
+                  child: (categoryController.categoryList != null && !categoryController.isSearching!)
                       ? Center(
                           child: Container(
                             height: ResponsiveHelper.isDesktop(context)
@@ -81,41 +69,26 @@ class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
                                     ? 140
                                     : 130,
                             margin: EdgeInsets.only(
-                              left: ResponsiveHelper.isDesktop(context)
-                                  ? 0
-                                  : Dimensions.PADDING_SIZE_DEFAULT,
+                              left: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_DEFAULT,
                             ),
                             width: Dimensions.WEB_MAX_WIDTH,
-                            padding: EdgeInsets.only(
-                                bottom: Dimensions.PADDING_SIZE_EXTRA_SMALL,
-                                top: Dimensions.PADDING_SIZE_DEFAULT),
+                            padding: EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_EXTRA_SMALL, top: Dimensions.PADDING_SIZE_DEFAULT),
                             child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              itemCount:
-                                  categoryController.categoryList!.length,
+                              itemCount: categoryController.categoryList!.length,
                               physics: BouncingScrollPhysics(),
                               padding: EdgeInsets.only(
-                                left: ResponsiveHelper.isDesktop(context)
-                                    ? 0
-                                    : Dimensions.PADDING_SIZE_SMALL,
-                                right: ResponsiveHelper.isDesktop(context)
-                                    ? 0
-                                    : Dimensions.PADDING_SIZE_SMALL,
+                                left: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_SMALL,
+                                right: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_SMALL,
                               ),
                               itemBuilder: (context, index) {
-                                CategoryModel categoryModel = categoryController
-                                    .categoryList!
-                                    .elementAt(index);
+                                CategoryModel categoryModel = categoryController.categoryList!.elementAt(index);
                                 return InkWell(
-                                  key: !ResponsiveHelper.isWeb()
-                                      ? categoryModel.globalKey
-                                      : null,
+                                  key: !ResponsiveHelper.isWeb() ? categoryModel.globalKey : null,
                                   onTap: () {
                                     subCategoryIndex = index.toString();
-                                    Get.find<CategoryController>()
-                                        .getSubCategoryList(
-                                            categoryModel.id!, index);
+                                    Get.find<CategoryController>().getSubCategoryList(categoryModel.id!, index);
                                   },
                                   hoverColor: Colors.transparent,
                                   child: Container(
@@ -124,77 +97,48 @@ class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
                                         : ResponsiveHelper.isTab(context)
                                             ? 140
                                             : 100,
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: Dimensions
-                                            .PADDING_SIZE_EXTRA_SMALL),
+                                    margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
-                                      color: index !=
-                                              int.parse(subCategoryIndex!)
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                      color:
+                                          index != int.parse(subCategoryIndex!) ? Theme.of(context).primaryColorLight : Theme.of(context).colorScheme.primary,
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            Dimensions.RADIUS_DEFAULT),
+                                        Radius.circular(Dimensions.RADIUS_DEFAULT),
                                       ),
                                     ),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                Dimensions.RADIUS_DEFAULT),
-                                            child: CustomImage(
-                                              fit: BoxFit.cover,
-                                              height:
-                                                  ResponsiveHelper.isDesktop(
-                                                          context)
-                                                      ? 50
-                                                      : ResponsiveHelper.isTab(
-                                                              context)
-                                                          ? 40
-                                                          : 30,
-                                              width: ResponsiveHelper.isDesktop(
-                                                      context)
-                                                  ? 50
-                                                  : ResponsiveHelper.isTab(
-                                                          context)
-                                                      ? 40
-                                                      : 30,
-                                              image:
-                                                  '${Get.find<SplashController>().configModel.content!.imageBaseUrl}'
-                                                  '/category/${categoryController.categoryList![index].image}',
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Dimensions.PADDING_SIZE_SMALL,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: Dimensions
-                                                    .PADDING_SIZE_DEFAULT),
-                                            child: Text(
-                                              categoryController
-                                                  .categoryList![index].name!,
-                                              style: ubuntuRegular.copyWith(
-                                                  fontSize:
-                                                      Dimensions.fontSizeSmall,
-                                                  color: index ==
-                                                          int.parse(
-                                                              subCategoryIndex!)
-                                                      ? Colors.white
-                                                      : Colors.black),
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ]),
+                                    child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
+                                        child: CustomImage(
+                                          fit: BoxFit.cover,
+                                          height: ResponsiveHelper.isDesktop(context)
+                                              ? 50
+                                              : ResponsiveHelper.isTab(context)
+                                                  ? 40
+                                                  : 30,
+                                          width: ResponsiveHelper.isDesktop(context)
+                                              ? 50
+                                              : ResponsiveHelper.isTab(context)
+                                                  ? 40
+                                                  : 30,
+                                          image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl}'
+                                              '/category/${categoryController.categoryList![index].image}',
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: Dimensions.PADDING_SIZE_SMALL,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT),
+                                        child: Text(
+                                          categoryController.categoryList![index].name!,
+                                          style: ubuntuRegular.copyWith(
+                                              fontSize: Dimensions.fontSizeSmall, color: index == int.parse(subCategoryIndex!) ? Colors.white : Colors.black),
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ]),
                                   ),
                                 );
                               },
@@ -212,16 +156,12 @@ class _CategorySubCategoryScreenState extends State<CategorySubCategoryScreen> {
                   child: Container(
                     width: Dimensions.WEB_MAX_WIDTH,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.PADDING_SIZE_LARGE),
+                      padding: const EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_LARGE),
                       child: Center(
                         child: Text(
                           'sub_categories'.tr,
                           style: ubuntuRegular.copyWith(
-                              fontSize: Dimensions.fontSizeDefault,
-                              color: Get.isDarkMode
-                                  ? Colors.white
-                                  : Theme.of(context).colorScheme.primary),
+                              fontSize: Dimensions.fontSizeDefault, color: Get.isDarkMode ? Colors.white : Theme.of(context).colorScheme.primary),
                         ),
                       ),
                     ),

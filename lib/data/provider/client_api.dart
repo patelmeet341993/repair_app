@@ -117,6 +117,7 @@ class ApiClient extends GetxService {
       Http.MultipartRequest _request =
           Http.MultipartRequest('POST', Uri.parse(appBaseUrl! + uri!));
 
+
       _request.headers.addAll(headers ?? _mainHeaders);
       for (MultipartBody multipart in multipartBody!) {
         if (kIsWeb) {
@@ -141,6 +142,16 @@ class ApiClient extends GetxService {
       }
       _request.fields.addAll(body);
       printLog('====> request: $_request');
+      printLog('====> MultipartRequest.fields: ${_request.fields}');
+      // printLog('====> MultipartRequest.fields: ${_request.files.first}');
+      _request.files.forEach((element) {
+        printLog('====> MultipartRequest.fieldName: ${element.field}');
+        printLog('====> MultipartRequest.fileName: ${element.filename}');
+        printLog('====> MultipartRequest.key: ${element.field}');
+        printLog('====> MultipartRequest.contentType: ${element.contentType}');
+      });
+
+
 
       Http.Response _response =
           await Http.Response.fromStream(await _request.send());
@@ -232,3 +243,4 @@ class MultipartBody {
 
   MultipartBody(this.key, this.file);
 }
+

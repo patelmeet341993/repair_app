@@ -1,3 +1,5 @@
+import 'package:repair/utils/parsing_helper.dart';
+
 class AddressModel {
   int? id;
   var addressLabel;
@@ -11,7 +13,7 @@ class AddressModel {
   var country;
   var zoneId;
   String? method;
-  var contactPersonName;
+  String contactPersonName = "";
   var contactPersonNumber;
   var contactPersonLabel;
   var street;
@@ -29,7 +31,7 @@ class AddressModel {
         this.country,
         this.zoneId,
         this.method,
-        this.contactPersonName,
+        this.contactPersonName = "",
         this.contactPersonNumber,
         this.contactPersonLabel,
         this.street,
@@ -48,7 +50,7 @@ class AddressModel {
     zipCode = json['zip_code'];
     country = json['country'];
     zoneId = json['zone_id'];
-    contactPersonName = json['contact_person_name'];
+    contactPersonName = ParsingHelper.parseStringMethod(json['contact_person_name']);
     contactPersonNumber = json['contact_person_number'];
     contactPersonLabel = json['address_label'];
     street = json['street'];

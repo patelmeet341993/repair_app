@@ -1,4 +1,5 @@
 import 'package:repair/data/provider/company_provider.dart';
+import 'package:repair/data/provider/company_provider.dart';
 import 'package:repair/feature/company/model/company_model.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -59,7 +60,9 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>>? languages;
   final String? bookingID;
+
   MyApp({@required this.languages, @required this.bookingID});
+
   void _route() {
     Get.find<SplashController>().getConfigData().then((bool isSuccess) async {
       if (isSuccess) {

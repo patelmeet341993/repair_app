@@ -13,7 +13,11 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
-      appBar: CustomAppBar(title: 'cart'.tr, isBackButtonExist: (ResponsiveHelper.isDesktop(context) || !fromNav)),
+      appBar: CustomAppBar(
+          onBackPressed: (){
+            Get.until((route) => Get.currentRoute == "/");
+          },
+          title: 'cart'.tr, isBackButtonExist: (ResponsiveHelper.isDesktop(context) || !fromNav)),
       body: SafeArea(
         child: GetBuilder<CartController>(
           initState: (state) {

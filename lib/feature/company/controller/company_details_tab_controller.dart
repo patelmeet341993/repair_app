@@ -5,8 +5,7 @@ import 'package:repair/core/core_export.dart';
 
 enum CompanyTabControllerState { serviceOverview, faq, review }
 
-class CompanyTabController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class CompanyTabController extends GetxController with GetSingleTickerProviderStateMixin {
   final CompanyDetailsRepo companyDetailsRepo;
   CompanyTabController({required this.companyDetailsRepo});
 

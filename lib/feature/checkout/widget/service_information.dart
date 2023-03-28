@@ -25,132 +25,131 @@ class ServiceInformation extends StatelessWidget {
                   right: Dimensions.PADDING_SIZE_DEFAULT),
               width: Get.width,
               color: Theme.of(context).hoverColor,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: Dimensions.PADDING_SIZE_SMALL,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Dimensions.PADDING_SIZE_SMALL,
+                          ),
+                          if (addressModel!.contactPersonName != null &&
+                              !addressModel.contactPersonName
+                                  .toString()
+                                  .contains('null'))
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                              child: Text(
+                                addressModel.contactPersonName.toString(),
+                                style: ubuntuMedium.copyWith(
+                                    fontSize: Dimensions.fontSizeSmall),
+                              ),
                             ),
-                            if (addressModel!.contactPersonName != null &&
-                                !addressModel.contactPersonName
-                                    .toString()
-                                    .contains('null'))
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                child: Text(
-                                  addressModel.contactPersonName.toString(),
-                                  style: ubuntuMedium.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall),
-                                ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          if (addressModel.contactPersonNumber != null &&
+                              !addressModel.contactPersonNumber
+                                  .toString()
+                                  .contains('null'))
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                              child: Text(
+                                addressModel.contactPersonNumber,
+                                style: ubuntuRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeSmall,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color!
+                                        .withOpacity(.6)),
                               ),
-                            SizedBox(
-                              height: 8.0,
                             ),
-                            if (addressModel.contactPersonNumber != null &&
-                                !addressModel.contactPersonNumber
-                                    .toString()
-                                    .contains('null'))
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                          if (addressModel.address != null)
+                            SizedBox(
+                              height: Dimensions.PADDING_SIZE_EXTRA_SMALL,
+                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.location_pin,
+                                size: 15,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              Expanded(
                                 child: Text(
-                                  addressModel.contactPersonNumber,
-                                  style: ubuntuRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color!
-                                          .withOpacity(.6)),
-                                ),
-                              ),
-                            if (addressModel.address != null)
-                              SizedBox(
-                                height: Dimensions.PADDING_SIZE_EXTRA_SMALL,
-                              ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.location_pin,
-                                  size: 15,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                Text(
                                   addressModel.address!,
-                                  maxLines: 1,
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: ubuntuRegular.copyWith(
                                       fontSize: Dimensions.fontSizeSmall),
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: Dimensions.PADDING_SIZE_EXTRA_SMALL,
-                            ),
-                            if (addressModel.country != null &&
-                                addressModel.street != null &&
-                                addressModel.city != null &&
-                                addressModel.zipCode != null)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                child: Text(
-                                  addressModel.country,
-                                  style: ubuntuRegular.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color!,
-                                      fontSize: Dimensions.fontSizeExtraSmall),
-                                ),
-                              )
-                            else
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical:
-                                        Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                child: Text(
-                                  "some_information_is_missing".tr,
-                                  style: ubuntuRegular.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color!
-                                          .withOpacity(.6),
-                                      fontSize: Dimensions.fontSizeExtraSmall),
-                                ),
-                              )
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: Dimensions.PADDING_SIZE_EXTRA_SMALL,
+                          ),
+                          if (addressModel.country != null &&
+                              addressModel.street != null &&
+                              addressModel.city != null &&
+                              addressModel.zipCode != null)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                              child: Text(
+                                addressModel.country,
+                                style: ubuntuRegular.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color!,
+                                    fontSize: Dimensions.fontSizeExtraSmall),
+                              ),
+                            )
+                          else
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical:
+                                      Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                              child: Text(
+                                "some_information_is_missing".tr,
+                                style: ubuntuRegular.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color!
+                                        .withOpacity(.6),
+                                    fontSize: Dimensions.fontSizeExtraSmall),
+                              ),
+                            )
+                        ],
                       ),
-                      Center(
-                        child: InkWell(
-                            onTap: () {
-                              Get.toNamed(
-                                  RouteHelper.getAddressRoute('checkout'));
-                            },
-                            child: Image.asset(
-                              Images.editButton,
-                              height: 20,
-                              width: 20,
-                            )),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Center(
+                      child: InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                                RouteHelper.getAddressRoute('checkout'));
+                          },
+                          child: Image.asset(
+                            Images.editButton,
+                            height: 20,
+                            width: 20,
+                          )),
+                    ),
+                  ],
                 ),
               ),
             ),

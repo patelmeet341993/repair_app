@@ -15,10 +15,10 @@ class CompanyDetailsController extends GetxController {
   Service? _service;
   bool? _isLoading;
   int? _offset = 1;
-  List<Data>? _companyContent;
+  List<CompanyData>? _companyContent;
   int? _pageSize;
 
-  List<Data>? get companyContent => _companyContent;
+  List<CompanyData>? get companyContent => _companyContent;
   int? get pageSize => _pageSize;
   int? get offset => _offset;
   Service? get service => _service;
@@ -67,7 +67,7 @@ class CompanyDetailsController extends GetxController {
           response.body['content'].forEach((element){
             // ['data'].forEach((company) {
             // if(element != null || element.length != 0) {
-              _companyContent!.add(Data.fromJson(element[0]));
+              _companyContent!.add(CompanyData.fromJson(element[0]));
             // }
             // });
           });

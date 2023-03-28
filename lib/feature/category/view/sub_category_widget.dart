@@ -70,7 +70,7 @@ class SubCategoryWidget extends GetView<ServiceController> {
                       height: Dimensions.PADDING_SIZE_SMALL,
                     ),
                     Text(
-                      "${categoryModel!.serviceCount} ${'services'.tr} ",
+                      "${(categoryModel ?? CategoryModel()).services?.length ?? 0} ${'services'.tr} ",
                       style: ubuntuRegular.copyWith(
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w400,

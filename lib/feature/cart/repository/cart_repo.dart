@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:file_picker/file_picker.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/notification/repository/notification_repo.dart';
 
@@ -49,5 +50,19 @@ class CartRepo {
   Future<Response> updateCartQuantity(String cartID, int quantity) async {
     return await apiClient.putData(
         AppConstants.UPDATE_CART_QUANTITY + "$cartID", {'quantity': quantity});
+  }
+
+
+  Future<Response> uploadFile({String message = "", String channelID = "", List<MultipartBody> file = const [], PlatformFile? platformFile}) async {
+    return await apiClient.postMultipartData(
+        AppConstants.UPLOADIMAGE,
+        {},
+        file);
+  }
+  Future<Response> uploadVideoAndDocument({String message = "", String channelID = "", List<MultipartBody> file = const [], PlatformFile? platformFile, bool isVideo = false}) async {
+    return await apiClient.postMultipartData(
+        isVideo ? AppConstants.UPLOADVIDEO : AppConstants.UPLOADPDF,
+        {},
+        file);
   }
 }

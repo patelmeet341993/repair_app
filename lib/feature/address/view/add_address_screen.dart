@@ -38,10 +38,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     super.initState();
     Get.find<LocationController>().resetAddress();
     if (widget.address != null) {
-      _serviceAddressController.text = widget.address!.address!;
-      _contactPersonNameController.text = widget.address!.contactPersonName!;
+      _serviceAddressController.text = widget.address!.address ?? "";
+      _contactPersonNameController.text = widget.address!.contactPersonName ?? "";
       _contactPersonNumberController.text =
-          widget.address!.contactPersonNumber!;
+          widget.address!.contactPersonNumber ?? "";
       _cityController.text = widget.address!.city ?? '';
       _countryController.text = widget.address!.country ?? '';
       _streetController.text = widget.address!.street ?? 'street'.toString();
