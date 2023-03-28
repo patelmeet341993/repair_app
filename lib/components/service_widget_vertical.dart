@@ -132,7 +132,7 @@ class ServiceWidgetVertical extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             CommonSubmitButton(
-                                text: 'Book Nows'.tr,
+                                text: 'Book Now'.tr,
                                 fontSize: Dimensions.fontSizeSmall,
                                 onTap: () {
                                   Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "", service.subCategoryId ?? ""),

@@ -211,6 +211,10 @@ class RouteHelper {
         binding: BottomNavBinding(),
         page: () => getRoute(BottomNavScreen(pageIndex: 0))),
     GetPage(
+        name: initial,
+        binding: BottomNavBinding(),
+        page: () => getRoute(BottomNavScreen(pageIndex: 1))),
+    GetPage(
         name: splash,
         page: () {
           String? _data;

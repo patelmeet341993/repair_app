@@ -9,6 +9,7 @@ import 'package:repair/feature/home/home_screen.dart';
 import 'package:repair/feature/menu/menu_screen.dart';
 import 'package:repair/feature/offers/offer_screen.dart';
 import 'package:repair/feature/service_booking/view/booking_screen.dart';
+import 'package:repair/feature/shop/shop_screen.dart';
 import 'package:repair/utils/dimensions.dart';
 import 'package:repair/utils/images.dart';
 import 'package:repair/utils/styles.dart';
@@ -202,11 +203,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       case BnbItem.Repair:
         return HomeScreen();
       case BnbItem.Shop:
-        if (!Get.find<AuthController>().isLoggedIn()) {
-          break;
-        } else {
-          return OfferScreen();
-        }
+        return ShopScreen();
+        // if (!Get.find<AuthController>().isLoggedIn()) {
+        //   break;
+        // } else {
+        //   return OfferScreen();
+        // }
+
       case BnbItem.Cart:
         if (!Get.find<AuthController>().isLoggedIn()) {
           break;

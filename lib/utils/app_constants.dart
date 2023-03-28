@@ -79,6 +79,13 @@ class AppConstants {
   static const String UPLOADVIDEO = '/api/v1/customer/cart/uploadVideos';
   static const String UPLOADPDF = '/api/v1/customer/cart/uploadPDF';
 
+  //region shop
+   static const String SHOP_BANNER_URI = '/api/v1/customer/productbanner?limit=10&offset=1';
+
+
+
+  //end region
+
   static List<ChooseUsModel> whyChooseUsList = [
     ChooseUsModel(icon: Images.landingTrusted, title: 'trusted_by_customers_and_store_owners'),
     ChooseUsModel(icon: Images.landingStores, title: 'thousands_of_stores'),
