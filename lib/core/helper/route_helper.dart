@@ -11,8 +11,11 @@ import 'package:repair/feature/checkout/view/payment_screen.dart';
 import 'package:repair/feature/service/view/all_service_view.dart';
 import 'package:repair/feature/html/html_viewer_screen.dart';
 import 'package:repair/feature/settings/bindings/settings_bindings.dart';
+import 'package:repair/feature/shop/features/shop_category/bindings/shop_category_bindings.dart';
 import 'package:repair/utils/html_type.dart';
 import 'package:repair/core/core_export.dart';
+
+import '../../feature/shop/features/shop_category/view/shop_category_subcategory_screen.dart';
 
 class RouteHelper {
   static const String initial = '/';
@@ -43,6 +46,7 @@ class RouteHelper {
   static const String selectedCompanies = '/selectedCompanies';
   static const String additionalIssue = '/additionalIssue';
   static const String categoryProduct = '/category-product';
+  static const String shopCategoryProduct = '/shop-category-product';
   static const String popularFoods = '/popular-foods';
   static const String itemCampaign = '/item-campaign';
   static const String support = '/help-and-support';
@@ -135,6 +139,12 @@ class RouteHelper {
     List<int> _encoded = utf8.encode(name);
     String _data = base64Encode(_encoded);
     return '$categoryProduct?id=$id&name=$_data&subCategoryIndex=$subCategoryIndex';
+  }
+  static String getShopCategoryProductRoute(
+      String id, String name, String subCategoryIndex) {
+    List<int> _encoded = utf8.encode(name);
+    String _data = base64Encode(_encoded);
+    return '$shopCategoryProduct?id=$id&name=$_data&subCategoryIndex=$subCategoryIndex';
   }
 
   static String getPopularFoodRoute() => '$popularFoods?page=popular';
@@ -393,6 +403,20 @@ class RouteHelper {
               base64Decode(Get.parameters['name']!.replaceAll(' ', '+'));
           String _data = utf8.decode(_decode);
           return getRoute(CategorySubCategoryScreen(
+            categoryID: Get.parameters['id']!,
+            categoryName: _data,
+            subCategoryIndex: Get.parameters['subCategoryIndex']!,
+          ));
+        }),
+
+    GetPage(
+        binding: ShopCategoryBindings(),
+        name: shopCategoryProduct,
+        page: () {
+          List<int> _decode =
+              base64Decode(Get.parameters['name']!.replaceAll(' ', '+'));
+          String _data = utf8.decode(_decode);
+          return getRoute(ShopCategorySubCategoryScreen(
             categoryID: Get.parameters['id']!,
             categoryName: _data,
             subCategoryIndex: Get.parameters['subCategoryIndex']!,

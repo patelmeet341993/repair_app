@@ -81,6 +81,8 @@ class AppConstants {
 
   //region shop
    static const String SHOP_BANNER_URI = '/api/v1/customer/productbanner?limit=10&offset=1';
+  static const String SHOP_CATEGORY_URI = '/api/v1/customer/productcategory?limit=20';
+  static const String SHOP_SUB_CATEGORY_URI = '/api/v1/customer/productcategory/childes?limit=20&offset=1&id=';
 
 
 

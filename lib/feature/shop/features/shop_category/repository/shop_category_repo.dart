@@ -7,7 +7,7 @@ class ShopCategoryRepo {
 
   Future<Response> getCategoryList(int offset) async {
     return await apiClient
-        .getData('${AppConstants.CATEGORY_URI}&limit=100&offset=$offset');
+        .getData('${AppConstants.SHOP_CATEGORY_URI}&limit=100&offset=$offset');
   }
 
   Future<Response> getItemsBasedOnCampaignId(
@@ -17,7 +17,7 @@ class ShopCategoryRepo {
   }
 
   Future<Response> getSubCategoryList(String parentID) async {
-    return await apiClient.getData('${AppConstants.SUB_CATEGORY_URI}$parentID');
+    return await apiClient.getData('${AppConstants.SHOP_SUB_CATEGORY_URI}$parentID');
   }
 
   Future<Response> getCategoryServiceList(

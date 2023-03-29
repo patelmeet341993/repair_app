@@ -1,15 +1,28 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/campaign/model/category_types_model.dart';
+import 'package:repair/feature/shop/features/products/model/product_model.dart';
+import 'package:repair/feature/shop/features/products/model/product_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+
+import '../repository/shop_category_repo.dart';
 
 class ShopCategoryController extends GetxController implements GetxService {
-  final CategoryRepo categoryRepo;
-  ShopCategoryController({required this.categoryRepo});
+  final ShopCategoryRepo shopCategoryRepo;
+  ShopCategoryController({required this.shopCategoryRepo});
 
-  List<CategoryModel>? _categoryList;
-  List<CategoryModel>? _subCategoryList;
-  List<Service>? _searchProductList = [];
-  List<CategoryModel>? _campaignBasedCategoryList;
+  List<ShopCategoryModel>? _categoryList;
+  List<ShopCategoryModel>? _subCategoryList;
+  List<Product>? _searchProductList = [];
+  List<ShopCategoryModel>? _campaignBasedCategoryList;
 
   bool _isLoading = false;
   int? _pageSize;
@@ -18,11 +31,11 @@ class ShopCategoryController extends GetxController implements GetxService {
   String? _searchText = '';
   int? _offset = 1;
 
-  List<CategoryModel>? get categoryList => _categoryList;
-  List<CategoryModel>? get campaignBasedCategoryList =>
+  List<ShopCategoryModel>? get categoryList => _categoryList;
+  List<ShopCategoryModel>? get campaignBasedCategoryList =>
       _campaignBasedCategoryList;
-  List<CategoryModel>? get subCategoryList => _subCategoryList;
-  List<Service>? get searchServiceList => _searchProductList;
+  List<ShopCategoryModel>? get subCategoryList => _subCategoryList;
+  List<Product>? get searchServiceList => _searchProductList;
   bool get isLoading => _isLoading;
   int? get pageSize => _pageSize;
   bool? get isSearching => _isSearching;
@@ -50,11 +63,11 @@ class ShopCategoryController extends GetxController implements GetxService {
   Future<void> getCategoryList(int offset, bool reload) async {
     _offset = offset;
     if (_categoryList == null || reload) {
-      Response response = await categoryRepo.getCategoryList(offset);
+      Response response = await shopCategoryRepo.getCategoryList(offset);
       if (response.statusCode == 200) {
         _categoryList = [];
         response.body['content']['data'].forEach((category) {
-          _categoryList!.add(CategoryModel.fromJson(category));
+          _categoryList!.add(ShopCategoryModel.fromJson(category));
         });
         _pageSize = response.body['content']['last_page'];
       } else {
@@ -71,12 +84,12 @@ class ShopCategoryController extends GetxController implements GetxService {
     if (shouldUpdate) {
       update();
     }
-    Response response = await categoryRepo.getSubCategoryList(categoryID);
+    Response response = await shopCategoryRepo.getSubCategoryList(categoryID);
     if (response.statusCode == 200) {
       _subCategoryList = [];
       response.body['content']['data'].forEach((category) => _subCategoryList!
-          .addIf(CategoryModel.fromJson(category).isActive,
-              CategoryModel.fromJson(category)));
+          .addIf(ShopCategoryModel.fromJson(category).isActive,
+              ShopCategoryModel.fromJson(category)));
     } else {
       ApiChecker.checkApi(response);
     }
@@ -87,7 +100,7 @@ class ShopCategoryController extends GetxController implements GetxService {
       String campaignID, bool isWithPagination) async {
     printLog("inside_campaign_based_category !");
     Response response =
-        await categoryRepo.getItemsBasedOnCampaignId(campaignID: campaignID);
+        await shopCategoryRepo.getItemsBasedOnCampaignId(campaignID: campaignID);
 
     if (response.body['response_code'] == 'default_200') {
       if (!isWithPagination) {

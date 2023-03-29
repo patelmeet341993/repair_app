@@ -3,6 +3,10 @@ import 'package:repair/components/menu_drawer.dart';
 import 'package:repair/feature/home/widget/category_view.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/shop_category/view/shop_subcategory_view.dart';
+
+import '../controller/shop_category_controller.dart';
+import '../model/shop_category_model.dart';
 
 class ShopCategorySubCategoryScreen extends StatefulWidget {
   final String categoryID;
@@ -21,9 +25,9 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
 
   @override
   void initState() {
-    Get.find<CategoryController>().getCategoryList(1, false);
+    Get.find<ShopCategoryController>().getCategoryList(1, false);
     subCategoryIndex = widget.subCategoryIndex;
-    Get.find<CategoryController>().getSubCategoryList(widget.categoryID, int.parse(widget.subCategoryIndex), shouldUpdate: false);
+    Get.find<ShopCategoryController>().getSubCategoryList(widget.categoryID, int.parse(widget.subCategoryIndex), shouldUpdate: false);
     if (!ResponsiveHelper.isWeb()) moved();
     super.initState();
   }
@@ -32,7 +36,7 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
     Future.delayed(Duration(seconds: 1), () {
       try {
         Scrollable.ensureVisible(
-          Get.find<CategoryController>().categoryList!.elementAt(int.parse(subCategoryIndex!)).globalKey!.currentContext!,
+          Get.find<ShopCategoryController>().categoryList!.elementAt(int.parse(subCategoryIndex!)).globalKey!.currentContext!,
           duration: Duration(seconds: 1),
         );
       } catch (e) {}
@@ -41,11 +45,11 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CategoryController>(builder: (categoryController) {
+    return GetBuilder<ShopCategoryController>(builder: (categoryController) {
       return Scaffold(
         endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
         appBar: CustomAppBar(
-          title: 'available_service'.tr,
+          title: 'available_product'.tr,
         ),
         body: FooterBaseView(
           child: SizedBox(
@@ -83,12 +87,12 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
                                 right: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_SMALL,
                               ),
                               itemBuilder: (context, index) {
-                                CategoryModel categoryModel = categoryController.categoryList!.elementAt(index);
+                                ShopCategoryModel categoryModel = categoryController.categoryList!.elementAt(index);
                                 return InkWell(
                                   key: !ResponsiveHelper.isWeb() ? categoryModel.globalKey : null,
                                   onTap: () {
                                     subCategoryIndex = index.toString();
-                                    Get.find<CategoryController>().getSubCategoryList(categoryModel.id!, index);
+                                    Get.find<ShopCategoryController>().getSubCategoryList(categoryModel.id!, index);
                                   },
                                   hoverColor: Colors.transparent,
                                   child: Container(
@@ -121,7 +125,7 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
                                                   ? 40
                                                   : 30,
                                           image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl}'
-                                              '/category/${categoryController.categoryList![index].image}',
+                                              '/productcategory/${categoryController.categoryList![index].image}',
                                         ),
                                       ),
                                       SizedBox(
@@ -167,7 +171,7 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
                     ),
                   ),
                 ),
-                SubCategoryView(
+                ShopSubCategoryView(
                   noDataText: "no_subcategory_found".tr,
                   isScrollable: true,
                 ),
@@ -177,5 +181,107 @@ class _ShopCategorySubCategoryScreenState extends State<ShopCategorySubCategoryS
         ),
       );
     });
+  }
+}
+class WebCategoryShimmer extends StatelessWidget {
+  final ShopCategoryController categoryController;
+  final bool? fromHomeScreen;
+
+  WebCategoryShimmer(
+      {required this.categoryController, this.fromHomeScreen = true});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: Dimensions.WEB_MAX_WIDTH,
+        child: Column(
+          children: [
+            if (fromHomeScreen!)
+              SizedBox(
+                height: Dimensions.PADDING_SIZE_DEFAULT,
+              ),
+            if (fromHomeScreen!)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    height: 30,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[
+                      Get.find<ThemeController>().darkTheme ? 700 : 300],
+                      borderRadius: BorderRadius.all(Radius.circular(
+                        Dimensions.RADIUS_DEFAULT,
+                      )),
+                    ),
+                  ),
+                  Container(
+                    height: 30,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[
+                      Get.find<ThemeController>().darkTheme ? 700 : 300],
+                      borderRadius: BorderRadius.all(Radius.circular(
+                        Dimensions.RADIUS_DEFAULT,
+                      )),
+                    ),
+                  )
+                ],
+              ),
+            if (fromHomeScreen!)
+              SizedBox(
+                height: Dimensions.PADDING_SIZE_DEFAULT,
+              ),
+            GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 8,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[
+                      Get.find<ThemeController>().darkTheme ? 700 : 300],
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Dimensions.RADIUS_DEFAULT))),
+                  margin: EdgeInsets.only(top: Dimensions.PADDING_SIZE_LARGE),
+                  child: Shimmer(
+                    duration: Duration(seconds: 2),
+                    enabled: true,
+                    child: Row(children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                      SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+                      Container(
+                          color: Colors.grey[
+                          Get.find<ThemeController>().darkTheme
+                              ? 600
+                              : 300]),
+                    ]),
+                  ),
+                );
+              },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: ResponsiveHelper.isDesktop(context)
+                    ? 8
+                    : ResponsiveHelper.isTab(context)
+                    ? 6
+                    : 4,
+                crossAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
+                mainAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
+                childAspectRatio:
+                ResponsiveHelper.isDesktop(context) ? 1 : 0.85,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

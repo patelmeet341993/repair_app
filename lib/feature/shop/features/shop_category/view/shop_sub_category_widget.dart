@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 
+import '../model/shop_category_model.dart';
+
 class ShopSubCategoryWidget extends GetView<ServiceController> {
-  final CategoryModel? categoryModel;
+  final ShopCategoryModel? categoryModel;
   ShopSubCategoryWidget({
     required this.categoryModel,
   });
@@ -32,7 +34,7 @@ class ShopSubCategoryWidget extends GetView<ServiceController> {
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
             child: CustomImage(
               image:
-                  '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/category/${categoryModel!.image}',
+                  '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/productcategory/${categoryModel!.image}',
               height: _desktop ? 120 : 78,
               width: _desktop ? 120 : 78,
               fit: BoxFit.cover,
@@ -70,7 +72,7 @@ class ShopSubCategoryWidget extends GetView<ServiceController> {
                       height: Dimensions.PADDING_SIZE_SMALL,
                     ),
                     Text(
-                      "${(categoryModel ?? CategoryModel()).services?.length ?? 0} ${'services'.tr} ",
+                      "${(categoryModel ?? ShopCategoryModel()).product?.length ?? 0} ${'services'.tr} ",
                       style: ubuntuRegular.copyWith(
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w400,

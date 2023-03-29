@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/category/view/sub_category_widget.dart';
+import 'package:repair/feature/shop/features/shop_category/controller/shop_category_controller.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
+import 'package:repair/feature/shop/features/shop_category/view/shop_sub_category_widget.dart';
 
 class ShopSubCategoryView extends GetView<CategoryController> {
   final EdgeInsetsGeometry? padding;
@@ -19,7 +22,7 @@ class ShopSubCategoryView extends GetView<CategoryController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CategoryController>(
+    return GetBuilder<ShopCategoryController>(
       builder: (categoryController) {
         if (categoryController.subCategoryList == null) {
           return SliverGrid(
@@ -40,7 +43,7 @@ class ShopSubCategoryView extends GetView<CategoryController> {
             ),
           );
         } else {
-          List<CategoryModel> subCategoryList =
+          List<ShopCategoryModel> subCategoryList =
               categoryController.subCategoryList ?? [];
           return subCategoryList.length > 0
               ? SliverGrid(
@@ -57,7 +60,7 @@ class ShopSubCategoryView extends GetView<CategoryController> {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return SubCategoryWidget(
+                      return ShopSubCategoryWidget(
                           categoryModel: subCategoryList[index]);
                     },
                     childCount: subCategoryList.length,

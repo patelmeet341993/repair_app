@@ -1,13 +1,14 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/shop_category/controller/shop_category_controller.dart';
 
 class ShopCategoryView extends StatelessWidget {
   ShopCategoryView();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CategoryController>(initState: (state) {
-      Get.find<CategoryController>().getCategoryList(1, false);
+    return GetBuilder<ShopCategoryController>(initState: (state) {
+      Get.find<ShopCategoryController>().getCategoryList(1, false);
     }, builder: (categoryController) {
       if (categoryController.categoryList != null &&
           categoryController.categoryList!.length == 0) {
@@ -26,15 +27,16 @@ class ShopCategoryView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Service Categories'.tr,
+                          Text('Product Categories'.tr,
                               style: ubuntuMedium.copyWith(
                                   fontSize: Dimensions.fontSizeExtraLarge)),
                           InkWell(
                             onTap: () {
-                              Get.toNamed(RouteHelper.getCategoryProductRoute(
+                              Get.toNamed(RouteHelper.getShopCategoryProductRoute(
                                   categoryController.categoryList![0].id!,
                                   categoryController.categoryList![0].name!,
                                   0.toString()));
+                              print("on tap called");
                             },
                             hoverColor: Theme.of(context)
                                 .primaryColor
@@ -99,7 +101,7 @@ class ShopCategoryView extends StatelessWidget {
                                           Dimensions.RADIUS_DEFAULT),
                                       child: CustomImage(
                                         image:
-                                            '${Get.find<SplashController>().configModel.content!.imageBaseUrl}/category/${categoryController.categoryList![index].image}',
+                                            '${Get.find<SplashController>().configModel.content!.imageBaseUrl}/productcategory/${categoryController.categoryList![index].image}',
                                         fit: BoxFit.cover,
                                         height: ResponsiveHelper.isMobile(
                                                 context)
@@ -155,7 +157,7 @@ class ShopCategoryView extends StatelessWidget {
 }
 
 class WebCategoryShimmer extends StatelessWidget {
-  final CategoryController categoryController;
+  final ShopCategoryController categoryController;
   final bool? fromHomeScreen;
 
   WebCategoryShimmer(

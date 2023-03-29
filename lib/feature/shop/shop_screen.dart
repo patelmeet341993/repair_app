@@ -6,6 +6,7 @@ import 'package:repair/feature/home/widget/campaign_view.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/home/widget/category_view.dart';
 import 'package:repair/feature/home/widget/random_campaign_view.dart';
+import 'package:repair/feature/shop/features/shop_category/controller/shop_category_controller.dart';
 import 'package:repair/feature/shop/web_shop_screen.dart';
 import 'package:repair/feature/shop/widgets/shop_banner_view.dart';
 import 'package:repair/feature/shop/widgets/shop_campaign_view.dart';
@@ -16,7 +17,7 @@ import 'controller/shop_banner_controller.dart';
 class ShopScreen extends StatefulWidget {
   static Future<void> loadData(bool reload) async {
     Get.find<ShopBannerController>().getShopBannerList(reload);
-    Get.find<CategoryController>().getCategoryList(1, reload);
+    Get.find<ShopCategoryController>().getCategoryList(1, reload);
     Get.find<ServiceController>().getPopularServiceList(1, reload);
     Get.find<CampaignController>().getCampaignList(reload);
     Get.find<ServiceController>().getRecommendedServiceList(1, reload);
@@ -59,7 +60,7 @@ class _ShopScreenState extends State<ShopScreen> {
           child: RefreshIndicator(
             onRefresh: () async {
               await Get.find<ShopBannerController>().getShopBannerList(true);
-              await Get.find<CategoryController>().getCategoryList(1, true);
+              await Get.find<ShopCategoryController>().getCategoryList(1, true);
               await Get.find<ServiceController>().getPopularServiceList(
                 1,
                 true,
