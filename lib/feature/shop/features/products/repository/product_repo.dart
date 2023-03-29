@@ -9,17 +9,17 @@ class ProductRepo extends GetxService {
 
   Future<Response> getAllProductList(int offset) async {
     return await apiClient
-        .getData('${AppConstants.ALL_SERVICE_URI}?offset=$offset&limit=10');
+        .getData('${AppConstants.SHOP_ALL_PRODUCT_URI}?offset=$offset&limit=10');
   }
 
   Future<Response> getPopularProductList(int offset) async {
     return await apiClient
-        .getData('${AppConstants.POPULAR_SERVICE_URI}?offset=$offset&limit=10');
+        .getData('${AppConstants.SHOP_POPULAR_SERVICE_URI}?offset=$offset&limit=10');
   }
 
   Future<Response> getRecommendedProductList(int offset) async {
     return await apiClient.getData(
-        '${AppConstants.RECOMMENDED_SERVICE_URI}?limit=10&offset=$offset');
+        '${AppConstants.RECOMMENDED_PRODUCT_URI}?limit=10&offset=$offset');
   }
 
   Future<Response> getOffersList(int offset) async {
@@ -30,7 +30,7 @@ class ProductRepo extends GetxService {
   Future<Response> getProductListBasedOnSubCategory(
       {required String subCategoryID, required int offset}) async {
     return await apiClient.getData(
-        '${AppConstants.SERVICE_BASED_ON_SUB_CATEGORY}$subCategoryID?limit=10&offset=$offset');
+        '${AppConstants.PRODUCT_BASED_ON_SUB_CATEGORY}$subCategoryID?limit=10&offset=$offset');
   }
 
   Future<Response> getItemsBasedOnCampaignId(

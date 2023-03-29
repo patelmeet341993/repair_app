@@ -33,7 +33,7 @@ class ShopPopularProductView extends GetView<ProductController> {
                     child: TitleWidget(
                       title: 'popular_services'.tr,
                       onTap: () => Get.toNamed(
-                          RouteHelper.allServiceScreenRoute(
+                          RouteHelper.allProductScreenRoute(
                               "fromPopularServiceView")),
                     ),
                   ),
@@ -64,25 +64,25 @@ class ShopPopularProductView extends GetView<ProductController> {
                         Product product = productController.popularProductList!
                             .elementAt(index);
                         double _lowestPrice = 0.0;
-                        if (product.variationsAppFormat!.zoneWiseVariations !=
-                            null) {
-                          _lowestPrice = product.variationsAppFormat!
-                              .zoneWiseVariations![0].price!
-                              .toDouble();
-                          for (var i = 0;
-                              i <
-                                  product.variationsAppFormat!
-                                      .zoneWiseVariations!.length;
-                              i++) {
-                            if (product.variationsAppFormat!
-                                    .zoneWiseVariations![i].price! <
-                                _lowestPrice) {
-                              _lowestPrice = product.variationsAppFormat!
-                                  .zoneWiseVariations![i].price!
-                                  .toDouble();
-                            }
-                          }
-                        }
+                        // if (product.variationsAppFormat!.zoneWiseVariations !=
+                        //     null) {
+                        //   _lowestPrice = product.variationsAppFormat!
+                        //       .zoneWiseVariations![0].price!
+                        //       .toDouble();
+                        //   for (var i = 0;
+                        //       i <
+                        //           product.variationsAppFormat!
+                        //               .zoneWiseVariations!.length;
+                        //       i++) {
+                        //     if (product.variationsAppFormat!
+                        //             .zoneWiseVariations![i].price! <
+                        //         _lowestPrice) {
+                        //       _lowestPrice = product.variationsAppFormat!
+                        //           .zoneWiseVariations![i].price!
+                        //           .toDouble();
+                        //     }
+                        //   }
+                        // }
                         return Container(
                           margin: EdgeInsets.only(
                               right: Dimensions.PADDING_SIZE_DEFAULT
@@ -125,7 +125,7 @@ class ShopPopularProductView extends GetView<ProductController> {
                                                     .RADIUS_SMALL)),
                                         child: CustomImage(
                                           image:
-                                              '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${product.thumbnail}',
+                                              '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${product.image}',
                                           fit: BoxFit.cover,
                                           width: MediaQuery.of(
                                                       context)
@@ -199,7 +199,7 @@ class ShopPopularProductView extends GetView<ProductController> {
                                             TextAlign.center),
                                         SizedBox(height: 1,),
                                         Text(
-                                          product.shortDescription!,
+                                          product.description!,
                                           style: ubuntuLight.copyWith(
                                               fontSize: Dimensions
                                                   .fontSizeExtraSmall,
@@ -218,8 +218,8 @@ class ShopPopularProductView extends GetView<ProductController> {
                                               text: 'Book Now'.tr,
                                               fontSize: Dimensions.fontSizeSmall,
                                               onTap:  () {
-                                                Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "",product.subCategoryId ?? ""),
-                                                    arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId:product.subCategoryId ?? ""));
+                                                // Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "",product.subCategoryId ?? ""),
+                                                //     arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId:product.subCategoryId ?? ""));
 
                                               }
                                                   // showModalBottomSheet(

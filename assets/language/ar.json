@@ -519,6 +519,10 @@
   "email_is_not_editable": "البريد الإلكتروني غير قابل للتحرير",
   "please_agree_with_terms_conditions": "الرجاء الموافقة على الشروط والأحكام",
   "recent_search": "عمليات البحث الأخيرة",
-  "app_version": "نسخة التطبيق:"
+  "app_version": "نسخة التطبيق:",
+  "all_product": "All Products",
+  "available_product": "Available Product",
+  "popular_product": "Popular Products",
+  "products": "Products"
 
 }

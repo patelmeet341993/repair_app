@@ -77,7 +77,7 @@ class ShopCategoryView extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              Get.toNamed(RouteHelper.getCategoryProductRoute(
+                              Get.toNamed(RouteHelper.getShopCategoryProductRoute(
                                   categoryController.categoryList![index].id!,
                                   categoryController.categoryList![index].name!,
                                   index.toString()));

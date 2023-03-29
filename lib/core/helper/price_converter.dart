@@ -135,37 +135,37 @@ class PriceConverter {
       {bool addCampaign = false}) {
     num? _discountAmount = 0;
     String? _discountAmountType;
-
-    if (product.productDiscount != null &&
-        product.productDiscount!.isNotEmpty) {
-      CouponProductDiscount _discount = _getProductDiscount(
-          product.productDiscount, _discountAmount, _discountAmountType);
-      _discountAmount = _discount.discountAmount;
-
-      _discountAmountType = _discount.discountAmountType;
-    } else if (product.campaignDiscount != null &&
-        product.campaignDiscount!.isNotEmpty &&
-        addCampaign) {
-      CouponProductDiscount _discount = _getProductDiscount(
-          product.campaignDiscount, _discountAmount, _discountAmountType);
-      _discountAmount = _discount.discountAmount;
-      _discountAmountType = _discount.discountAmountType;
-    } else {
-      if (product.category?.categoryDiscount != null &&
-          product.category!.categoryDiscount!.isNotEmpty) {
-        CouponProductDiscount _discount = _getProductDiscount(product.category?.categoryDiscount,
+    //
+    // if (product.productDiscount != null &&
+    //     product.productDiscount!.isNotEmpty) {
+    //   CouponProductDiscount _discount = _getProductDiscount(
+    //       product.productDiscount, _discountAmount, _discountAmountType);
+    //   _discountAmount = _discount.discountAmount;
+    //
+    //   _discountAmountType = _discount.discountAmountType;
+    // } else if (product.campaignDiscount != null &&
+    //     product.campaignDiscount!.isNotEmpty &&
+    //     addCampaign) {
+    //   CouponProductDiscount _discount = _getProductDiscount(
+    //       product.campaignDiscount, _discountAmount, _discountAmountType);
+    //   _discountAmount = _discount.discountAmount;
+    //   _discountAmountType = _discount.discountAmountType;
+    // } else {
+    //   if (product.category?.categoryDiscount != null &&
+    //       product.category!.categoryDiscount!.isNotEmpty) {
+    //     CouponProductDiscount _discount = _getProductDiscount(product.category?.categoryDiscount,
+    //         _discountAmount, _discountAmountType);
+    //     _discountAmount = _discount.discountAmount;
+    //     _discountAmountType = _discount.discountAmountType;
+    //   } else if (product.category?.campaignDiscount != null &&
+    //       product.category!.campaignDiscount!.isNotEmpty &&
+    //       addCampaign) {
+        CouponProductDiscount _discount = _getProductDiscount([],
             _discountAmount, _discountAmountType);
         _discountAmount = _discount.discountAmount;
         _discountAmountType = _discount.discountAmountType;
-      } else if (product.category?.campaignDiscount != null &&
-          product.category!.campaignDiscount!.isNotEmpty &&
-          addCampaign) {
-        CouponProductDiscount _discount = _getProductDiscount(product.category?.campaignDiscount,
-            _discountAmount, _discountAmountType);
-        _discountAmount = _discount.discountAmount;
-        _discountAmountType = _discount.discountAmountType;
-      }
-    }
+      // }
+    // }
 
     return CouponProductDiscount(
         discountAmount: _discountAmount,

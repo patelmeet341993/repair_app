@@ -83,6 +83,11 @@ class AppConstants {
    static const String SHOP_BANNER_URI = '/api/v1/customer/productbanner?limit=10&offset=1';
   static const String SHOP_CATEGORY_URI = '/api/v1/customer/productcategory?limit=20';
   static const String SHOP_SUB_CATEGORY_URI = '/api/v1/customer/productcategory/childes?limit=20&offset=1&id=';
+  static const String SHOP_POPULAR_SERVICE_URI = '/api/v1/customer/product/popular';
+  static const String SHOP_ALL_PRODUCT_URI = '/api/v1/customer/product';
+  static const String RECOMMENDED_PRODUCT_URI = '/api/v1/customer/product/recommended';
+
+  static const String PRODUCT_BASED_ON_SUB_CATEGORY = '/api/v1/customer/product/sub-category/';
 
 
 

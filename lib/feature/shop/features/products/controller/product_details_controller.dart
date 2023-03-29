@@ -39,65 +39,65 @@ class ProductDetailsController extends GetxController {
     update();
   }
 
-  Future<void> getServiceDiscount() async {
-    Product product = _product!;
-
-    ///if category discount not null then calculate category discount
-    if (product.campaignDiscount != null) {
-      ///product based campaign discount
-      _productDiscount = product.campaignDiscount!.length > 0
-          ? product.campaignDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.campaignDiscount!.length > 0
-          ? product.campaignDiscount!.elementAt(0).productDiscount!.discountType!
-          : 'amount';
-    } else if (product.category!.campaignDiscount != null) {
-      ///category based campaign discount
-      _productDiscount = product.category!.campaignDiscount!.length > 0
-          ? product.category!.campaignDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.category!.campaignDiscount!.length > 0
-          ? product.category!.campaignDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmountType!
-          : 'amount';
-    } else if (product.productDiscount != null) {
-      ///product based product discount
-      _productDiscount = product.productDiscount!.length > 0
-          ? product.productDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.productDiscount!.length > 0
-          ? product.productDiscount!.elementAt(0).productDiscount!.discountType!
-          : 'amount';
-    } else {
-      ///category based category discount
-      _productDiscount = product.category!.categoryDiscount!.length > 0
-          ? product.category!.categoryDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.category!.categoryDiscount!.length > 0
-          ? product.category!.categoryDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmountType!
-          : 'amount';
-    }
-    update();
-  }
+  // Future<void> getServiceDiscount() async {
+  //   Product product = _product!;
+  //
+  //   ///if category discount not null then calculate category discount
+  //   if (product.campaignDiscount != null) {
+  //     ///product based campaign discount
+  //     _productDiscount = product.campaignDiscount!.length > 0
+  //         ? product.campaignDiscount!
+  //             .elementAt(0)
+  //             .productDiscount!
+  //             .discountAmount!
+  //             .toDouble()
+  //         : 0.0;
+  //     _discountType = product.campaignDiscount!.length > 0
+  //         ? product.campaignDiscount!.elementAt(0).productDiscount!.discountType!
+  //         : 'amount';
+  //   } else if (product.category!.campaignDiscount != null) {
+  //     ///category based campaign discount
+  //     _productDiscount = product.category!.campaignDiscount!.length > 0
+  //         ? product.category!.campaignDiscount!
+  //             .elementAt(0)
+  //             .productDiscount!
+  //             .discountAmount!
+  //             .toDouble()
+  //         : 0.0;
+  //     _discountType = product.category!.campaignDiscount!.length > 0
+  //         ? product.category!.campaignDiscount!
+  //             .elementAt(0)
+  //             .productDiscount!
+  //             .discountAmountType!
+  //         : 'amount';
+  //   } else if (product.productDiscount != null) {
+  //     ///product based product discount
+  //     _productDiscount = product.productDiscount!.length > 0
+  //         ? product.productDiscount!
+  //             .elementAt(0)
+  //             .productDiscount!
+  //             .discountAmount!
+  //             .toDouble()
+  //         : 0.0;
+  //     _discountType = product.productDiscount!.length > 0
+  //         ? product.productDiscount!.elementAt(0).productDiscount!.discountType!
+  //         : 'amount';
+  //   } else {
+  //     ///category based category discount
+  //     _productDiscount = product.category!.categoryDiscount!.length > 0
+  //         ? product.category!.categoryDiscount!
+  //             .elementAt(0)
+  //             .productDiscount!
+  //             .discountAmount!
+  //             .toDouble()
+  //         : 0.0;
+  //     _discountType = product.category!.categoryDiscount!.length > 0
+  //         ? product.category!.categoryDiscount!
+  //             .elementAt(0)
+  //             .productDiscount!
+  //             .discountAmountType!
+  //         : 'amount';
+  //   }
+  //   update();
+  // }
 }

@@ -11,10 +11,12 @@ import 'package:repair/feature/checkout/view/payment_screen.dart';
 import 'package:repair/feature/service/view/all_service_view.dart';
 import 'package:repair/feature/html/html_viewer_screen.dart';
 import 'package:repair/feature/settings/bindings/settings_bindings.dart';
+import 'package:repair/feature/shop/features/products/bindings/product_bindings.dart';
 import 'package:repair/feature/shop/features/shop_category/bindings/shop_category_bindings.dart';
 import 'package:repair/utils/html_type.dart';
 import 'package:repair/core/core_export.dart';
 
+import '../../feature/shop/features/products/view/all_product_view.dart';
 import '../../feature/shop/features/shop_category/view/shop_category_subcategory_screen.dart';
 
 class RouteHelper {
@@ -66,6 +68,7 @@ class RouteHelper {
   static const String bookingDetailsScreen = '/bookingDetailsScreen';
   static const String rateReviewScreen = '/rateReviewScreen';
   static const String allServiceScreen = '/allServiceScreen';
+  static const String allProductScreen = '/allServiceScreen';
   static const String subCategoryScreen = '/subCategoryScreen';
   static const String paymentPage = '/paymentPage';
   static const String invoice = '/invoice';
@@ -201,6 +204,10 @@ class RouteHelper {
   static String allServiceScreenRoute(String fromPage,
           {String campaignID = ''}) =>
       '$allServiceScreen?fromPage=$fromPage&campaignID=$campaignID';
+
+  static String allProductScreenRoute(String fromPage,
+          {String campaignID = ''}) =>
+      '$allProductScreen?fromPage=$fromPage&campaignID=$campaignID';
   static String subCategoryScreenRoute(
       String categoryName, String categoryID, int subCategoryIndex) {
     return '$subCategoryScreen?categoryName=$categoryName&categoryId=$categoryID&subCategoryIndex=$subCategoryIndex';
@@ -493,6 +500,14 @@ class RouteHelper {
       binding: ServiceBinding(),
       name: allServiceScreen,
       page: () => getRoute(AllServiceView(
+        fromPage: Get.parameters['fromPage']!,
+        campaignID: Get.parameters['campaignID']!,
+      )),
+    ),
+    GetPage(
+      binding: ProductBinding(),
+      name: allProductScreen,
+      page: () => getRoute(AllProductView(
         fromPage: Get.parameters['fromPage']!,
         campaignID: Get.parameters['campaignID']!,
       )),

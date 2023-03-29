@@ -5,30 +5,37 @@ import 'package:repair/components/paginated_list_view.dart';
 import 'package:repair/components/service_view_vertical.dart';
 import 'package:repair/components/service_widget_vertical.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/products/components/product_view_vertical.dart';
+import 'package:repair/feature/shop/features/products/components/product_widget_vertical.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 
-class AllServiceView extends StatefulWidget {
+import '../model/product_model.dart';
+
+class AllProductView extends StatefulWidget {
   final String fromPage;
   final String campaignID;
-  AllServiceView({required this.fromPage, required this.campaignID});
+
+  AllProductView({required this.fromPage, required this.campaignID});
 
   @override
-  State<AllServiceView> createState() => _AllServiceViewState();
+  State<AllProductView> createState() => _AllProductViewState();
 }
 
-class _AllServiceViewState extends State<AllServiceView> {
+class _AllProductViewState extends State<AllProductView> {
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: widget.fromPage == 'allServices'
-            ? 'all_service'.tr
+        title: widget.fromPage == 'allProduct'
+            ? 'all_product'.tr
             : widget.fromPage == 'fromRecommendedScreen'
                 ? 'recommended_for_you'.tr
                 : widget.fromPage == 'fromPopularServiceView'
-                    ? 'popular_services'.tr
-                    : 'available_service'.tr,
+                    ? 'popular_product'.tr
+                    : 'available_product'.tr,
         showCart: true,
       ),
       endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
@@ -36,14 +43,13 @@ class _AllServiceViewState extends State<AllServiceView> {
     );
   }
 
-  Widget _buildBody(String fromPage, BuildContext context,
-      ScrollController scrollController) {
+  Widget _buildBody(String fromPage, BuildContext context, ScrollController scrollController) {
     if (fromPage == 'fromPopularServiceView') {
-      return GetBuilder<ServiceController>(
+      return GetBuilder<ProductController>(
         initState: (state) {
-          Get.find<ServiceController>().getPopularServiceList(1, true);
+          Get.find<ProductController>().getPopularProductList(1, true);
         },
-        builder: (serviceController) {
+        builder: (productController) {
           return FooterBaseView(
             scrollController: scrollController,
             child: SizedBox(
@@ -59,40 +65,26 @@ class _AllServiceViewState extends State<AllServiceView> {
                         Dimensions.PADDING_SIZE_SMALL,
                       ),
                       child: TitleWidget(
-                        title: 'popular_services'.tr,
+                        title: 'popular_product'.tr,
                       ),
                     ),
                   PaginatedListView(
                     scrollController: scrollController,
-                    totalSize: serviceController.popularBasedServiceContent !=
-                            null
-                        ? serviceController.popularBasedServiceContent!.total!
-                        : null,
-                    offset: serviceController.popularBasedServiceContent != null
-                        ? serviceController
-                                    .popularBasedServiceContent!.currentPage !=
-                                null
-                            ? serviceController
-                                .popularBasedServiceContent!.currentPage!
+                    totalSize: productController.popularBasedProductContent != null ? productController.popularBasedProductContent!.total! : null,
+                    offset: productController.popularBasedProductContent != null
+                        ? productController.popularBasedProductContent!.currentPage != null
+                            ? productController.popularBasedProductContent!.currentPage!
                             : null
                         : null,
                     onPaginate: (int offset) async {
                       print("popular_service_on_paginate");
-                      return await serviceController.getPopularServiceList(
-                          offset, false);
+                      return await productController.getPopularProductList(offset, false);
                     },
-                    itemView: ServiceViewVertical(
-                      service:
-                          serviceController.popularBasedServiceContent != null
-                              ? serviceController.popularServiceList
-                              : null,
+                    itemView: ProductViewVertical(
+                      product: productController.popularBasedProductContent != null ? productController.popularProductList : null,
                       padding: EdgeInsets.symmetric(
-                        horizontal: ResponsiveHelper.isDesktop(context)
-                            ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                            : Dimensions.PADDING_SIZE_SMALL,
-                        vertical: ResponsiveHelper.isDesktop(context)
-                            ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                            : Dimensions.PADDING_SIZE_SMALL,
+                        horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_SMALL,
+                        vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_SMALL,
                       ),
                       type: 'others',
                       noDataType: NoDataType.HOME,
@@ -105,21 +97,19 @@ class _AllServiceViewState extends State<AllServiceView> {
         },
       );
     } else if (fromPage == 'fromCampaign') {
-      return GetBuilder<ServiceController>(
+      return GetBuilder<ProductController>(
         initState: (state) {
-          Get.find<ServiceController>().getEmptyCampaignService();
-          Get.find<ServiceController>()
-              .getCampaignBasedServiceList(widget.campaignID, true);
+          Get.find<ProductController>().getEmptyCampaignProduct();
+          Get.find<ProductController>().getCampaignBasedProductList(widget.campaignID, true);
         },
         builder: (serviceController) {
-          return _buildWidget(
-              serviceController.campaignBasedServiceList, context);
+          return _buildWidget(serviceController.campaignBasedProductList, context);
         },
       );
     } else if (fromPage == 'fromRecommendedScreen') {
-      return GetBuilder<ServiceController>(
+      return GetBuilder<ProductController>(
         initState: (state) {
-          Get.find<ServiceController>().getRecommendedServiceList(1, true);
+          Get.find<ProductController>().getRecommendedProductList(1, true);
         },
         builder: (serviceController) {
           return FooterBaseView(
@@ -142,39 +132,21 @@ class _AllServiceViewState extends State<AllServiceView> {
                     ),
                   PaginatedListView(
                     scrollController: scrollController,
-                    totalSize:
-                        serviceController.recommendedBasedServiceContent != null
-                            ? serviceController
-                                .recommendedBasedServiceContent!.total!
-                            : null,
-                    offset:
-                        serviceController.recommendedBasedServiceContent != null
-                            ? serviceController.recommendedBasedServiceContent!
-                                        .currentPage !=
-                                    null
-                                ? serviceController
-                                    .recommendedBasedServiceContent!
-                                    .currentPage!
-                                : null
-                            : null,
+                    totalSize: serviceController.recommendedBasedProductContent != null ? serviceController.recommendedBasedProductContent!.total! : null,
+                    offset: serviceController.recommendedBasedProductContent != null
+                        ? serviceController.recommendedBasedProductContent!.currentPage != null
+                            ? serviceController.recommendedBasedProductContent!.currentPage!
+                            : null
+                        : null,
                     onPaginate: (int offset) async {
                       printLog("inside_on_paginate:$offset");
-                      return await serviceController.getRecommendedServiceList(
-                          offset, false);
+                      return await serviceController.getRecommendedProductList(offset, false);
                     },
-                    itemView: ServiceViewVertical(
-                      service:
-                          serviceController.recommendedBasedServiceContent !=
-                                  null
-                              ? serviceController.recommendedServiceList
-                              : null,
+                    itemView: ProductViewVertical(
+                      product: serviceController.recommendedBasedProductContent != null ? serviceController.recommendedProductList : null,
                       padding: EdgeInsets.symmetric(
-                        horizontal: ResponsiveHelper.isDesktop(context)
-                            ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                            : Dimensions.PADDING_SIZE_SMALL,
-                        vertical: ResponsiveHelper.isDesktop(context)
-                            ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                            : Dimensions.PADDING_SIZE_SMALL,
+                        horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_SMALL,
+                        vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_SMALL,
                       ),
                       type: 'others',
                       noDataType: NoDataType.HOME,
@@ -186,9 +158,9 @@ class _AllServiceViewState extends State<AllServiceView> {
           );
         },
       );
-    } else if (fromPage == 'allServices') {
-      return GetBuilder<ServiceController>(initState: (state) {
-        Get.find<ServiceController>().getAllServiceList(1, true);
+    } else if (fromPage == 'allProducts') {
+      return GetBuilder<ProductController>(initState: (state) {
+        Get.find<ProductController>().getAllProductList(1, true);
       }, builder: (serviceController) {
         return FooterBaseView(
           scrollController: scrollController,
@@ -205,7 +177,7 @@ class _AllServiceViewState extends State<AllServiceView> {
                       Dimensions.PADDING_SIZE_SMALL,
                     ),
                     child: TitleWidget(
-                      title: 'all_service'.tr,
+                      title: 'all_product'.tr,
                     ),
                   ),
                 SizedBox(
@@ -213,29 +185,22 @@ class _AllServiceViewState extends State<AllServiceView> {
                 ),
                 PaginatedListView(
                   scrollController: scrollController,
-                  totalSize: serviceController.serviceContent != null
-                      ? serviceController.serviceContent!.total != null
-                          ? serviceController.serviceContent!.total!
+                  totalSize: serviceController.productContent != null
+                      ? serviceController.productContent!.total != null
+                          ? serviceController.productContent!.total!
                           : null
                       : null,
-                  offset: serviceController.serviceContent != null
-                      ? serviceController.serviceContent!.currentPage != null
-                          ? serviceController.serviceContent!.currentPage!
+                  offset: serviceController.productContent != null
+                      ? serviceController.productContent!.currentPage != null
+                          ? serviceController.productContent!.currentPage!
                           : null
                       : null,
-                  onPaginate: (int offset) async =>
-                      await serviceController.getAllServiceList(offset, false),
-                  itemView: ServiceViewVertical(
-                    service: serviceController.serviceContent != null
-                        ? serviceController.allService
-                        : null,
+                  onPaginate: (int offset) async => await serviceController.getAllProductList(offset, false),
+                  itemView: ProductViewVertical(
+                    product: serviceController.productContent != null ? serviceController.allProduct : null,
                     padding: EdgeInsets.symmetric(
-                      horizontal: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                          : Dimensions.PADDING_SIZE_SMALL,
-                      vertical: ResponsiveHelper.isDesktop(context)
-                          ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                          : 0,
+                      horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_SMALL,
+                      vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0,
                     ),
                     type: 'others',
                     noDataType: NoDataType.HOME,
@@ -247,35 +212,30 @@ class _AllServiceViewState extends State<AllServiceView> {
         );
       });
     } else {
-      return GetBuilder<ServiceController>(
+      return GetBuilder<ProductController>(
         initState: (state) {
-          Get.find<ServiceController>().getSubCategoryBasedServiceList(
-              fromPage, false,
-              isShouldUpdate: true);
+          Get.find<ProductController>().getSubCategoryBasedProductList(fromPage, false, isShouldUpdate: true);
         },
         builder: (serviceController) {
-          return _buildWidget(
-              serviceController.subCategoryBasedServiceList, context);
+          return _buildWidget(serviceController.subCategoryBasedProductList, context);
         },
       );
     }
   }
 
-  Widget _buildWidget(List<Service>? serviceList, BuildContext context) {
+  Widget _buildWidget(List<Product>? productList, BuildContext context) {
     return FooterBaseView(
-      isCenter: (serviceList == null || serviceList.length == 0),
+      isCenter: (productList == null || productList.length == 0),
       child: SizedBox(
         width: Dimensions.WEB_MAX_WIDTH,
-        child: (serviceList != null && serviceList.length == 0)
+        child: (productList != null && productList.length == 0)
             ? NoDataScreen(
                 text: 'no_services_found'.tr,
                 type: NoDataType.SERVICE,
               )
-            : serviceList != null
+            : productList != null
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.PADDING_SIZE_DEFAULT,
-                        vertical: Dimensions.PADDING_SIZE_DEFAULT),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT, vertical: Dimensions.PADDING_SIZE_DEFAULT),
                     child: CustomScrollView(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -286,15 +246,10 @@ class _AllServiceViewState extends State<AllServiceView> {
                             height: Dimensions.PADDING_SIZE_EXTRA_MORE_LARGE,
                           )),
                         SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
                             mainAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
-                            childAspectRatio:
-                                ResponsiveHelper.isDesktop(context) ||
-                                        ResponsiveHelper.isTab(context)
-                                    ? .9
-                                    : .75,
+                            childAspectRatio: ResponsiveHelper.isDesktop(context) || ResponsiveHelper.isTab(context) ? .9 : .75,
                             crossAxisCount: ResponsiveHelper.isMobile(context)
                                 ? 2
                                 : ResponsiveHelper.isTab(context)
@@ -304,15 +259,14 @@ class _AllServiceViewState extends State<AllServiceView> {
                           ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
-                              Get.find<ServiceController>()
-                                  .getServiceDiscount(serviceList[index]);
-                              return ServiceWidgetVertical(
-                                service: serviceList[index],
+                              Get.find<ProductController>().getProductDiscount(productList[index]);
+                              return ProductWidgetVertical(
+                                product: productList[index],
                                 isAvailable: true,
                                 fromType: widget.fromPage,
                               );
                             },
-                            childCount: serviceList.length,
+                            childCount: productList.length,
                           ),
                         ),
                         SliverToBoxAdapter(
@@ -333,10 +287,7 @@ class _AllServiceViewState extends State<AllServiceView> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
                       mainAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
-                      childAspectRatio: ResponsiveHelper.isDesktop(context) ||
-                              ResponsiveHelper.isTab(context)
-                          ? 1
-                          : .70,
+                      childAspectRatio: ResponsiveHelper.isDesktop(context) || ResponsiveHelper.isTab(context) ? 1 : .70,
                       crossAxisCount: ResponsiveHelper.isMobile(context)
                           ? 2
                           : ResponsiveHelper.isTab(context)

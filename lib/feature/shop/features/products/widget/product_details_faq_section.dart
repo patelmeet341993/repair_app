@@ -15,7 +15,7 @@ class ProductDetailsFaqSection extends StatelessWidget {
     return GetBuilder<ProductDetailsController>(
         builder: (productDetailsController) {
       if (!productDetailsController.isLoading) {
-        List<ProductFaqs>? faqs = productDetailsController.product!.faqs;
+        List<ProductFaqs>? faqs = [];
         return WebShadowWrap(
           child: Container(
             width: Dimensions.WEB_MAX_WIDTH,

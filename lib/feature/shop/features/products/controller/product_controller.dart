@@ -20,7 +20,10 @@ class ProductController extends GetxController implements GetxService {
   List<Product>? _offerBasedProductList;
   List<Product>? _allProduct;
   List<Product>? get allProduct => _allProduct;
+  ProductContent? _recommendedBasedProductContent;
 
+  ProductContent? get recommendedBasedProductContent =>
+      _recommendedBasedProductContent;
   bool _isLoading = false;
   List<int>? _variationIndex;
   int? _quantity = 1;
@@ -191,7 +194,7 @@ class ProductController extends GetxController implements GetxService {
               .add(ProductTypesModel.fromJson(productTypesModel).product);
         }
       });
-      Get.toNamed(RouteHelper.allServiceScreenRoute("fromCampaign",
+      Get.toNamed(RouteHelper.allProductScreenRoute("fromCampaign",
           campaignID: campaignID));
     } else {
       customSnackBar('campaign_is_not_available_for_this_service'.tr);
@@ -225,7 +228,7 @@ class ProductController extends GetxController implements GetxService {
         Get.find<CategoryController>()
             .getCampaignBasedCategoryList(campaignID, false);
       } else {
-        Get.toNamed(RouteHelper.allServiceScreenRoute("fromCampaign",
+        Get.toNamed(RouteHelper.allProductScreenRoute("fromCampaign",
             campaignID: campaignID));
       }
     } else {
@@ -265,12 +268,12 @@ class ProductController extends GetxController implements GetxService {
 
   int setExistInCart(Product product, {bool notify = true}) {
     List<String> _variationList = [];
-    for (int index = 0;
-        index < product.variationsAppFormat!.zoneWiseVariations!.length;
-        index++) {
-      _variationList.add(
-          product.variationsAppFormat!.zoneWiseVariations![index].variantName!);
-    }
+    // for (int index = 0;
+    //     index < product.variationsAppFormat!.zoneWiseVariations!.length;
+    //     index++) {
+    //   _variationList.add(
+    //       product.variationsAppFormat!.zoneWiseVariations![index].variantName!);
+    // }
     String variationType = '';
     bool isFirst = true;
     _variationList.forEach((variation) {
@@ -320,56 +323,56 @@ class ProductController extends GetxController implements GetxService {
   }
 
   Future<void> getProductDiscount(Product product) async {
-    if (product.campaignDiscount != null) {
-      _productDiscount = product.campaignDiscount!.length > 0
-          ? product.campaignDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.campaignDiscount!.length > 0
-          ? product.campaignDiscount!.elementAt(0).productDiscount!.discountType!
-          : 'amount';
-    } else if (product.category!.campaignDiscount != null) {
-      _productDiscount = product.category!.campaignDiscount!.length > 0
-          ? product.category!.campaignDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.category!.campaignDiscount!.length > 0
-          ? product.category!.campaignDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmountType!
-          : 'amount';
-    } else if (product.productDiscount != null) {
-      _productDiscount = product.productDiscount!.length > 0
-          ? product.productDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.productDiscount!.length > 0
-          ? product.productDiscount!.elementAt(0).productDiscount!.discountType!
-          : 'amount';
-    } else {
-      _productDiscount = product.category!.categoryDiscount!.length > 0
-          ? product.category!.categoryDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmount!
-              .toDouble()
-          : 0.0;
-      _discountType = product.category!.categoryDiscount!.length > 0
-          ? product.category!.categoryDiscount!
-              .elementAt(0)
-              .productDiscount!
-              .discountAmountType!
-          : 'amount';
-    }
+    // if (product.campaignDiscount != null) {
+    //   _productDiscount = product.campaignDiscount!.length > 0
+    //       ? product.campaignDiscount!
+    //           .elementAt(0)
+    //           .productDiscount!
+    //           .discountAmount!
+    //           .toDouble()
+    //       : 0.0;
+    //   _discountType = product.campaignDiscount!.length > 0
+    //       ? product.campaignDiscount!.elementAt(0).productDiscount!.discountType!
+    //       : 'amount';
+    // } else if (product.category!.campaignDiscount != null) {
+    //   _productDiscount = product.category!.campaignDiscount!.length > 0
+    //       ? product.category!.campaignDiscount!
+    //           .elementAt(0)
+    //           .productDiscount!
+    //           .discountAmount!
+    //           .toDouble()
+    //       : 0.0;
+    //   _discountType = product.category!.campaignDiscount!.length > 0
+    //       ? product.category!.campaignDiscount!
+    //           .elementAt(0)
+    //           .productDiscount!
+    //           .discountAmountType!
+    //       : 'amount';
+    // } else if (product.productDiscount != null) {
+    //   _productDiscount = product.productDiscount!.length > 0
+    //       ? product.productDiscount!
+    //           .elementAt(0)
+    //           .productDiscount!
+    //           .discountAmount!
+    //           .toDouble()
+    //       : 0.0;
+    //   _discountType = product.productDiscount!.length > 0
+    //       ? product.productDiscount!.elementAt(0).productDiscount!.discountType!
+    //       : 'amount';
+    // } else {
+    //   _productDiscount = product.category!.categoryDiscount!.length > 0
+    //       ? product.category!.categoryDiscount!
+    //           .elementAt(0)
+    //           .productDiscount!
+    //           .discountAmount!
+    //           .toDouble()
+    //       : 0.0;
+    //   _discountType = product.category!.categoryDiscount!.length > 0
+    //       ? product.category!.categoryDiscount!
+    //           .elementAt(0)
+    //           .productDiscount!
+    //           .discountAmountType!
+    //       : 'amount';
+    // }
   }
 }

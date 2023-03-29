@@ -53,7 +53,7 @@ class ProductInformationCard extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                           child: CustomImage(
                             image:
-                                '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${product.thumbnail}',
+                                '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${product.image}',
                             fit: BoxFit.cover,
                             placeholder: Images.placeholder,
                             height: ResponsiveHelper.isMobile(context)
@@ -242,8 +242,8 @@ class ProductInformationCard extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {
 
-                              Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "",product.subCategoryId ?? ""),
-                                  arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId:product.subCategoryId ?? ""));
+                              // Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "",product.subCategoryId ?? ""),
+                              //     arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId:product.subCategoryId ?? ""));
 
                               // showModalBottomSheet(
                               //     context: context,

@@ -1,18 +1,22 @@
 import 'package:get/get.dart';
 import 'package:repair/feature/home/web/web_recommended_service_view.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
+
+import '../web/shop_web_recommended_service_view.dart';
 
 class ShopRecommendedServiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
-    return GetBuilder<ServiceController>(
-      builder: (serviceController) {
-        if (serviceController.recommendedServiceList != null &&
-            serviceController.recommendedServiceList!.length == 0) {
+    return GetBuilder<ProductController>(
+      builder: (productController) {
+        if (productController.recommendedProductList != null &&
+            productController.recommendedProductList!.length == 0) {
           return SizedBox();
         } else {
-          if (serviceController.recommendedServiceList != null) {
+          if (productController.recommendedProductList != null) {
             return Column(
               children: [
                 Padding(
@@ -24,7 +28,7 @@ class ShopRecommendedServiceView extends StatelessWidget {
                   ),
                   child: TitleWidget(
                     title: 'recommended_for_you'.tr,
-                    onTap: () => Get.toNamed(RouteHelper.allServiceScreenRoute(
+                    onTap: () => Get.toNamed(RouteHelper.allProductScreenRoute(
                         "fromRecommendedScreen")),
                   ),
                 ),
@@ -37,36 +41,35 @@ class ShopRecommendedServiceView extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                           horizontal: Dimensions.PADDING_SIZE_SMALL),
                       itemCount:
-                          serviceController.recommendedServiceList!.length > 10
+                          productController.recommendedProductList!.length > 10
                               ? 10
-                              : serviceController
-                                  .recommendedServiceList!.length,
+                              : productController
+                                  .recommendedProductList!.length,
                       itemBuilder: (context, index) {
-                        Discount _discountValue =
-                            PriceConverter.discountCalculation(serviceController
-                                .recommendedServiceList![index]);
+                        CouponProductDiscount _discountValue =
+                            PriceConverter.productDiscountCalculation(productController
+                                .recommendedProductList![index]);
                         return Padding(
                           padding: EdgeInsets.fromLTRB(
                               2, 2, Dimensions.PADDING_SIZE_SMALL, 2),
                           child: InkWell(
                             onTap: () {
                               Get.toNamed(
-                                RouteHelper.getServiceRoute(serviceController
-                                    .recommendedServiceList![index].id!),
+                                RouteHelper.getServiceRoute(productController
+                                    .recommendedProductList![index].id!),
                                 arguments: ServiceDetailsScreen(
-                                    serviceID: serviceController
-                                        .recommendedServiceList![index].id!),
+                                    serviceID: productController
+                                        .recommendedProductList![index].id!),
                               );
                             },
                             child: Container(
-                              height: 110,
+                              // height: 110,
                               width: MediaQuery.of(context).size.width / 1.20,
-                              child: ServiceModelView(
-                                serviceList:
-                                    serviceController.recommendedServiceList!,
-                                discountAmountType:
-                                    _discountValue.discountAmountType,
-                                discountAmount: _discountValue.discountAmount,
+                              child: ProductModelView(
+                                serviceList: productController.recommendedProductList ?? [],
+                                // discountAmountType:
+                                //     _discountValue.discountAmountType,
+                                // discountAmount: _discountValue.discountAmount,
                                 index: index,
                               ),
                             ),

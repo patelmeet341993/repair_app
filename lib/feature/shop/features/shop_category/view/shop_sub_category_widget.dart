@@ -16,7 +16,7 @@ class ShopSubCategoryWidget extends GetView<ServiceController> {
     return InkWell(
       onTap: () {
         Get.find<ServiceController>().cleanSubCategory();
-        Get.toNamed(RouteHelper.allServiceScreenRoute(
+        Get.toNamed(RouteHelper.allProductScreenRoute(
             "${categoryModel!.id!.toString()}"));
       },
       child: Container(
@@ -52,7 +52,7 @@ class ShopSubCategoryWidget extends GetView<ServiceController> {
                     Row(children: [
                       Expanded(
                           child: Text(
-                        categoryModel!.name!,
+                        categoryModel!.name ?? "",
                         style: ubuntuBold.copyWith(
                             fontSize: Dimensions.fontSizeDefault),
                         maxLines: _desktop ? 1 : 1,
@@ -72,7 +72,7 @@ class ShopSubCategoryWidget extends GetView<ServiceController> {
                       height: Dimensions.PADDING_SIZE_SMALL,
                     ),
                     Text(
-                      "${(categoryModel ?? ShopCategoryModel()).product?.length ?? 0} ${'services'.tr} ",
+                      "${(categoryModel ?? ShopCategoryModel()).product?.length ?? 0} ${'products'.tr} ",
                       style: ubuntuRegular.copyWith(
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w400,
