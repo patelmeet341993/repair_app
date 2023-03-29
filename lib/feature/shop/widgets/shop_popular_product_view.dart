@@ -2,21 +2,24 @@ import 'package:get/get.dart';
 import 'package:repair/components/ripple_button.dart';
 import 'package:repair/components/service_center_dialog.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 import 'package:touch_ripple_effect/touch_ripple_effect.dart';
 
 import '../../company/view/company_screen.dart';
+import '../features/products/model/product_model.dart';
 
-class ShopPopularServiceView extends GetView<ServiceController> {
+class ShopPopularProductView extends GetView<ProductController> {
   @override
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
-    return GetBuilder<ServiceController>(
-      builder: (serviceController) {
-        if (serviceController.popularServiceList != null &&
-            serviceController.popularServiceList!.length == 0) {
+    return GetBuilder<ProductController>(
+      builder: (productController) {
+        if (productController.popularProductList != null &&
+            productController.popularProductList!.length == 0) {
           return SizedBox();
         } else {
-          if (serviceController.popularServiceList != null) {
+          if (productController.popularProductList != null) {
             return Container(
               child: Column(
                 children: [
@@ -49,32 +52,32 @@ class ShopPopularServiceView extends GetView<ServiceController> {
                           bottom: Dimensions.PADDING_SIZE_EXTRA_SMALL,
                           top: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                       itemCount:
-                          serviceController.popularServiceList!.length > 10
+                          productController.popularProductList!.length > 10
                               ? 10
-                              : serviceController.popularServiceList!.length,
+                              : productController.popularProductList!.length,
                       itemBuilder: (context, index) {
-                        controller.getServiceDiscount(
-                            serviceController.popularServiceList![index]);
-                        Discount _discountModel =
-                            PriceConverter.discountCalculation(
-                                serviceController.popularServiceList![index]);
-                        Service service = serviceController.popularServiceList!
+                        controller.getProductDiscount(
+                            productController.popularProductList![index]);
+                        CouponProductDiscount _discountModel =
+                            PriceConverter.productDiscountCalculation(
+                                productController.popularProductList![index]);
+                        Product product = productController.popularProductList!
                             .elementAt(index);
                         double _lowestPrice = 0.0;
-                        if (service.variationsAppFormat!.zoneWiseVariations !=
+                        if (product.variationsAppFormat!.zoneWiseVariations !=
                             null) {
-                          _lowestPrice = service.variationsAppFormat!
+                          _lowestPrice = product.variationsAppFormat!
                               .zoneWiseVariations![0].price!
                               .toDouble();
                           for (var i = 0;
                               i <
-                                  service.variationsAppFormat!
+                                  product.variationsAppFormat!
                                       .zoneWiseVariations!.length;
                               i++) {
-                            if (service.variationsAppFormat!
+                            if (product.variationsAppFormat!
                                     .zoneWiseVariations![i].price! <
                                 _lowestPrice) {
-                              _lowestPrice = service.variationsAppFormat!
+                              _lowestPrice = product.variationsAppFormat!
                                   .zoneWiseVariations![i].price!
                                   .toDouble();
                             }
@@ -95,7 +98,7 @@ class ShopPopularServiceView extends GetView<ServiceController> {
                           child: MyRippleButton(
                             onTap: () => Get.toNamed(
                               RouteHelper.getServiceRoute(
-                                  service.id!),
+                                  product.id!),
                             ),
                             child: Container(
                               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
@@ -122,7 +125,7 @@ class ShopPopularServiceView extends GetView<ServiceController> {
                                                     .RADIUS_SMALL)),
                                         child: CustomImage(
                                           image:
-                                              '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${service.thumbnail}',
+                                              '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${product.thumbnail}',
                                           fit: BoxFit.cover,
                                           width: MediaQuery.of(
                                                       context)
@@ -185,7 +188,7 @@ class ShopPopularServiceView extends GetView<ServiceController> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(service.name!,
+                                        Text(product.name!,
                                             style: ubuntuMedium.copyWith(
                                                 fontSize: Dimensions
                                                     .fontSizeDefault),
@@ -196,7 +199,7 @@ class ShopPopularServiceView extends GetView<ServiceController> {
                                             TextAlign.center),
                                         SizedBox(height: 1,),
                                         Text(
-                                          service.shortDescription!,
+                                          product.shortDescription!,
                                           style: ubuntuLight.copyWith(
                                               fontSize: Dimensions
                                                   .fontSizeExtraSmall,
@@ -215,8 +218,8 @@ class ShopPopularServiceView extends GetView<ServiceController> {
                                               text: 'Book Now'.tr,
                                               fontSize: Dimensions.fontSizeSmall,
                                               onTap:  () {
-                                                Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
-                                                    arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
+                                                Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "",product.subCategoryId ?? ""),
+                                                    arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId:product.subCategoryId ?? ""));
 
                                               }
                                                   // showModalBottomSheet(

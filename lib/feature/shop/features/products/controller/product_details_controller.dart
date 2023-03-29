@@ -70,17 +70,17 @@ class ProductDetailsController extends GetxController {
               .productDiscount!
               .discountAmountType!
           : 'amount';
-    } else if (product.serviceDiscount != null) {
+    } else if (product.productDiscount != null) {
       ///product based product discount
-      _productDiscount = product.serviceDiscount!.length > 0
-          ? product.serviceDiscount!
+      _productDiscount = product.productDiscount!.length > 0
+          ? product.productDiscount!
               .elementAt(0)
               .productDiscount!
               .discountAmount!
               .toDouble()
           : 0.0;
-      _discountType = product.serviceDiscount!.length > 0
-          ? product.serviceDiscount!.elementAt(0).productDiscount!.discountType!
+      _discountType = product.productDiscount!.length > 0
+          ? product.productDiscount!.elementAt(0).productDiscount!.discountType!
           : 'amount';
     } else {
       ///category based category discount

@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/campaign/model/service_types.dart';
+import 'package:repair/feature/shop/features/product_campaign/model/product_types.dart';
 import 'package:repair/feature/shop/features/products/model/product_model.dart';
+import 'package:repair/feature/shop/features/products/repository/product_repo.dart';
 
 class ProductController extends GetxController implements GetxService {
-  final ServiceRepo serviceRepo;
-  ProductController({required this.serviceRepo});
+  final ProductRepo productRepo;
+  ProductController({required this.productRepo});
 
   ProductContent? _productContent;
   ProductContent? _offerBasedProductContent;
@@ -17,7 +19,7 @@ class ProductController extends GetxController implements GetxService {
   List<Product>? _campaignBasedProductList;
   List<Product>? _offerBasedProductList;
   List<Product>? _allProduct;
-  List<Product>? get allService => _allProduct;
+  List<Product>? get allProduct => _allProduct;
 
   bool _isLoading = false;
   List<int>? _variationIndex;
@@ -45,8 +47,8 @@ class ProductController extends GetxController implements GetxService {
   List<int>? get addOnQtyList => _addOnQtyList;
   int get cartIndex => _cartIndex;
 
-  double? _serviceDiscount = 0.0;
-  double get serviceDiscount => _serviceDiscount!;
+  double? _productDiscount = 0.0;
+  double get productDiscount => _productDiscount!;
 
   String? _discountType;
   String get discountType => _discountType!;
@@ -68,13 +70,13 @@ class ProductController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getAllServiceList(int offset, bool reload) async {
-    print("getAllServiceList_offset:$offset");
+  Future<void> getAllProductList(int offset, bool reload) async {
+    print("getAllProductList_offset:$offset");
     if (offset != 1 || _allProduct == null || reload) {
       if (reload) {
         _allProduct = null;
       }
-      Response response = await serviceRepo.getAllServiceList(offset);
+      Response response = await productRepo.getAllProductList(offset);
       if (response.statusCode == 200) {
         if (reload) {
           _allProduct = [];
@@ -82,11 +84,11 @@ class ProductController extends GetxController implements GetxService {
         _productContent = ProductModel.fromJson(response.body).content;
         if (_allProduct != null && offset != 1) {
           _allProduct!.addAll(
-              ProductModel.fromJson(response.body).content!.serviceList!);
+              ProductModel.fromJson(response.body).content!.productList!);
         } else {
           _allProduct = [];
           _allProduct!.addAll(
-              ProductModel.fromJson(response.body).content!.serviceList!);
+              ProductModel.fromJson(response.body).content!.productList!);
         }
         update();
       } else {
@@ -95,11 +97,11 @@ class ProductController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getPopularServiceList(int offset, bool reload) async {
+  Future<void> getPopularProductList(int offset, bool reload) async {
     print(offset);
     print("offset");
     if (offset != 1 || _popularProductList == null || reload) {
-      Response response = await serviceRepo.getPopularServiceList(offset);
+      Response response = await productRepo.getPopularProductList(offset);
       if (response.statusCode == 200) {
         if (reload) {
           _popularProductList = [];
@@ -109,11 +111,11 @@ class ProductController extends GetxController implements GetxService {
 
         if (_popularProductList != null && offset != 1) {
           _popularProductList!
-              .addAll(_popularBasedProductContent!.serviceList!);
+              .addAll(_popularBasedProductContent!.productList!);
         } else {
           _popularProductList = [];
           _popularProductList!
-              .addAll(_popularBasedProductContent!.serviceList!);
+              .addAll(_popularBasedProductContent!.productList!);
         }
       } else {
         ApiChecker.checkApi(response);
@@ -122,9 +124,9 @@ class ProductController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getRecommendedServiceList(int offset, bool reload) async {
+  Future<void> getRecommendedProductList(int offset, bool reload) async {
     if (offset != 1 || _recommendedProductList == null || reload) {
-      Response response = await serviceRepo.getRecommendedServiceList(offset);
+      Response response = await productRepo.getRecommendedProductList(offset);
       if (response.statusCode == 200) {
         if (reload) {
           _recommendedProductList = [];
@@ -133,11 +135,11 @@ class ProductController extends GetxController implements GetxService {
             ProductModel.fromJson(response.body).content;
         if (_recommendedProductList != null && offset != 1) {
           _recommendedProductList!.addAll(
-              ProductModel.fromJson(response.body).content!.serviceList!);
+              ProductModel.fromJson(response.body).content!.productList!);
         } else {
           _recommendedProductList = [];
           _recommendedProductList!
-              .addAll(_recommendedProductContent!.serviceList!);
+              .addAll(_recommendedProductContent!.productList!);
         }
       } else {
         ApiChecker.checkApi(response);
@@ -151,21 +153,21 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getSubCategoryBasedServiceList(
+  Future<void> getSubCategoryBasedProductList(
       String subCategoryID, bool isWithPagination,
       {bool isShouldUpdate = true}) async {
-    Response response = await serviceRepo.getServiceListBasedOnSubCategory(
+    Response response = await productRepo.getProductListBasedOnSubCategory(
         subCategoryID: subCategoryID, offset: 1);
     if (response.statusCode == 200) {
       if (!isWithPagination) {
         _subCategoryBasedProductList = [];
       }
-      if(ServiceModel.fromJson(response.body).content != null) {
+      if(ProductModel.fromJson(response.body).content != null) {
         _subCategoryBasedProductList!
             .addAll(ProductModel
             .fromJson(response.body)
             .content!
-            .serviceList!);
+            .productList!);
       }
     } else {
       ApiChecker.checkApi(response);
@@ -175,18 +177,18 @@ class ProductController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getCampaignBasedServiceList(
+  Future<void> getCampaignBasedProductList(
       String campaignID, bool reload) async {
     Response response =
-        await serviceRepo.getItemsBasedOnCampaignId(campaignID: campaignID);
+        await productRepo.getItemsBasedOnCampaignId(campaignID: campaignID);
     if (response.body['response_code'] == 'default_200') {
       if (reload) {
         _campaignBasedProductList = [];
       }
-      response.body['content']['data'].forEach((serviceTypesModel) {
-        if (ServiceTypesModel.fromJson(serviceTypesModel).service != null) {
+      response.body['content']['data'].forEach((productTypesModel) {
+        if (ProductTypesModel.fromJson(productTypesModel).product != null) {
           _campaignBasedProductList!
-              .add(ServiceTypesModel.fromJson(serviceTypesModel).service);
+              .add(ProductTypesModel.fromJson(productTypesModel).product);
         }
       });
       Get.toNamed(RouteHelper.allServiceScreenRoute("fromCampaign",
@@ -200,7 +202,7 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getEmptyCampaignService() async {
+  Future<void> getEmptyCampaignProduct() async {
     _campaignBasedProductList = null;
   }
 
@@ -210,12 +212,12 @@ class ProductController extends GetxController implements GetxService {
       _campaignBasedProductList = [];
     }
     Response response =
-        await serviceRepo.getItemsBasedOnCampaignId(campaignID: campaignID);
+        await productRepo.getItemsBasedOnCampaignId(campaignID: campaignID);
     if (response.body['response_code'] == 'default_200') {
-      response.body['content']['data'].forEach((serviceTypesModel) {
-        if (ServiceTypesModel.fromJson(serviceTypesModel).service != null) {
+      response.body['content']['data'].forEach((productTypesModel) {
+        if (ProductTypesModel.fromJson(productTypesModel).product != null) {
           _campaignBasedProductList!
-              .add(ServiceTypesModel.fromJson(serviceTypesModel).service);
+              .add(ProductTypesModel.fromJson(productTypesModel).product);
         }
       });
       _isLoading = false;
@@ -238,17 +240,17 @@ class ProductController extends GetxController implements GetxService {
 
   Future<void> getOffersList(int offset, bool reload) async {
     print("offset_from_offer_list:$offset");
-    Response response = await serviceRepo.getOffersList(offset);
+    Response response = await productRepo.getOffersList(offset);
     if (response.statusCode == 200) {
       if (reload) {
         _offerBasedProductList = [];
       }
       _offerBasedProductContent = ProductModel.fromJson(response.body).content;
       if (_offerBasedProductList != null && offset != 1) {
-        _offerBasedProductList!.addAll(_offerBasedProductContent!.serviceList!);
+        _offerBasedProductList!.addAll(_offerBasedProductContent!.productList!);
       } else {
         _offerBasedProductList = [];
-        _offerBasedProductList!.addAll(_offerBasedProductContent!.serviceList!);
+        _offerBasedProductList!.addAll(_offerBasedProductContent!.productList!);
       }
     } else {
       ApiChecker.checkApi(response);
@@ -261,13 +263,13 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  int setExistInCart(Service service, {bool notify = true}) {
+  int setExistInCart(Product product, {bool notify = true}) {
     List<String> _variationList = [];
     for (int index = 0;
-        index < service.variationsAppFormat!.zoneWiseVariations!.length;
+        index < product.variationsAppFormat!.zoneWiseVariations!.length;
         index++) {
       _variationList.add(
-          service.variationsAppFormat!.zoneWiseVariations![index].variantName!);
+          product.variationsAppFormat!.zoneWiseVariations![index].variantName!);
     }
     String variationType = '';
     bool isFirst = true;
@@ -305,7 +307,7 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  void setCartVariationIndex(int index, int i, Service product) {
+  void setCartVariationIndex(int index, int i, Product product) {
     _variationIndex![index] = i;
     _quantity = 1;
     setExistInCart(product);
@@ -317,55 +319,55 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getServiceDiscount(Service service) async {
-    if (service.campaignDiscount != null) {
-      _serviceDiscount = service.campaignDiscount!.length > 0
-          ? service.campaignDiscount!
+  Future<void> getProductDiscount(Product product) async {
+    if (product.campaignDiscount != null) {
+      _productDiscount = product.campaignDiscount!.length > 0
+          ? product.campaignDiscount!
               .elementAt(0)
-              .discount!
+              .productDiscount!
               .discountAmount!
               .toDouble()
           : 0.0;
-      _discountType = service.campaignDiscount!.length > 0
-          ? service.campaignDiscount!.elementAt(0).discount!.discountType!
+      _discountType = product.campaignDiscount!.length > 0
+          ? product.campaignDiscount!.elementAt(0).productDiscount!.discountType!
           : 'amount';
-    } else if (service.category!.campaignDiscount != null) {
-      _serviceDiscount = service.category!.campaignDiscount!.length > 0
-          ? service.category!.campaignDiscount!
+    } else if (product.category!.campaignDiscount != null) {
+      _productDiscount = product.category!.campaignDiscount!.length > 0
+          ? product.category!.campaignDiscount!
               .elementAt(0)
-              .discount!
+              .productDiscount!
               .discountAmount!
               .toDouble()
           : 0.0;
-      _discountType = service.category!.campaignDiscount!.length > 0
-          ? service.category!.campaignDiscount!
+      _discountType = product.category!.campaignDiscount!.length > 0
+          ? product.category!.campaignDiscount!
               .elementAt(0)
-              .discount!
+              .productDiscount!
               .discountAmountType!
           : 'amount';
-    } else if (service.serviceDiscount != null) {
-      _serviceDiscount = service.serviceDiscount!.length > 0
-          ? service.serviceDiscount!
+    } else if (product.productDiscount != null) {
+      _productDiscount = product.productDiscount!.length > 0
+          ? product.productDiscount!
               .elementAt(0)
-              .discount!
+              .productDiscount!
               .discountAmount!
               .toDouble()
           : 0.0;
-      _discountType = service.serviceDiscount!.length > 0
-          ? service.serviceDiscount!.elementAt(0).discount!.discountType!
+      _discountType = product.productDiscount!.length > 0
+          ? product.productDiscount!.elementAt(0).productDiscount!.discountType!
           : 'amount';
     } else {
-      _serviceDiscount = service.category!.categoryDiscount!.length > 0
-          ? service.category!.categoryDiscount!
+      _productDiscount = product.category!.categoryDiscount!.length > 0
+          ? product.category!.categoryDiscount!
               .elementAt(0)
-              .discount!
+              .productDiscount!
               .discountAmount!
               .toDouble()
           : 0.0;
-      _discountType = service.category!.categoryDiscount!.length > 0
-          ? service.category!.categoryDiscount!
+      _discountType = product.category!.categoryDiscount!.length > 0
+          ? product.category!.categoryDiscount!
               .elementAt(0)
-              .discount!
+              .productDiscount!
               .discountAmountType!
           : 'amount';
     }

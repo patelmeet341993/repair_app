@@ -43,7 +43,7 @@ class ProductModel {
 
 class ProductContent {
   int? currentPage;
-  List<Product>? serviceList;
+  List<Product>? productList;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -58,7 +58,7 @@ class ProductContent {
 
   ProductContent(
       {this.currentPage,
-        this.serviceList,
+        this.productList,
         this.firstPageUrl,
         this.from,
         this.lastPage,
@@ -74,9 +74,9 @@ class ProductContent {
   ProductContent.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
-      serviceList = <Product>[];
+      productList = <Product>[];
       json['data'].forEach((v) {
-        serviceList!.add(new Product.fromJson(v));
+        productList!.add(new Product.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -100,8 +100,8 @@ class ProductContent {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['current_page'] = this.currentPage;
-    if (this.serviceList != null) {
-      data['data'] = this.serviceList!.map((v) => v.toJson()).toList();
+    if (this.productList != null) {
+      data['data'] = this.productList!.map((v) => v.toJson()).toList();
     }
     data['first_page_url'] = this.firstPageUrl;
     data['from'] = this.from;
@@ -142,7 +142,7 @@ class Product {
   ProductVariationsAppFormat? variationsAppFormat;
   List<ProductVariations>? variations;
   List<ProductFaqs>? faqs;
-  List<ProductDiscount>? serviceDiscount;
+  List<ProductDiscount>? productDiscount;
   List<ProductDiscount>? campaignDiscount;
 
   Product(
@@ -167,7 +167,7 @@ class Product {
         this.variationsAppFormat,
         this.variations,
         this.faqs,
-        this.serviceDiscount,
+        this.productDiscount,
         this.campaignDiscount,
       });
 
@@ -210,9 +210,9 @@ class Product {
       });
     }
     if (json['service_discount'] != null) {
-      serviceDiscount = <ProductDiscount>[];
+      productDiscount = <ProductDiscount>[];
       json['service_discount'].forEach((v) {
-        serviceDiscount!.add(new ProductDiscount.fromJson(v));
+        productDiscount!.add(new ProductDiscount.fromJson(v));
       });
     }
     if (json['campaign_discount'] != null) {
@@ -256,8 +256,8 @@ class Product {
     if (this.faqs != null) {
       data['faqs'] = this.faqs!.map((v) => v.toJson()).toList();
     }
-    if (this.serviceDiscount != null) {
-      data['service_discount'] = this.serviceDiscount!.map((v) => v.toJson()).toList();
+    if (this.productDiscount != null) {
+      data['service_discount'] = this.productDiscount!.map((v) => v.toJson()).toList();
     }
     if (this.campaignDiscount != null) {
       data['campaign_discount'] = this.campaignDiscount!.map((v) => v.toJson()).toList();

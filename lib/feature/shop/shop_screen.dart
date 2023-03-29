@@ -11,6 +11,7 @@ import 'package:repair/feature/shop/web_shop_screen.dart';
 import 'package:repair/feature/shop/widgets/shop_banner_view.dart';
 import 'package:repair/feature/shop/widgets/shop_campaign_view.dart';
 import 'package:repair/feature/shop/widgets/shop_category_view.dart';
+import 'package:repair/feature/shop/widgets/shop_popular_product_view.dart';
 
 import 'controller/shop_banner_controller.dart';
 
@@ -135,8 +136,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                   child: ShopCategoryView(),
                                 ),
                                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-                                RandomCampaignView(),
-                                PopularServiceView(),
+                                ShopCampaignView(),
+                                ShopPopularProductView(),
                                 CampaignView(),
                                 RecommendedServiceView(),
                                 SizedBox(

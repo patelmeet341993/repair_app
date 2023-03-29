@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
+import 'package:repair/feature/shop/controller/shop_campaign_controller.dart';
+import 'package:repair/feature/shop/model/shop_campaign_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:repair/core/core_export.dart';
 
 class ShopCampaignView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CampaignController>(builder: (campaignController) {
-      if (campaignController.campaignList != null &&
-          campaignController.campaignList!.length == 0) {
+    return GetBuilder<ShopCampaignController>(builder: (shopCampaignController) {
+      if (shopCampaignController.campaignList != null &&
+          shopCampaignController.campaignList!.length == 0) {
         return SizedBox();
       } else {
         return Container(
@@ -17,7 +19,7 @@ class ShopCampaignView extends StatelessWidget {
                 ? 350
                 : MediaQuery.of(context).size.width * 0.40,
             padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_DEFAULT),
-            child: campaignController.campaignList != null
+            child: shopCampaignController.campaignList != null
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -30,13 +32,13 @@ class ShopCampaignView extends StatelessWidget {
                             disableCenter: true,
                             autoPlayInterval: Duration(seconds: 7),
                             onPageChanged: (index, reason) {
-                              campaignController.setCurrentIndex(index, true);
+                              shopCampaignController.setCurrentIndex(index, true);
                             },
                           ),
                           itemCount:
-                              campaignController.campaignList!.length == 0
+                              shopCampaignController.campaignList!.length == 0
                                   ? 1
-                                  : campaignController.campaignList!.length,
+                                  : shopCampaignController.campaignList!.length,
                           itemBuilder: (context, index, _) {
                             String? _baseUrl = Get.find<SplashController>()
                                 .configModel
@@ -48,13 +50,13 @@ class ShopCampaignView extends StatelessWidget {
                                   return;
                                 }
                                 print("checking_campaign");
-                                print(campaignController
+                                print(shopCampaignController
                                     .campaignList![index].id!);
-                                print(campaignController.campaignList![index]
+                                print(shopCampaignController.campaignList![index]
                                     .discount!.discountType!);
-                                campaignController.navigateFromCampaign(
-                                    campaignController.campaignList![index].id!,
-                                    campaignController.campaignList![index]
+                                shopCampaignController.navigateFromCampaign(
+                                    shopCampaignController.campaignList![index].id!,
+                                    shopCampaignController.campaignList![index]
                                         .discount!.discountType!);
                               },
                               child: Padding(
@@ -75,7 +77,7 @@ class ShopCampaignView extends StatelessWidget {
                                       builder: (splashController) {
                                         return CustomImage(
                                           image:
-                                              '$_baseUrl/campaign/${campaignController.campaignList![index].coverImage}',
+                                              '$_baseUrl/campaign/${shopCampaignController.campaignList![index].coverImage}',
                                           fit: BoxFit.cover,
                                           placeholder: Images.placeholder,
                                         );
@@ -92,8 +94,8 @@ class ShopCampaignView extends StatelessWidget {
                       Align(
                         alignment: Alignment.center,
                         child: AnimatedSmoothIndicator(
-                          activeIndex: campaignController.currentIndex!,
-                          count: campaignController.campaignList!.length,
+                          activeIndex: shopCampaignController.currentIndex!,
+                          count: shopCampaignController.campaignList!.length,
                           effect: ExpandingDotsEffect(
                             dotHeight: 8,
                             dotWidth: 8,
