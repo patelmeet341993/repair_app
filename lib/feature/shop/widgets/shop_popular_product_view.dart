@@ -1,3 +1,4 @@
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:repair/components/ripple_button.dart';
 import 'package:repair/components/service_center_dialog.dart';
@@ -32,7 +33,7 @@ class ShopPopularProductView extends GetView<ProductController> {
                       Dimensions.PADDING_SIZE_SMALL,
                     ),
                     child: TitleWidget(
-                      title: 'popular_services'.tr,
+                      title: 'popular_products'.tr,
                       onTap: () => Get.toNamed(RouteHelper.allProductScreenRoute("fromPopularProductView")),
                     ),
                   ),
@@ -150,13 +151,28 @@ class ShopPopularProductView extends GetView<ProductController> {
                                         SizedBox(
                                           height: 1,
                                         ),
-                                        Text(
-                                          product.description,
-                                          style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
+                                        Html(
+                                          data: product.description,
+                                          style: {
+                                            'body': Style(
+                                                margin: Margins.all(0),
+                                                padding: EdgeInsets.zero,
+                                                fontSize: FontSize( Dimensions.fontSizeExtraSmall),
+                                                maxLines: 1,
+                                                color: Theme.of(context).disabledColor
+                                              // textOverflow: TextOverflow.ellipsis
+                                              // overflow: TextOverflow.ellipsis,
+                                              // lineHeight: LineHeight(.5),
+                                            ),
+                                          },
                                         ),
+                                        // Text(
+                                        //   product.description,
+                                        //   style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
+                                        //   maxLines: 2,
+                                        //   overflow: TextOverflow.ellipsis,
+                                        //   textAlign: TextAlign.start,
+                                        // ),
                                         SizedBox(
                                           height: 2,
                                         ),
