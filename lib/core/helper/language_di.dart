@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'package:repair/feature/shop/features/cart/controller/product_cart_controller.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 import 'package:repair/feature/voucher/controller/coupon_controller.dart';
 import 'package:repair/feature/web_landing/controller/web_landing_controller.dart';
 import 'package:repair/feature/web_landing/repository/web_landing_repo.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+
+import '../../feature/shop/features/cart/repository/product_cart_repo.dart';
+import '../../feature/shop/features/products/repository/product_repo.dart';
 
 Future<Map<String, Map<String, String>>> init() async {
   //those binding are used before called GetMaterial app
@@ -15,6 +20,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => ThemeController(sharedPreferences: Get.find()));
   Get.lazyPut(() => LocationController(locationRepo: LocationRepo(apiClient: Get.find(), sharedPreferences: Get.find())));
   Get.lazyPut(() => CartController(cartRepo: CartRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
+  Get.lazyPut(() => ProductCartController(productCartRepo: ProductCartRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
   Get.lazyPut(() => CouponController(couponRepo: CouponRepo(apiClient: Get.find())));
   Get.lazyPut(() => AuthController(authRepo: AuthRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
   Get.lazyPut(() => UserController(userRepo: UserRepo(apiClient: Get.find())));

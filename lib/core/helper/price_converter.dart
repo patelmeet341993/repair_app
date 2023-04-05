@@ -173,20 +173,20 @@ class PriceConverter {
   }
 
 
-  static CouponProductDiscount _getProductDiscount(List<ProductDiscount>? productDiscountList,
+  static CouponProductDiscount _getProductDiscount(List<CouponProductDiscount>? productDiscountList,
       num? _discountAmount, String? _discountAmountType) {
-    ProductDiscount? productDiscount =
+    CouponProductDiscount? productDiscount =
     (productDiscountList != null && productDiscountList.length > 0)
         ? productDiscountList.first
         : null;
     if (productDiscount != null) {
-      num? _getDiscount = productDiscount.productDiscount?.discountAmount;
-      if (_getDiscount! > productDiscount.productDiscount!.maxDiscountAmount! &&
-          productDiscount.productDiscount!.discountType == 'percent') {
-        _getDiscount = productDiscount.productDiscount!.maxDiscountAmount!;
+      num? _getDiscount = productDiscount.discountAmount;
+      if (_getDiscount! > productDiscount.maxDiscountAmount! &&
+          productDiscount.discountType == 'percent') {
+        _getDiscount = productDiscount.maxDiscountAmount!;
       }
       _discountAmount = (_discountAmount! + _getDiscount);
-      _discountAmountType = productDiscount.productDiscount!.discountAmountType!;
+      _discountAmountType = productDiscount.discountAmountType!;
     }
     return CouponProductDiscount(
         discountAmount: _discountAmount,

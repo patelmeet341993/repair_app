@@ -70,7 +70,7 @@ class ApiClient extends GetxService {
     ).timeout(Duration(seconds: timeoutInSeconds));
     try {
 
-
+      printLog('====> response: ${(_response.body)}');
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
@@ -166,7 +166,8 @@ class ApiClient extends GetxService {
   Future<Response> putData(String? uri, dynamic body,
       {Map<String, String>? headers}) async {
     try {
-      printLog('====> ApiCall: $url');
+      printLog('====> ApiCall: $uri');
+      printLog('====> Header: $_mainHeaders');
 
       Http.Response _response = await Http.put(
         Uri.parse(appBaseUrl! + uri!),
@@ -174,6 +175,7 @@ class ApiClient extends GetxService {
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
 
+      printLog('====> response: ${(_response.body)}');
 
       return handleResponse(_response, uri);
     } catch (e) {

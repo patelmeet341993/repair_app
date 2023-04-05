@@ -7,6 +7,6 @@ class ShopCampaignRepo {
   ShopCampaignRepo({required this.apiClient});
 
   Future<Response?> getcampaignList() async {
-    return await apiClient.getData(AppConstants.CAMPAIGN_URI);
+    return await apiClient.getData("${AppConstants.SHOP_CAMPAIGN_URI}");
   }
 }

@@ -1,9 +1,12 @@
+import 'package:flutter_html/flutter_html.dart';
 import 'package:repair/feature/home/web/web_campaign_view.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
 import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 
+import '../../../components/product_cart_widget.dart';
+import '../componants/product_center_dialog.dart';
 import '../features/products/model/product_model.dart';
 
 class ShopWebRecommendedServiceView extends StatelessWidget {
@@ -81,8 +84,8 @@ class ProductModelView extends StatelessWidget {
     Key? key,
     required this.serviceList,
     required this.index,
-     this.discountAmount,
-     this.discountAmountType,
+    this.discountAmount,
+    this.discountAmountType,
   }) : super(key: key);
 
   @override
@@ -172,26 +175,62 @@ class ProductModelView extends StatelessWidget {
                 SizedBox(height: 2),
 
                 // SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                Text(
-                  serviceList[index].description,
-                  style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Html(
+                  data: serviceList[index].description,
+                  style: {
+                    'body': Style(
+                      margin: Margins.all(0),
+                      padding: EdgeInsets.zero,
+                      fontSize: FontSize( Dimensions.fontSizeExtraSmall),
+                      maxLines: 1,
+                      color: Theme.of(context).disabledColor
+                      // textOverflow: TextOverflow.ellipsis
+                      // overflow: TextOverflow.ellipsis,
+                      // lineHeight: LineHeight(.5),
+                    ),
+                  },
                 ),
+                // Text(
+                //   serviceList[index].description,
+                //   style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
+                //   maxLines: 1,
+                //   overflow: TextOverflow.ellipsis,
+                // ),
                 SizedBox(height: 2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    CommonSubmitButton(
-                      text: 'Book Now'.tr,
-                      fontSize: Dimensions.fontSizeSmall,
+                    InkWell(
+                      // onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
                       onTap: () {
-                        Get.toNamed(
-                          RouteHelper.getServiceRoute(serviceList[index].id),
-                          arguments: ServiceDetailsScreen(serviceID: serviceList[index].id),
+                        showModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => ProductCenterDialog(
+                            product: serviceList[index],
+                            isFromDetails: true,
+                          ),
                         );
                       },
-                    ),
+                      child: Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
+                        padding: EdgeInsets.all(2),
+                        child:
+                            ProductCartWidget(color: Get.isDarkMode ? Theme.of(context).primaryColor : Colors.white, size: Dimensions.PRODUCT_CART_WIDGET_SIZE),
+                      ),
+                    )
+                    // CommonSubmitButton(
+                    //   text: 'Book Now'.tr,
+                    //   fontSize: Dimensions.fontSizeSmall,
+                    //   onTap: () {
+                    //     Get.toNamed(
+                    //       RouteHelper.getServiceRoute(serviceList[index].id),
+                    //       arguments: ServiceDetailsScreen(serviceID: serviceList[index].id),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ],

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:repair/feature/home/web/web_recommended_service_view.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
 import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
+import 'package:repair/feature/shop/features/products/view/product_details_screen.dart';
 
 import '../web/shop_web_recommended_service_view.dart';
 
@@ -46,20 +46,17 @@ class ShopRecommendedServiceView extends StatelessWidget {
                               : productController
                                   .recommendedProductList!.length,
                       itemBuilder: (context, index) {
-                        CouponProductDiscount _discountValue =
-                            PriceConverter.productDiscountCalculation(productController
-                                .recommendedProductList![index]);
                         return Padding(
                           padding: EdgeInsets.fromLTRB(
                               2, 2, Dimensions.PADDING_SIZE_SMALL, 2),
                           child: InkWell(
                             onTap: () {
                               Get.toNamed(
-                                RouteHelper.getServiceRoute(productController
-                                    .recommendedProductList![index].id!),
-                                arguments: ServiceDetailsScreen(
-                                    serviceID: productController
-                                        .recommendedProductList![index].id!),
+                                RouteHelper.getProductRoute(productController
+                                    .recommendedProductList![index].id),
+                                arguments: ProductDetailsScreen(
+                                    productID: productController
+                                        .recommendedProductList![index].id),
                               );
                             },
                             child: Container(

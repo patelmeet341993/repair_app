@@ -30,22 +30,23 @@ class ProductRepo extends GetxService {
   Future<Response> getProductListBasedOnSubCategory(
       {required String subCategoryID, required int offset}) async {
     return await apiClient.getData(
-        '${AppConstants.PRODUCT_BASED_ON_SUB_CATEGORY}$subCategoryID?limit=10&offset=$offset');
+        // '${AppConstants.SHOP_SUB_CATEGORY_URI}$subCategoryID');
+        '${AppConstants.PRODUCT_SUB_CATEGORY_URI}$subCategoryID');
   }
 
   Future<Response> getItemsBasedOnCampaignId(
       {required String campaignID}) async {
     return await apiClient.getData(
-        '${AppConstants.ITEMS_BASED_ON_CAMPAIGN_ID}$campaignID&limit=100&offset=1');
+        '${AppConstants.ITEMS_BASED_ON_SHOP_CAMPAIGN_ID}$campaignID&limit=100&offset=1');
   }
 
   Future<Response> getProductDetails(String serviceID) async {
     return await apiClient
-        .getData('${AppConstants.SERVICE_DETAILS_URI}/$serviceID');
+        .getData('${AppConstants.PRODUCT_DETAILS_URI}/$serviceID');
   }
 
   Future<Response> submitReview(ReviewBody reviewBody) async {
     return await apiClient.postData(
-        AppConstants.SERVICE_REVIEW, reviewBody.toJson());
+        AppConstants.PRODUCT_REVIEW, reviewBody.toJson());
   }
 }

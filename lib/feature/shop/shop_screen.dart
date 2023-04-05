@@ -106,7 +106,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                       borderRadius: BorderRadius.circular(22),
                                       color: Theme.of(context).cardColor),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                    Text('search_services'.tr, style: ubuntuRegular.copyWith(color: Theme.of(context).hintColor)),
+                                    Text('search_product'.tr, style: ubuntuRegular.copyWith(color: Theme.of(context).hintColor)),
                                     Padding(
                                       padding: EdgeInsets.only(right: Dimensions.PADDING_SIZE_RADIUS),
                                       child: Container(
@@ -138,9 +138,10 @@ class _ShopScreenState extends State<ShopScreen> {
                                   child: ShopCategoryView(),
                                 ),
                                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-                                ShopCampaignView(),
+                                // ShopCampaignView(),
                                 ShopPopularProductView(),
-                                CampaignView(),
+                                // CampaignView(),
+                                ShopCampaignView(),
                                 ShopRecommendedServiceView(),
                                 SizedBox(
                                   height: Dimensions.PADDING_SIZE_DEFAULT,

@@ -2,6 +2,8 @@ import 'package:repair/components/footer_base_view.dart';
 import 'package:repair/components/menu_drawer.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:get/get.dart';
+import 'package:repair/feature/shop/features/shop_category/controller/shop_category_controller.dart';
+import 'package:repair/feature/shop/features/shop_category/view/shop_subcategory_view.dart';
 
 class ShopSubCategoryScreen extends StatefulWidget {
   final String categoryTitle;
@@ -31,8 +33,8 @@ class _ShopSubCategoryScreenState extends State<ShopSubCategoryScreen> {
         appBar: CustomAppBar(
           title: widget.categoryTitle,
         ),
-        body: GetBuilder<CategoryController>(initState: (state) {
-          Get.find<CategoryController>().getSubCategoryList(
+        body: GetBuilder<ShopCategoryController>(initState: (state) {
+          Get.find<ShopCategoryController>().getSubCategoryList(
               widget.categoryID, widget.subCategoryIndex,
               shouldUpdate: false); //banner id is category here
         }, builder: (categoryController) {
@@ -52,7 +54,7 @@ class _ShopSubCategoryScreenState extends State<ShopSubCategoryScreen> {
                           : 0,
                     ),
                   ),
-                  SubCategoryView(
+                  ShopSubCategoryView(
                     isScrollable: true,
                   ),
                 ],

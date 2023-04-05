@@ -5,18 +5,22 @@ import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/shop/componants/product_center_dialog.dart';
 import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
 
+import '../../../../../components/product_cart_widget.dart';
+import '../../../../../utils/parsing_helper.dart';
 import '../model/product_model.dart';
 
 class ProductWidgetVertical extends StatelessWidget {
   final Product product;
   final bool isAvailable;
   final String fromType;
+  final bool isFromSubCategoryProductView;
 
   ProductWidgetVertical({
     Key? key,
     required this.product,
     required this.isAvailable,
     required this.fromType,
+    this.isFromSubCategoryProductView = false
   }) : super(key: key);
 
   @override
@@ -49,20 +53,23 @@ class ProductWidgetVertical extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
 
-          // color: Theme.of(context).cardColor,
+        // color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
           boxShadow: Get.isDarkMode ? null : cardShadow),
       child: MyRippleButton(
         onTap: () {
+          print("productID: ${product.id}  ${product.productId} fromType: $isFromSubCategoryProductView");
           Get.toNamed(
-            RouteHelper.getServiceRoute(product.id),
+            RouteHelper.getProductRoute(isFromSubCategoryProductView ? product.productId : product.id),
           );
         },
         child: Container(
           // margin: EdgeInsets.only(right: Dimensions.PADDING_SIZE_DEFAULT),
           padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS).copyWith(bottom: 4),
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: Theme
+                .of(context)
+                .cardColor,
             // color: Colors.red,
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
             //  boxShadow: Get.isDarkMode ? null : cardShadow,
@@ -76,31 +83,51 @@ class ProductWidgetVertical extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(Dimensions.RADIUS_SMALL)),
                     child: CustomImage(
-                      image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${product.image}',
+                      image: '${Get
+                          .find<SplashController>()
+                          .configModel
+                          .content!
+                          .imageBaseUrl!}/product/${product.image}',
                       fit: BoxFit.cover,
                       width: double.maxFinite,
                       height: Dimensions.HOME_IMAGE_SIZE,
                     ),
                   ),
-                  _discountModel.discountAmount! > 0
-                      ? Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).errorColor,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(Dimensions.RADIUS_DEFAULT),
-                                topRight: Radius.circular(Dimensions.RADIUS_SMALL),
-                              ),
-                            ),
-                            child: Text(
-                              PriceConverter.percentageOrAmount('${_discountModel.discountAmount}', '${_discountModel.discountAmountType}'),
-                              style: ubuntuRegular.copyWith(color: Theme.of(context).primaryColorLight),
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
+                  // product.variations!.isNotEmpty
+                  //     ? product.variations!.first.packateMeasurementCostPrice != "0"
+                  //     ? Padding(
+                  //   padding: const EdgeInsets.only(left: 3.0),
+                  //   child: Text(
+                  //     PriceConverter.convertPrice(
+                  //       ParsingHelper.parseDoubleMethod(product.variations!.first.packateMeasurementDiscountPrice),
+                  //       isShowLongPrice: true,
+                  //     ),
+                  //     style: ubuntuRegular.copyWith(
+                  //         fontSize: Dimensions.fontSizeSmall,
+                  //         color: Get.isDarkMode ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor),
+                  //   ),
+                  // )
+                  //     : SizedBox()
+                  //     : SizedBox(),
+                  // _discountModel.discountAmount! > 0
+                  //     ? Align(
+                  //         alignment: Alignment.topRight,
+                  //         child: Container(
+                  //           padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                  //           decoration: BoxDecoration(
+                  //             color: Theme.of(context).errorColor,
+                  //             borderRadius: BorderRadius.only(
+                  //               bottomLeft: Radius.circular(Dimensions.RADIUS_DEFAULT),
+                  //               topRight: Radius.circular(Dimensions.RADIUS_SMALL),
+                  //             ),
+                  //           ),
+                  //           child: Text(
+                  //             PriceConverter.percentageOrAmount('${_discountModel.discountAmount}', '${_discountModel.discountAmountType}'),
+                  //             style: ubuntuRegular.copyWith(color: Theme.of(context).primaryColorLight),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : SizedBox(),
                 ],
               ),
               SizedBox(
@@ -122,8 +149,10 @@ class ProductWidgetVertical extends StatelessWidget {
                       //SizedBox(height: 3,),
                       Text(
                         product.description,
-                        style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
-                        maxLines: 2,
+                        style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme
+                            .of(context)
+                            .disabledColor),
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.start,
                       ),
@@ -133,20 +162,51 @@ class ProductWidgetVertical extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            CommonSubmitButton(
-                                text: 'Book Now'.tr,
-                                fontSize: Dimensions.fontSizeSmall,
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      useRootNavigator: true,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      context: context,
-                                      builder: (context) =>
-                                          ProductCenterDialog(product: product));
-                                  // Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "", product.subCategoryId ?? ""),
-                                  //     arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId: product.subCategoryId ?? ""));
-                                }),
+                            InkWell(
+                              // onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) =>
+                                        ProductCenterDialog(
+                                          product: product,
+                                          isFromDetails: true,
+                                        ));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColor
+                                ),
+                                padding: EdgeInsets.all(2),
+                                child: ProductCartWidget(
+                                    color: Get.isDarkMode
+                                        ? Theme
+                                        .of(context)
+                                        .primaryColor
+                                        : Colors.white,
+                                    size: Dimensions.PRODUCT_CART_WIDGET_SIZE),
+                              ),
+                            )
+                            // CommonSubmitButton(
+                            //     text: 'Book Now'.tr,
+                            //     fontSize: Dimensions.fontSizeSmall,
+                            //     onTap: () {
+                            //       showModalBottomSheet(
+                            //           useRootNavigator: true,
+                            //           isScrollControlled: true,
+                            //           backgroundColor: Colors.transparent,
+                            //           context: context,
+                            //           builder: (context) =>
+                            //               ProductCenterDialog(product: product));
+                            //       // Get.toNamed(RouteHelper.getCompanyRoute(product.id ?? "", product.subCategoryId ?? ""),
+                            //       //     arguments: CompanyScreen(serviceID: product.id ?? "", subCategoryId: product.subCategoryId ?? ""));
+                            //     }),
                           ],
                         ),
                       /*  Stack(

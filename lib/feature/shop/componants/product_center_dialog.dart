@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:repair/feature/shop/features/cart/controller/product_cart_controller.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 
 import '../features/products/model/product_model.dart';
 
@@ -10,11 +12,7 @@ class ProductCenterDialog extends StatefulWidget {
   final int? cartIndex;
   final bool? isFromDetails;
 
-  ProductCenterDialog(
-      {required this.product,
-      this.cart,
-      this.cartIndex,
-      this.isFromDetails = false});
+  ProductCenterDialog({required this.product, this.cart, this.cartIndex, this.isFromDetails = false});
 
   @override
   State<ProductCenterDialog> createState() => _ProductBottomSheetState();
@@ -23,16 +21,17 @@ class ProductCenterDialog extends StatefulWidget {
 class _ProductBottomSheetState extends State<ProductCenterDialog> {
   @override
   void initState() {
-    // Get.find<CartController>().setInitialCartList(widget.product!);
+    Get.find<ProductCartController>().setInitialCartList(widget.product!);
     super.initState();
   }
+
+  int count = 1;
 
   @override
   Widget build(BuildContext context) {
     if (ResponsiveHelper.isDesktop(context))
       return Dialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE)),
         insetPadding: EdgeInsets.all(30),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: pointerInterceptor(),
@@ -42,23 +41,18 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
 
   pointerInterceptor() {
     return Padding(
-      padding: EdgeInsets.only(
-          top: ResponsiveHelper.isWeb() ? 0 : Dimensions.CART_DIALOG_PADDING),
+      padding: EdgeInsets.only(top: ResponsiveHelper.isWeb() ? 0 : Dimensions.CART_DIALOG_PADDING),
       child: PointerInterceptor(
         child: Container(
-          width: ResponsiveHelper.isDesktop(context)
-              ? Dimensions.WEB_MAX_WIDTH / 1.5
-              : Dimensions.WEB_MAX_WIDTH,
+          width: ResponsiveHelper.isDesktop(context) ? Dimensions.WEB_MAX_WIDTH / 1.5 : Dimensions.WEB_MAX_WIDTH,
           padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_LARGE),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.vertical(
-                top: Radius.circular(Dimensions.RADIUS_EXTRA_LARGE)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(Dimensions.RADIUS_EXTRA_LARGE)),
           ),
-          child: GetBuilder<CartController>(builder: (cartControllerInit) {
-            return GetBuilder<ServiceController>(builder: (serviceController) {
-              if (widget.product!.variations !=
-                  null)
+          child: GetBuilder<ProductCartController>(builder: (productCartControllerInit) {
+            return GetBuilder<ProductController>(builder: (serviceController) {
+              if (widget.product!.variations != null)
                 return Stack(
                   children: [
                     Padding(
@@ -69,246 +63,200 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                       ),
                       child: SingleChildScrollView(
                         child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: ResponsiveHelper.isDesktop(context)
-                                      ? 0
-                                      : Dimensions.PADDING_SIZE_DEFAULT,
-                                  bottom:
-                                      Dimensions.PADDING_SIZE_EXTRA_MORE_LARGE,
-                                ),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                          height:
-                                              Dimensions.PADDING_SIZE_LARGE),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.only(
-                                            bottom: Dimensions
-                                                .PADDING_SIZE_EXTRA_LARGE,
-                                          ),
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: cartControllerInit
-                                              .initialCartList.length,
-                                          itemBuilder: (context, index) {
-                                            //variation item
-                                            return Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: Dimensions
-                                                      .PADDING_SIZE_SMALL),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: Dimensions
-                                                        .PADDING_SIZE_EXTRA_SMALL),
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .hoverColor,
-                                                    borderRadius: BorderRadius
-                                                        .all(Radius.circular(
-                                                            Dimensions
-                                                                .PADDING_SIZE_DEFAULT))),
-                                                child:
-                                                    GetBuilder<CartController>(
-                                                  builder: (cartController) {
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Expanded(
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    cartControllerInit
-                                                                        .initialCartList[
-                                                                            index]
-                                                                        .variantKey
-                                                                        .replaceAll(
-                                                                            '-',
-                                                                            ' '),
-                                                                    style: ubuntuMedium.copyWith(
-                                                                        fontSize:
-                                                                            Dimensions.fontSizeSmall),
-                                                                    maxLines: 2,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: Dimensions
-                                                                        .PADDING_SIZE_EXTRA_SMALL,
-                                                                  ),
-                                                                  Text(
-                                                                      PriceConverter.convertPrice(
-                                                                          double.parse(cartControllerInit
-                                                                              .initialCartList[
-                                                                                  index]
-                                                                              .price
-                                                                              .toString()),
-                                                                          isShowLongPrice:
-                                                                              true),
-                                                                      style: ubuntuMedium.copyWith(
-                                                                          color: Get.isDarkMode
-                                                                              ? Theme.of(context).primaryColorLight
-                                                                              : Theme.of(context).primaryColor,
-                                                                          fontSize: Dimensions.fontSizeSmall)),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            // Expanded(child: SizedBox()),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .end,
-                                                                  children: [
-                                                                    cartControllerInit.initialCartList[index].quantity >
-                                                                            0
-                                                                        ? InkWell(
-                                                                            onTap:
-                                                                                () {
-                                                                              cartController.updateQuantity(index, false);
-                                                                            },
-                                                                            child:
-                                                                                Container(
-                                                                              height: 30,
-                                                                              width: 30,
-                                                                              margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
-                                                                              decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).colorScheme.secondary),
-                                                                              alignment: Alignment.center,
-                                                                              child: Icon(
-                                                                                Icons.remove,
-                                                                                size: 15,
-                                                                                color: Theme.of(context).cardColor,
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        : SizedBox(),
-                                                                    cartControllerInit.initialCartList[index].quantity >
-                                                                            0
-                                                                        ? Text(
-                                                                            cartControllerInit.initialCartList[index].quantity.toString(),
-                                                                          )
-                                                                        : SizedBox(),
-                                                                    GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        cartController.updateQuantity(
-                                                                            index,
-                                                                            true);
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                Dimensions.PADDING_SIZE_SMALL),
-                                                                        decoration: BoxDecoration(
-                                                                            shape:
-                                                                                BoxShape.circle,
-                                                                            color: Theme.of(context).colorScheme.secondary),
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .add,
-                                                                          size:
-                                                                              15,
-                                                                          color:
-                                                                              Theme.of(context).cardColor,
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          ]),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                      SizedBox(
-                                          height:
-                                              Dimensions.PADDING_SIZE_LARGE),
-                                    ]),
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_DEFAULT,
+                                bottom: Dimensions.PADDING_SIZE_EXTRA_MORE_LARGE,
                               ),
-                            ]),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.only(
+                                      bottom: Dimensions.PADDING_SIZE_EXTRA_LARGE,
+                                    ),
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: widget.product!.variations!.length,
+                                    itemBuilder: (context, index) {
+                                      //variation item
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context).hoverColor,
+                                                borderRadius: BorderRadius.all(Radius.circular(Dimensions.PADDING_SIZE_DEFAULT))),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          "${widget.product!.variations![index].attributeName} - ${widget.product!.variations![index].attributeValue}",
+                                                          style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                        SizedBox(
+                                                          height: Dimensions.PADDING_SIZE_EXTRA_SMALL,
+                                                        ),
+                                                        Text(
+                                                            PriceConverter.convertPrice(
+                                                                double.parse(widget.product!.variations![index].packateMeasurementDiscountPrice),
+                                                                isShowLongPrice: true),
+                                                            style: ubuntuMedium.copyWith(
+                                                                color: Get.isDarkMode ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                                                                fontSize: Dimensions.fontSizeSmall)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(child: SizedBox()),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        // InkWell(
+                                                        //   onTap: () {
+                                                        //     if (count > 1) {
+                                                        //       count -= 1;
+                                                        //       setState(() {});
+                                                        //     }
+                                                        //     // cartController.updateQuantity(index, false);
+                                                        //   },
+                                                        //   child: Container(
+                                                        //     height: 30,
+                                                        //     width: 30,
+                                                        //     margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
+                                                        //     decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).colorScheme.secondary),
+                                                        //     alignment: Alignment.center,
+                                                        //     child: Icon(
+                                                        //       Icons.remove,
+                                                        //       size: 15,
+                                                        //       color: Theme.of(context).cardColor,
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
+                                                        productCartControllerInit.initialCartList[index].quantity > 0
+                                                            ? InkWell(
+                                                                onTap: () {
+                                                                  // cartController.updateQuantity(index, false);
+                                                                },
+                                                                child: Container(
+                                                                  height: 30,
+                                                                  width: 30,
+                                                                  margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
+                                                                  decoration:
+                                                                      BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).colorScheme.secondary),
+                                                                  alignment: Alignment.center,
+                                                                  child: Icon(
+                                                                    Icons.remove,
+                                                                    size: 15,
+                                                                    color: Theme.of(context).cardColor,
+                                                                  ),
+                                                                ),
+                                                              )
+
+                                                        // Text(
+                                                        //   "$count",
+                                                        // ),
+                                                          : SizedBox(),
+                                                        productCartControllerInit.initialCartList[index].quantity > 0
+                                                            ? Text(
+                                                                "1",
+                                                              )
+                                                            : SizedBox(),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            if (count >= 1) {
+                                                              count += 1;
+                                                              setState(() {});
+                                                            }
+                                                            productCartControllerInit.updateQuantity(index, true);
+                                                          },
+                                                          child: Container(
+                                                            height: 30,
+                                                            width: 30,
+                                                            margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
+                                                            decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).colorScheme.secondary),
+                                                            alignment: Alignment.center,
+                                                            child: Icon(
+                                                              Icons.add,
+                                                              size: 15,
+                                                              color: Theme.of(context).cardColor,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Positioned(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.PADDING_SIZE_DEFAULT),
+                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: Dimensions.PADDING_SIZE_LARGE,
-                                  ),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            Dimensions.PADDING_SIZE_DEFAULT)),
-                                    child: CustomImage(
-                                      image:
-                                          '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${widget.product!.image}',
-                                      height: Dimensions.IMAGE_SIZE_MEDIUM,
-                                      width: Dimensions.IMAGE_SIZE_MEDIUM,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white70.withOpacity(0.6),
-                                        boxShadow: Get.isDarkMode
-                                            ? null
-                                            : [
-                                                BoxShadow(
-                                                  color: Colors.grey[300]!,
-                                                  blurRadius: 2,
-                                                  spreadRadius: 1,
-                                                )
-                                              ]),
-                                    child: InkWell(
-                                        onTap: () => Get.back(),
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.black54,
-                                        )),
-                                  )
-                                ]),
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              SizedBox(
+                                width: Dimensions.PADDING_SIZE_LARGE,
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(Dimensions.PADDING_SIZE_DEFAULT)),
+                                child: CustomImage(
+                                  image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${widget.product!.image}',
+                                  height: Dimensions.IMAGE_SIZE_MEDIUM,
+                                  width: Dimensions.IMAGE_SIZE_MEDIUM,
+                                ),
+                              ),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white70.withOpacity(0.6),
+                                    boxShadow: Get.isDarkMode
+                                        ? null
+                                        : [
+                                            BoxShadow(
+                                              color: Colors.grey[300]!,
+                                              blurRadius: 2,
+                                              spreadRadius: 1,
+                                            )
+                                          ]),
+                                child: InkWell(
+                                    onTap: () => Get.back(),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.black54,
+                                    )),
+                              )
+                            ]),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -318,9 +266,8 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                     height: Dimensions.PADDING_SIZE_RADIUS,
                                   ),
                                   Text(
-                                    widget.product!.name!,
-                                    style: ubuntuMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeDefault),
+                                    widget.product!.name,
+                                    style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
                                     textAlign: TextAlign.center,
                                     maxLines: 2,
                                   ),
@@ -329,12 +276,7 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                   ),
                                   Text(
                                     "${widget.product!.variations!.length} ${'options_available'.tr}",
-                                    style: ubuntuRegular.copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color!
-                                            .withOpacity(.5)),
+                                    style: ubuntuRegular.copyWith(color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(.5)),
                                   ),
                                 ]),
                           ],
@@ -342,53 +284,33 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                       ),
                     ),
                     Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        height: 70,
-                        color: Theme.of(context).cardColor,
-                      ),
-                    ),
-                    Positioned(
                       left: Dimensions.PADDING_SIZE_DEFAULT,
                       right: Dimensions.PADDING_SIZE_DEFAULT,
                       bottom: Dimensions.PADDING_SIZE_DEFAULT,
-                      child:
-                          GetBuilder<CartController>(builder: (cartController) {
+                      child: GetBuilder<ProductCartController>(builder: (productCartController) {
                         bool _addToCart = true;
-                        return cartController.isLoading
+                        return productCartController.isLoading
                             ? Center(child: CircularProgressIndicator())
                             : CustomButton(
-                                height: ResponsiveHelper.isDesktop(context)
-                                    ? 50
-                                    : 45,
-                                onPressed: cartControllerInit.isButton
+                                height: ResponsiveHelper.isDesktop(context) ? 50 : 45,
+                                onPressed: productCartControllerInit.isButton
                                     ? () async {
                                         if (_addToCart) {
-                                          // _addToCart = false;
-                                          // if (Get.find<AuthController>()
-                                          //     .isLoggedIn()) {
-                                          //   await cartController
-                                          //       .addCartToServer(
-                                          //           widget.product?.id, widget.product?.subCategoryId ?? "", context);
-                                          //   await cartController
-                                          //       .getCartListFromServer();
-                                          //   // Get.back();
-                                          // } else {
-                                          //   cartController.addDataToCart(
-                                          //       widget.product?.id, widget.product?.subCategoryId ?? "");
-                                          //   //cartController.addDataInCart();
-                                          // }
+                                          _addToCart = false;
+                                          if (Get.find<AuthController>().isLoggedIn()) {
+                                            await productCartController.addCartToServer(context);
+                                            await productCartController
+                                                .getCartListFromServer();
+                                            // Get.back();
+                                          } else {
+                                            productCartController.addDataToCart();
+                                            //cartController.addDataInCart();
+                                          }
                                         }
                                       }
                                     : null,
                                 buttonText:
-                                    (cartController.cartList.length > 0 &&
-                                            cartController.cartList
-                                                    .elementAt(0)
-                                                    .serviceId ==
-                                                widget.product!.id)
+                                    (productCartController.cartList.length > 0 && productCartController.cartList.elementAt(0).id == widget.product!.id)
                                         ? 'update_cart'.tr
                                         : 'add_to_cart'.tr);
                       }),
@@ -405,30 +327,28 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                       width: 40,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white70.withOpacity(0.6),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[
-                                  Get.find<ThemeController>().darkTheme
-                                      ? 700
-                                      : 300]!,
-                              blurRadius: 2,
-                              spreadRadius: 1,
-                            )
-                          ]),
-                      child: InkWell(
-                          onTap: () => Get.back(), child: Icon(Icons.close)),
+                        shape: BoxShape.circle,
+                        color: Colors.white70.withOpacity(0.6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]!,
+                            blurRadius: 2,
+                            spreadRadius: 1,
+                          )
+                        ],
+                      ),
+                      child: InkWell(onTap: () => Get.back(), child: Icon(Icons.close)),
                     ),
                   ),
                   Container(
-                      height: Get.height / 7,
-                      child: Center(
-                          child: Text(
+                    height: Get.height / 7,
+                    child: Center(
+                      child: Text(
                         'no_variation_is_available'.tr,
-                        style: ubuntuMedium.copyWith(
-                            fontSize: Dimensions.fontSizeLarge),
-                      )))
+                        style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+                      ),
+                    ),
+                  )
                 ],
               );
             });

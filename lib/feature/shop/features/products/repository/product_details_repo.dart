@@ -6,13 +6,13 @@ class ProductDetailsRepo extends GetxService {
   final ApiClient apiClient;
   ProductDetailsRepo({required this.apiClient});
 
-  Future<Response> getProductDetails(String serviceID) async {
+  Future<Response> getProductDetails(String productID) async {
     return await apiClient
-        .getData('${AppConstants.SERVICE_DETAILS_URI}/$serviceID');
+        .getData('${AppConstants.PRODUCT_DETAILS_URI}$productID');
   }
 
   Future<Response> getProductReviewList(String serviceID, int offset) async {
     return await apiClient.getData(
-        '${AppConstants.GET_SERVICE_REVIEW_LIST}$serviceID?offset=$offset&limit=10');
+        '${AppConstants.GET_PRODUCT_REVIEW_LIST}$serviceID?offset=$offset&limit=10');
   }
 }

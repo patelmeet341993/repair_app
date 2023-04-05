@@ -13,11 +13,13 @@ import 'package:repair/feature/checkout/widget/payment_section/payment_page.dart
 class CheckoutScreen extends StatefulWidget {
   final String pageState;
   final String addressId;
+  bool isFromProduct;
 
   CheckoutScreen(
     this.pageState,
     this.addressId, {
     Key? key,
+    this.isFromProduct = false,
   }) : super(key: key);
 
   @override
@@ -38,13 +40,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     print("page_state: ${widget.pageState}");
+    print("widget.isFromProduct: ${widget.isFromProduct}");
 
     return WillPopScope(
       onWillPop: () => _exitApp(),
       child: Scaffold(
         endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
         appBar: CustomAppBar(
-            title: 'checkout'.tr,
+            title: (widget.isFromProduct ?? false) ? "product_checkout" : 'checkout'.tr,
             onBackPressed: () {
               if (widget.pageState == 'payment' || Get.find<CheckOutController>().currentPage == PageState.payment) {
                 print("inside_here_true");
@@ -137,15 +140,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             child: Align(
                                               alignment: Alignment.center,
                                               child: Container(
-                                              height: 55,
-                                              width: 55,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(50),
-                                                image: DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image: AssetImage(
-                                                      Images.paymentSelected,
-                                                    ))),
+                                                height: 55,
+                                                width: 55,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(50),
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.fill,
+                                                        image: AssetImage(
+                                                          Images.paymentSelected,
+                                                        ))),
                                               ),
                                             ),
                                           ),
@@ -156,15 +159,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             top: 0,
                                             bottom: 0,
                                             child: Container(
-                                            height: 55,
-                                            width: 55,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(50),
-                                              image: DecorationImage(
-                                                  fit: BoxFit.fill,
-                                                  image: AssetImage(
-                                                    Images.completeSelected,
-                                                  ))),
+                                              height: 55,
+                                              width: 55,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(50),
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: AssetImage(
+                                                        Images.completeSelected,
+                                                      ))),
                                             ),
                                           ),
                                       ],
@@ -205,7 +208,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           return controller.currentPage == PageState.orderDetails && PageState.orderDetails.name == widget.pageState
                               ? ResponsiveHelper.isDesktop(context)
                                   ? OrderDetailsPageWeb()
-                                  : const OrderDetailsPage()
+                                  : OrderDetailsPage(
+                                      isFromProduct: widget.isFromProduct,
+                                    )
                               : controller.currentPage == PageState.payment || PageState.payment.name == widget.pageState
                                   ? PaymentPage(
                                       addressId: widget.addressId,
@@ -430,7 +435,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                 userID: userId,
                                                 serviceAddressId: addressModel.id.toString(),
                                                 schedule: schedule,
-
                                               );
                                             }
                                           }

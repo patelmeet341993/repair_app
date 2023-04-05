@@ -22,6 +22,7 @@ class Dimensions {
   static const double LOGO_SIZE = 100.0;
   static const double MAINSCREEN_LOGO_SIZE = 180.0;
   static const double CART_WIDGET_SIZE = 30.0;
+  static const double PRODUCT_CART_WIDGET_SIZE = 25.0;
   static const double CUSTOMER_APPBAR_SIZE = 70.0;
   static const double PREFERRED_SIZE_WHEN_DESKTOP = 70.0;
   static const double PREFERRED_SIZE = 50.0;

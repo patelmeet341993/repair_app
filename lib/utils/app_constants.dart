@@ -83,11 +83,28 @@ class AppConstants {
    static const String SHOP_BANNER_URI = '/api/v1/customer/productbanner?limit=10&offset=1';
   static const String SHOP_CATEGORY_URI = '/api/v1/customer/productcategory?limit=20';
   static const String SHOP_SUB_CATEGORY_URI = '/api/v1/customer/productcategory/childes?limit=20&offset=1&id=';
+  static const String PRODUCT_SUB_CATEGORY_URI = '/api/v1/customer/productcategory/childes-products?limit=20&offset=1&id=';
   static const String SHOP_POPULAR_SERVICE_URI = '/api/v1/customer/product/popular';
   static const String SHOP_ALL_PRODUCT_URI = '/api/v1/customer/product';
   static const String RECOMMENDED_PRODUCT_URI = '/api/v1/customer/product/recommended';
 
   static const String PRODUCT_BASED_ON_SUB_CATEGORY = '/api/v1/customer/product/sub-category/';
+  static const String ITEMS_BASED_ON_SHOP_CAMPAIGN_ID = '/api/v1/customer/productcampaign/data/items?campaign_id=';
+
+  static const String SHOP_CAMPAIGN_URI = '/api/v1/customer/productcampaign?limit=10&offset=1';
+  // static const String PRODUCT_DETAILS_URI = '/api/v1/customer/product/detail';
+  static const String PRODUCT_DETAILS_URI = '/api/v1/customer/product/detail?offset=1&limit=10&product_id=';
+  static const String PRODUCT_REVIEW = '/api/v1/customer/productreview/submit';
+  static const String GET_PRODUCT_REVIEW_LIST = '/api/v1/customer/product/review/';
+  static const String PRODUCT_ADD_TO_CART = '/api/v1/customer/product/add_to_cart';
+  static const String PRODUCT_GET_CART_LIST = '/api/v1/customer/product/list?limit=100&offset=1';
+
+  static const String REMOVE_SINGLE_CART_ITEM = '/api/v1/customer/product/remove/';
+  static const String UPDATE_PRODUCT_CART_QUANTITY = '/api/v1/customer/product/update-product-quantity?limit=20&offset=1&id=';
+
+
+
+
 
 
 
@@ -106,6 +123,7 @@ class AppConstants {
   static const String COUNTRY_CODE = 'demand_country_code';
   static const String LANGUAGE_CODE = 'demand_language_code';
   static const String CART_LIST = 'demand_cart_list';
+  static const String PRODUCT_CART_LIST = 'demand_product_cart_list';
   static const String USER_PASSWORD = 'demand_user_password';
   static const String USER_ADDRESS = 'demand_user_address';
   static const String USER_NUMBER = 'demand_user_number';
@@ -129,4 +147,7 @@ class AppConstants {
     LanguageModel(imageUrl: Images.arabicTwo, languageName: 'عربى', countryCode: 'SA', languageCode: 'ar'),
   ];
   static const double limitOfPickedImageSizeInMB = 2;
+
+  static const String englishLanguageId = "1";
+  static const String arabicLabnguageId = "2";
 }

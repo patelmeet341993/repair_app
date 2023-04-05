@@ -19,6 +19,7 @@ import 'package:get/get.dart';
 
 class BottomNavScreen extends StatefulWidget {
   final int pageIndex;
+
   BottomNavScreen({required this.pageIndex});
 
   @override
@@ -63,7 +64,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         floatingActionButton: ResponsiveHelper.isDesktop(context)
             ? null
             : InkWell(
-                onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
+                onTap: () {
+                  if(Get.find<BottomNavController>().currentPage.value ==  BnbItem.Shop){
+                    Get.toNamed(RouteHelper.getProductCartRoute());
+                  } else {
+                    Get.toNamed(RouteHelper.getCartRoute());
+                  }
+                },
                 child: Container(
                   height: 70,
                   width: 70,
@@ -83,34 +90,24 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                           )
                         : null,
                   ),
-                  child: CartWidget(
-                      color: Get.isDarkMode
-                          ? Theme.of(context).primaryColorLight
-                          : Colors.white,
-                      size: 30),
+                  child: CartWidget(color: Get.isDarkMode ? Theme.of(context).primaryColorLight : Colors.white, size: 30),
                 ),
               ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
         bottomNavigationBar: ResponsiveHelper.isDesktop(context)
             ? SizedBox()
             : SafeArea(
                 child: Container(
-                  height: ResponsiveHelper.isMobile(context)
-                      ? 55
-                      : 60 + MediaQuery.of(context).padding.top,
+                  height: ResponsiveHelper.isMobile(context) ? 55 : 60 + MediaQuery.of(context).padding.top,
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  color: Get.isDarkMode
-                      ? Theme.of(context).cardColor.withOpacity(.5)
-                      : Theme.of(context).primaryColor,
+                  color: Get.isDarkMode ? Theme.of(context).cardColor.withOpacity(.5) : Theme.of(context).primaryColor,
                   child: Row(children: [
                     _bnbItem(
                         icon: Images.repairBlack,
                         bnbItem: BnbItem.Repair,
                         onTap: () {
-                          Get.find<BottomNavController>()
-                              .changePage(BnbItem.Repair);
+                          Get.find<BottomNavController>().changePage(BnbItem.Repair);
                         },
                         context: context),
                     _bnbItem(
@@ -118,11 +115,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                         bnbItem: BnbItem.Shop,
                         onTap: () {
                           if (!_isUserLoggedIn) {
-                            Get.toNamed(RouteHelper.getNotLoggedScreen(
-                                'my_bookings'.tr));
+                            Get.toNamed(RouteHelper.getNotLoggedScreen('my_bookings'.tr));
                           } else {
-                            Get.find<BottomNavController>()
-                                .changePage(BnbItem.Shop);
+                            Get.find<BottomNavController>().changePage(BnbItem.Shop);
                           }
                         },
                         context: context),
@@ -131,11 +126,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                         bnbItem: BnbItem.Cart,
                         onTap: () {
                           if (!_isUserLoggedIn) {
-                            Get.toNamed(
-                                RouteHelper.getSignInRoute(RouteHelper.main));
+                            Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
                           } else {
-                            Get.find<BottomNavController>()
-                                .changePage(BnbItem.Cart);
+                            Get.find<BottomNavController>().changePage(BnbItem.Cart);
                           }
                         },
                         context: context),
@@ -143,17 +136,14 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                         icon: Images.bookingsBlack,
                         bnbItem: BnbItem.Booking,
                         onTap: () {
-                          Get.find<BottomNavController>()
-                              .changePage(BnbItem.Booking);
+                          Get.find<BottomNavController>().changePage(BnbItem.Booking);
                         },
                         context: context),
                     _bnbItem(
                         icon: Images.menu,
                         bnbItem: BnbItem.More,
                         onTap: () {
-                          Get.bottomSheet(MenuScreen(),
-                              backgroundColor: Colors.transparent,
-                              isScrollControlled: true);
+                          Get.bottomSheet(MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
                         },
                         context: context),
                   ]),
@@ -164,11 +154,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     );
   }
 
-  Widget _bnbItem(
-      {required String icon,
-      required BnbItem bnbItem,
-      required GestureTapCallback onTap,
-      context}) {
+  Widget _bnbItem({required String icon, required BnbItem bnbItem, required GestureTapCallback onTap, context}) {
     return Obx(() => Expanded(
             child: InkWell(
           onTap: bnbItem != BnbItem.Cart ? onTap : null,
@@ -179,19 +165,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                     icon,
                     width: 18,
                     height: 18,
-                    color: Get.find<BottomNavController>().currentPage.value ==
-                            bnbItem
-                        ? Colors.white
-                        : Theme.of(context).secondaryHeaderColor,
+                    color: Get.find<BottomNavController>().currentPage.value == bnbItem ? Colors.white : Theme.of(context).secondaryHeaderColor,
                   ),
             SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(bnbItem != BnbItem.Cart ? bnbItem.name.tr : '',
                 style: ubuntuRegular.copyWith(
                   fontSize: Dimensions.fontSizeSmall,
-                  color: Get.find<BottomNavController>().currentPage.value ==
-                          bnbItem
-                      ? Colors.white
-                      : Theme.of(context).secondaryHeaderColor,
+                  color: Get.find<BottomNavController>().currentPage.value == bnbItem ? Colors.white : Theme.of(context).secondaryHeaderColor,
                 )),
           ]),
         )));
@@ -204,11 +184,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         return HomeScreen();
       case BnbItem.Shop:
         return ShopScreen();
-        // if (!Get.find<AuthController>().isLoggedIn()) {
-        //   break;
-        // } else {
-        //   return OfferScreen();
-        // }
+      // if (!Get.find<AuthController>().isLoggedIn()) {
+      //   break;
+      // } else {
+      //   return OfferScreen();
+      // }
 
       case BnbItem.Cart:
         if (!Get.find<AuthController>().isLoggedIn()) {

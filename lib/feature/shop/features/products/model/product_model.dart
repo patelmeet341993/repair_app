@@ -1,29 +1,23 @@
-import 'dart:async';
-
-import 'package:repair/data/model/response/config_model.dart';
-import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
 import 'package:repair/utils/parsing_helper.dart';
 
-import '../../../../../data/model/response/error_response.dart';
-
 class ProductModel {
-  String? responseCode;
-  String? message;
+  String responseCode = "";
+  String message = "";
   ProductContent? content;
-  List<Errors>? errors;
+  List<String> errors = [];
 
-  ProductModel({this.responseCode, this.message, this.content, this.errors});
+  ProductModel({
+    this.responseCode = "",
+    this.message = "",
+    this.content,
+    this.errors = const [],
+  });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
-    responseCode = json['response_code'];
-    message = json['message'];
+    responseCode = ParsingHelper.parseStringMethod(json['response_code']);
+    message = ParsingHelper.parseStringMethod(json['message']);
     content = json['content'] != null ? new ProductContent.fromJson(json['content']) : null;
-    if (json['errors'] != null) {
-      errors = <Errors>[];
-      json['errors'].forEach((v) {
-        errors!.add(new Errors.fromJson(v));
-      });
-    }
+    errors = ParsingHelper.parseListMethod(json['errors']);
   }
 
   Map<String, dynamic> toJson() {
@@ -33,9 +27,7 @@ class ProductModel {
     if (this.content != null) {
       data['content'] = this.content!.toJson();
     }
-    if (this.errors != null) {
-      data['errors'] = this.errors!.map((v) => v.toJson()).toList();
-    }
+    data['errors'] = this.errors;
     return data;
   }
 }
@@ -48,10 +40,10 @@ class ProductContent {
   int? lastPage;
   String? lastPageUrl;
   List<Links>? links;
-  var nextPageUrl;
+  String? nextPageUrl;
   String? path;
   String? perPage;
-  var prevPageUrl;
+  String? prevPageUrl;
   int? to;
   int? total;
 
@@ -84,7 +76,7 @@ class ProductContent {
     lastPageUrl = json['last_page_url'];
     if (json['links'] != null) {
       links = <Links>[];
-      json['links'].forEach((v) {
+      ParsingHelper.parseListMethod(json['links']).forEach((v) {
         links!.add(new Links.fromJson(v));
       });
     }
@@ -169,62 +161,101 @@ class Product {
   int isActive = 0;
   String createdAt = "";
   String updatedAt = "";
+  String catName = "";
+  String companyName = "";
+  String productId = "";
+  String packateMeasurementAttributeId = "";
+  String packateMeasurementAttributeValue = "";
+  String packateMeasurementSellPrice = "";
+  String packateMeasurementCostPrice = "";
+  String packateMeasurementDiscountPrice = "";
+  String packateMeasurementShelfLifeVal = "";
+  String packateMeasurementShelfLifeUnit = "";
+  String packateMeasurementBarcode = "";
+  String packateMeasurementFssaiNumber = "";
+  int packateMeasurementQty = 0;
+  String packateMeasurementImages = "";
   String catNm = "";
+  int countOrder = 0;
   List<ProductVariations>? variations;
+  List<Features>? features;
+  List<Specifications>? specifications;
+  List<Shipping>? shipping;
+  List<Media>? media;
+  List<Subcategory>? subcategory;
 
-  Product({
-    this.id = "",
-    this.groupId = 0,
-    this.langId = 0,
-    this.name = "",
-    this.description = "",
-    this.categoryId = "",
-    this.indicator = 0,
-    this.sku = "",
-    this.tags = "",
-    this.vendor = "",
-    this.madeIn = "",
-    this.manufacturer = "",
-    this.manufacturerPartNo = "",
-    this.brandIds = "",
-    this.weight = 0,
-    this.length = 0,
-    this.width = 0,
-    this.height = 0,
-    this.returnStatus = 0,
-    this.promoStatus = 0,
-    this.cancelableStatus = 0,
-    this.tillStatus = "",
-    this.bstatus = 0,
-    this.image = "",
-    this.videoURL = "",
-    this.brochure = "",
-    this.seoPageNm = "",
-    this.sMetaTitle = "",
-    this.sMetaKeywords = "",
-    this.sMetaDescription = "",
-    this.publishedStatus = 0,
-    this.showHomePageStatus = 0,
-    this.reviewStatus = 0,
-    this.availableStartDt = "",
-    this.availableEndDt = "",
-    this.markAsNewStatus = 0,
-    this.topsellerStatus = 0,
-    this.indemandStatus = 0,
-    this.bapprovalst = 0,
-    this.approvalDt = "",
-    this.blockProductStatus = 0,
-    this.blockComment = "",
-    this.adminComment = "",
-    this.approveStatus = 0,
-    this.ratingCount = 0,
-    this.avgRating = 0,
-    this.isActive = 0,
-    this.createdAt = "",
-    this.updatedAt = "",
-    this.catNm = "",
-    this.variations,
-  });
+  Product(
+      {this.id = "",
+      this.groupId = 0,
+      this.langId = 0,
+      this.name = "",
+      this.description = "",
+      this.categoryId = "",
+      this.indicator = 0,
+      this.sku = "",
+      this.tags = "",
+      this.vendor = "",
+      this.madeIn = "",
+      this.manufacturer = "",
+      this.manufacturerPartNo = "",
+      this.brandIds = "",
+      this.weight = 0,
+      this.length = 0,
+      this.width = 0,
+      this.height = 0,
+      this.returnStatus = 0,
+      this.promoStatus = 0,
+      this.cancelableStatus = 0,
+      this.tillStatus = "",
+      this.bstatus = 0,
+      this.image = "",
+      this.videoURL = "",
+      this.brochure = "",
+      this.seoPageNm = "",
+      this.sMetaTitle = "",
+      this.sMetaKeywords = "",
+      this.sMetaDescription = "",
+      this.publishedStatus = 0,
+      this.showHomePageStatus = 0,
+      this.reviewStatus = 0,
+      this.availableStartDt = "",
+      this.availableEndDt = "",
+      this.markAsNewStatus = 0,
+      this.topsellerStatus = 0,
+      this.indemandStatus = 0,
+      this.bapprovalst = 0,
+      this.approvalDt = "",
+      this.blockProductStatus = 0,
+      this.blockComment = "",
+      this.adminComment = "",
+      this.approveStatus = 0,
+      this.ratingCount = 0,
+      this.avgRating = 0,
+      this.isActive = 0,
+      this.createdAt = "",
+      this.updatedAt = "",
+      this.catName = "",
+      this.companyName = "",
+      this.variations,
+      this.features,
+      this.specifications,
+      this.shipping,
+      this.media,
+      this.subcategory,
+      this.productId = "",
+      this.packateMeasurementAttributeId = "",
+      this.packateMeasurementAttributeValue = "",
+      this.packateMeasurementSellPrice = "",
+      this.packateMeasurementCostPrice = "",
+      this.packateMeasurementDiscountPrice = "",
+      this.packateMeasurementShelfLifeVal = "",
+      this.packateMeasurementShelfLifeUnit = "",
+      this.packateMeasurementBarcode = "",
+      this.packateMeasurementFssaiNumber = "",
+      this.packateMeasurementQty = 0,
+      this.packateMeasurementImages = "",
+      this.catNm = "",
+      this.countOrder = 0});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = ParsingHelper.parseStringMethod(json['id']);
@@ -276,11 +307,56 @@ class Product {
     isActive = ParsingHelper.parseIntMethod(json['is_active']);
     createdAt = ParsingHelper.parseStringMethod(json['created_at']);
     updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
+    catName = ParsingHelper.parseStringMethod(json['catName']);
+    companyName = ParsingHelper.parseStringMethod(json['company_name']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    packateMeasurementAttributeId = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_id']);
+    packateMeasurementAttributeValue = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_value']);
+    packateMeasurementSellPrice = ParsingHelper.parseStringMethod(json['packate_measurement_sell_price']);
+    packateMeasurementCostPrice = ParsingHelper.parseStringMethod(json['packate_measurement_cost_price']);
+    packateMeasurementDiscountPrice = ParsingHelper.parseStringMethod(json['packate_measurement_discount_price']);
+    packateMeasurementShelfLifeVal = ParsingHelper.parseStringMethod(json['packate_measurement_shelf_life_val']);
+    packateMeasurementShelfLifeUnit = ParsingHelper.parseStringMethod(json['packate_measurement_shelf_life_unit']);
+    packateMeasurementBarcode = ParsingHelper.parseStringMethod(json['packate_measurement_barcode']);
+    packateMeasurementFssaiNumber = ParsingHelper.parseStringMethod(json['packate_measurement_fssai_number']);
+    packateMeasurementQty = ParsingHelper.parseIntMethod(json['packate_measurement_qty']);
+    packateMeasurementImages = ParsingHelper.parseStringMethod(json['packate_measurement_images']);
     catNm = ParsingHelper.parseStringMethod(json['catNm']);
+    countOrder = ParsingHelper.parseIntMethod(json['count_order']);
     if (json['variations'] != null) {
       variations = <ProductVariations>[];
       json['variations'].forEach((v) {
         variations!.add(new ProductVariations.fromJson(v));
+      });
+    }
+    if (json['features'] != null) {
+      features = <Features>[];
+      json['features'].forEach((v) {
+        features!.add(new Features.fromJson(v));
+      });
+    }
+    if (json['specifications'] != null) {
+      specifications = <Specifications>[];
+      json['specifications'].forEach((v) {
+        specifications!.add(new Specifications.fromJson(v));
+      });
+    }
+    if (json['shipping'] != null) {
+      shipping = <Shipping>[];
+      json['shipping'].forEach((v) {
+        shipping!.add(new Shipping.fromJson(v));
+      });
+    }
+    if (json['media'] != null) {
+      media = <Media>[];
+      json['media'].forEach((v) {
+        media!.add(new Media.fromJson(v));
+      });
+    }
+    if (json['subcategory'] != null) {
+      subcategory = <Subcategory>[];
+      json['subcategory'].forEach((v) {
+        subcategory!.add(new Subcategory.fromJson(v));
       });
     }
   }
@@ -336,39 +412,39 @@ class Product {
     data['is_active'] = this.isActive;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['catName'] = this.catName;
+    data['company_name'] = this.companyName;
+    data['product_id'] = this.productId;
+    data['packate_measurement_attribute_id'] = this.packateMeasurementAttributeId;
+    data['packate_measurement_attribute_value'] = this.packateMeasurementAttributeValue;
+    data['packate_measurement_sell_price'] = this.packateMeasurementSellPrice;
+    data['packate_measurement_cost_price'] = this.packateMeasurementCostPrice;
+    data['packate_measurement_discount_price'] = this.packateMeasurementDiscountPrice;
+    data['packate_measurement_shelf_life_val'] = this.packateMeasurementShelfLifeVal;
+    data['packate_measurement_shelf_life_unit'] = this.packateMeasurementShelfLifeUnit;
+    data['packate_measurement_barcode'] = this.packateMeasurementBarcode;
+    data['packate_measurement_fssai_number'] = this.packateMeasurementFssaiNumber;
+    data['packate_measurement_qty'] = this.packateMeasurementQty;
+    data['packate_measurement_images'] = this.packateMeasurementImages;
     data['catNm'] = this.catNm;
-
+    data['count_order'] = this.countOrder;
     if (this.variations != null) {
       data['variations'] = this.variations!.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class ProductVariationsAppFormat {
-  String? zoneId;
-  double? defaultPrice;
-  List<ProductZoneWiseVariations>? zoneWiseVariations;
-
-  ProductVariationsAppFormat({this.zoneId, this.defaultPrice, this.zoneWiseVariations});
-
-  ProductVariationsAppFormat.fromJson(Map<String, dynamic> json) {
-    zoneId = json['zone_id'];
-    defaultPrice = json['default_price'].toDouble();
-    if (json['zone_wise_variations'] != null) {
-      zoneWiseVariations = <ProductZoneWiseVariations>[];
-      json['zone_wise_variations'].forEach((v) {
-        zoneWiseVariations!.add(new ProductZoneWiseVariations.fromJson(v));
-      });
+    if (this.features != null) {
+      data['features'] = this.features!.map((v) => v.toJson()).toList();
     }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['zone_id'] = this.zoneId;
-    data['default_price'] = this.defaultPrice;
-    if (this.zoneWiseVariations != null) {
-      data['zone_wise_variations'] = this.zoneWiseVariations!.map((v) => v.toJson()).toList();
+    if (this.specifications != null) {
+      data['specifications'] = this.specifications!.map((v) => v.toJson()).toList();
+    }
+    if (this.shipping != null) {
+      data['shipping'] = this.shipping!.map((v) => v.toJson()).toList();
+    }
+    if (this.media != null) {
+      data['media'] = this.media!.map((v) => v.toJson()).toList();
+    }
+    if (this.subcategory != null) {
+      data['subcategory'] = this.subcategory!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -378,53 +454,112 @@ class ProductVariations {
   int id = 0;
   String productId = "";
   int groupId = 0;
-  String packetMeasurementAttributeId = "";
-  String packetMeasurementAttributeValue = "";
-  double? packetMeasurementSellPrice;
-  String packetMeasurementCostPrice = "";
-  String packetMeasurementDiscountPrice = "";
-  String packetMeasurementShelfLifeVal = "";
-  String packetMeasurementShelfLifeUnit = "";
-  String packetMeasurementBarcode = "";
-  String packetMeasurementFssaiNumber = "";
-  int packetMeasurementQty = 0;
-  String? packetMeasurementImages;
+  String packateMeasurementAttributeId = "";
+  String packateMeasurementAttributeValue = "";
+  double packateMeasurementSellPrice = 0;
+  String packateMeasurementCostPrice = "";
+  String packateMeasurementDiscountPrice = "";
+  String packateMeasurementShelfLifeVal = "";
+  String packateMeasurementShelfLifeUnit = "";
+  String packateMeasurementBarcode = "";
+  String packateMeasurementFssaiNumber = "";
+  int packateMeasurementQty = 0;
+  String packateMeasurementImages = "";
   String createdAt = "";
   String updatedAt = "";
+  String attributeName = "";
+  String attributeValue = "";
 
   ProductVariations(
       {this.id = 0,
       this.productId = "",
       this.groupId = 0,
-      this.packetMeasurementAttributeId = "",
-      this.packetMeasurementAttributeValue = "",
-      this.packetMeasurementSellPrice = 0,
-      this.packetMeasurementCostPrice = "",
-      this.packetMeasurementDiscountPrice = "",
-      this.packetMeasurementShelfLifeVal = "",
-      this.packetMeasurementShelfLifeUnit = "",
-      this.packetMeasurementBarcode = "",
-      this.packetMeasurementFssaiNumber = "",
-      this.packetMeasurementQty = 0,
-      this.packetMeasurementImages = "",
+      this.packateMeasurementAttributeId = "",
+      this.packateMeasurementAttributeValue = "",
+      this.packateMeasurementSellPrice = 0,
+      this.packateMeasurementCostPrice = "",
+      this.packateMeasurementDiscountPrice = "",
+      this.packateMeasurementShelfLifeVal = "",
+      this.packateMeasurementShelfLifeUnit = "",
+      this.packateMeasurementBarcode = "",
+      this.packateMeasurementFssaiNumber = "",
+      this.packateMeasurementQty = 0,
+      this.packateMeasurementImages = "",
       this.createdAt = "",
-      this.updatedAt = ""});
+      this.updatedAt = "",
+      this.attributeName = "",
+      this.attributeValue = ""});
 
   ProductVariations.fromJson(Map<String, dynamic> json) {
     id = ParsingHelper.parseIntMethod(json['id']);
     productId = ParsingHelper.parseStringMethod(json['product_id']);
     groupId = ParsingHelper.parseIntMethod(json['group_id']);
-    packetMeasurementAttributeId = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_id']);
-    packetMeasurementAttributeValue = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_value']);
-    packetMeasurementSellPrice = ParsingHelper.parseDoubleMethod(json['packate_measurement_sell_price']);
-    packetMeasurementCostPrice = ParsingHelper.parseStringMethod(json['packate_measurement_cost_price']);
-    packetMeasurementDiscountPrice = ParsingHelper.parseStringMethod(json['packate_measurement_discount_price']);
-    packetMeasurementShelfLifeVal = ParsingHelper.parseStringMethod(json['packate_measurement_shelf_life_val']);
-    packetMeasurementShelfLifeUnit = ParsingHelper.parseStringMethod(json['packate_measurement_shelf_life_unit']);
-    packetMeasurementBarcode = ParsingHelper.parseStringMethod(json['packate_measurement_barcode']);
-    packetMeasurementFssaiNumber = ParsingHelper.parseStringMethod(json['packate_measurement_fssai_number']);
-    packetMeasurementQty = ParsingHelper.parseIntMethod(json['packate_measurement_qty']);
-    packetMeasurementImages = ParsingHelper.parseStringMethod(json['packate_measurement_images']);
+    packateMeasurementAttributeId = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_id']);
+    packateMeasurementAttributeValue = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_value']);
+    packateMeasurementSellPrice = ParsingHelper.parseDoubleMethod(json['packate_measurement_sell_price']);
+    packateMeasurementCostPrice = ParsingHelper.parseStringMethod(json['packate_measurement_cost_price']);
+    packateMeasurementDiscountPrice = ParsingHelper.parseStringMethod(json['packate_measurement_discount_price']);
+    packateMeasurementShelfLifeVal = ParsingHelper.parseStringMethod(json['packate_measurement_shelf_life_val']);
+    packateMeasurementShelfLifeUnit = ParsingHelper.parseStringMethod(json['packate_measurement_shelf_life_unit']);
+    packateMeasurementBarcode = ParsingHelper.parseStringMethod(json['packate_measurement_barcode']);
+    packateMeasurementFssaiNumber = ParsingHelper.parseStringMethod(json['packate_measurement_fssai_number']);
+    packateMeasurementQty = ParsingHelper.parseIntMethod(json['packate_measurement_qty']);
+    packateMeasurementImages = ParsingHelper.parseStringMethod(json['packate_measurement_images']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
+    attributeName = ParsingHelper.parseStringMethod(json['attribute_name']);
+    attributeValue = ParsingHelper.parseStringMethod(json['attribute_value']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['product_id'] = this.productId;
+    data['group_id'] = this.groupId;
+    data['packate_measurement_attribute_id'] = this.packateMeasurementAttributeId;
+    data['packate_measurement_attribute_value'] = this.packateMeasurementAttributeValue;
+    data['packate_measurement_sell_price'] = this.packateMeasurementSellPrice;
+    data['packate_measurement_cost_price'] = this.packateMeasurementCostPrice;
+    data['packate_measurement_discount_price'] = this.packateMeasurementDiscountPrice;
+    data['packate_measurement_shelf_life_val'] = this.packateMeasurementShelfLifeVal;
+    data['packate_measurement_shelf_life_unit'] = this.packateMeasurementShelfLifeUnit;
+    data['packate_measurement_barcode'] = this.packateMeasurementBarcode;
+    data['packate_measurement_fssai_number'] = this.packateMeasurementFssaiNumber;
+    data['packate_measurement_qty'] = this.packateMeasurementQty;
+    data['packate_measurement_images'] = this.packateMeasurementImages;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['attribute_name'] = this.attributeName;
+    data['attribute_value'] = this.attributeValue;
+    return data;
+  }
+}
+
+class Features {
+  int id = 0;
+  String productId = "";
+  int groupId = 0;
+  String featuresName = "";
+  int featuresStatus = 0;
+  String createdAt = "";
+  String updatedAt = "";
+
+  Features({
+    this.id = 0,
+    this.productId = "",
+    this.groupId = 0,
+    this.featuresName = "",
+    this.featuresStatus = 0,
+    this.createdAt = "",
+    this.updatedAt = "",
+  });
+
+  Features.fromJson(Map<String, dynamic> json) {
+    id = ParsingHelper.parseIntMethod(json['id']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    groupId = ParsingHelper.parseIntMethod(json['group_id']);
+    featuresName = ParsingHelper.parseStringMethod(json['features_name']);
+    featuresStatus = ParsingHelper.parseIntMethod(json['features_status']);
     createdAt = ParsingHelper.parseStringMethod(json['created_at']);
     updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
   }
@@ -434,241 +569,200 @@ class ProductVariations {
     data['id'] = this.id;
     data['product_id'] = this.productId;
     data['group_id'] = this.groupId;
-    data['packate_measurement_attribute_id'] = this.packetMeasurementAttributeId;
-    data['packate_measurement_attribute_value'] = this.packetMeasurementAttributeValue;
-    data['packate_measurement_sell_price'] = this.packetMeasurementSellPrice;
-    data['packate_measurement_cost_price'] = this.packetMeasurementCostPrice;
-    data['packate_measurement_discount_price'] = this.packetMeasurementDiscountPrice;
-    data['packate_measurement_shelf_life_val'] = this.packetMeasurementShelfLifeVal;
-    data['packate_measurement_shelf_life_unit'] = this.packetMeasurementShelfLifeUnit;
-    data['packate_measurement_barcode'] = this.packetMeasurementBarcode;
-    data['packate_measurement_fssai_number'] = this.packetMeasurementFssaiNumber;
-    data['packate_measurement_qty'] = this.packetMeasurementQty;
-    data['packate_measurement_images'] = this.packetMeasurementImages;
+    data['features_name'] = this.featuresName;
+    data['features_status'] = this.featuresStatus;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;
   }
 }
 
-class ProductZoneWiseVariations {
-  String? variantKey;
-  String? variantName;
-  num? price;
+class Specifications {
+  int id = 0;
+  String productId = "";
+  int groupId = 0;
+  String specificationType = "";
+  String specificationName = "";
+  int specificationStatus = 0;
+  String createdAt = "";
+  String updatedAt = "";
 
-  ProductZoneWiseVariations({
-    this.variantKey,
-    this.variantName,
-    this.price,
+  Specifications({
+    this.id = 0,
+    this.productId = "",
+    this.groupId = 0,
+    this.specificationType = "",
+    this.specificationName = "",
+    this.specificationStatus = 0,
+    this.createdAt = "",
+    this.updatedAt = "",
   });
 
-  ProductZoneWiseVariations.fromJson(Map<String, dynamic> json) {
-    variantKey = json['variant_key'];
-    variantName = json['variant_name'];
-    price = json['price'].toDouble();
+  Specifications.fromJson(Map<String, dynamic> json) {
+    id = ParsingHelper.parseIntMethod(json['id']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    groupId = ParsingHelper.parseIntMethod(json['group_id']);
+    specificationType = ParsingHelper.parseStringMethod(json['specification_type']);
+    specificationName = ParsingHelper.parseStringMethod(json['specification_name']);
+    specificationStatus = ParsingHelper.parseIntMethod(json['specification_status']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['variant_key'] = this.variantKey;
-    data['variant_name'] = this.variantName;
-    data['price'] = this.price;
+    data['id'] = this.id;
+    data['product_id'] = this.productId;
+    data['group_id'] = this.groupId;
+    data['specification_type'] = this.specificationType;
+    data['specification_name'] = this.specificationName;
+    data['specification_status'] = this.specificationStatus;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }
 
-class ProductCategory {
-  String? id;
-  String? parentId;
-  String? name;
-  String? image;
-  int? position;
-  var description;
-  int? isActive;
-  String? createdAt;
-  String? updatedAt;
-  List<ProductZonesBasicInfo>? zonesBasicInfo;
-  List<ProductDiscount>? categoryDiscount;
-  List<ProductDiscount>? campaignDiscount;
+class Shipping {
+  int id = 0;
+  int groupId = 0;
+  String productId = "";
+  String zoneId = "";
+  String deliveryCharge = "";
+  String createdAt = "";
+  String updatedAt = "";
 
-  ProductCategory({
-    this.id,
-    this.parentId,
-    this.name,
-    this.image,
-    this.position,
-    this.description,
-    this.isActive,
-    this.createdAt,
-    this.updatedAt,
-    this.zonesBasicInfo,
-    this.categoryDiscount,
-    this.campaignDiscount,
+  Shipping({
+    this.id = 0,
+    this.groupId = 0,
+    this.productId = "",
+    this.zoneId = "",
+    this.deliveryCharge = "",
+    this.createdAt = "",
+    this.updatedAt = "",
   });
 
-  ProductCategory.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    parentId = json['parent_id'];
-    name = json['name'];
-    image = json['image'];
-    position = json['position'];
-    description = json['description'];
-    isActive = json['is_active'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    if (json['zones_basic_info'] != null) {
-      zonesBasicInfo = <ProductZonesBasicInfo>[];
-      json['zones_basic_info'].forEach((v) {
-        zonesBasicInfo!.add(new ProductZonesBasicInfo.fromJson(v));
-      });
-    }
-    if (json['category_discount'] != null) {
-      categoryDiscount = <ProductDiscount>[];
-      json['category_discount'].forEach((v) {
-        categoryDiscount!.add(new ProductDiscount.fromJson(v));
-      });
-    }
-    if (json['campaign_discount'] != null) {
-      campaignDiscount = <ProductDiscount>[];
-      json['campaign_discount'].forEach((v) {
-        campaignDiscount!.add(new ProductDiscount.fromJson(v));
-      });
-    }
+  Shipping.fromJson(Map<String, dynamic> json) {
+    id = ParsingHelper.parseIntMethod(json['id']);
+    groupId = ParsingHelper.parseIntMethod(json['group_id']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    zoneId = ParsingHelper.parseStringMethod(json['zone_id']);
+    deliveryCharge = ParsingHelper.parseStringMethod(json['delivery_charge']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['parent_id'] = this.parentId;
-    data['name'] = this.name;
-    data['image'] = this.image;
-    data['position'] = this.position;
-    data['description'] = this.description;
-    data['is_active'] = this.isActive;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.zonesBasicInfo != null) {
-      data['zones_basic_info'] = this.zonesBasicInfo!.map((v) => v.toJson()).toList();
-    }
-    if (this.categoryDiscount != null) {
-      data['category_discount'] = this.categoryDiscount!.map((v) => v.toJson()).toList();
-    }
-    if (this.campaignDiscount != null) {
-      data['campaign_discount'] = this.campaignDiscount!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class ProductZonesBasicInfo {
-  String? id;
-  String? name;
-  List<Coordinates>? coordinates;
-  int? isActive;
-  String? createdAt;
-  String? updatedAt;
-  Pivot? pivot;
-
-  ProductZonesBasicInfo({this.id, this.name, this.coordinates, this.isActive, this.createdAt, this.updatedAt, this.pivot});
-
-  ProductZonesBasicInfo.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    if (json['coordinates'] != null) {
-      coordinates = <Coordinates>[];
-      json['coordinates'].forEach((v) {
-        coordinates!.add(new Coordinates.fromJson(v));
-      });
-    }
-    isActive = json['is_active'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    pivot = json['pivot'] != null ? new Pivot.fromJson(json['pivot']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    if (this.coordinates != null) {
-      data['coordinates'] = this.coordinates!.map((v) => v.toJson()).toList();
-    }
-    data['is_active'] = this.isActive;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.pivot != null) {
-      data['pivot'] = this.pivot!.toJson();
-    }
-    return data;
-  }
-}
-
-class ProductFaqs {
-  String? id;
-  String? question;
-  String? answer;
-  String? serviceId;
-  int? isActive;
-  String? createdAt;
-  String? updatedAt;
-
-  ProductFaqs({this.id, this.question, this.answer, this.serviceId, this.isActive, this.createdAt, this.updatedAt});
-
-  ProductFaqs.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    question = json['question'];
-    answer = json['answer'];
-    serviceId = json['service_id'];
-    isActive = json['is_active'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['question'] = this.question;
-    data['answer'] = this.answer;
-    data['service_id'] = this.serviceId;
-    data['is_active'] = this.isActive;
+    data['group_id'] = this.groupId;
+    data['product_id'] = this.productId;
+    data['zone_id'] = this.zoneId;
+    data['delivery_charge'] = this.deliveryCharge;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;
   }
 }
 
-class ProductDiscount {
-  int? id;
-  String? discountId;
-  String? discountType;
-  String? typeWiseId;
-  String? createdAt;
-  String? updatedAt;
-  CouponProductDiscount? productDiscount;
+class Media {
+  int id = 0;
+  String productId = "";
+  int groupId = 0;
+  String otherImages = "";
+  String createdAt = "";
+  String updatedAt = "";
 
-  ProductDiscount({this.id, this.discountId, this.discountType, this.typeWiseId, this.createdAt, this.updatedAt, this.productDiscount});
+  Media({
+    this.id = 0,
+    this.productId = "",
+    this.groupId = 0,
+    this.otherImages = "",
+    this.createdAt = "",
+    this.updatedAt = "",
+  });
 
-  ProductDiscount.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    discountId = json['discount_id'];
-    discountType = json['discount_type'];
-    typeWiseId = json['type_wise_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    productDiscount = json['discount'] != null ? new CouponProductDiscount.fromJson(json['discount']) : null;
+  Media.fromJson(Map<String, dynamic> json) {
+    id = ParsingHelper.parseIntMethod(json['id']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    groupId = ParsingHelper.parseIntMethod(json['group_id']);
+    otherImages = ParsingHelper.parseStringMethod(json['other_images']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['discount_id'] = this.discountId;
-    data['discount_type'] = this.discountType;
-    data['type_wise_id'] = this.typeWiseId;
+    data['product_id'] = this.productId;
+    data['group_id'] = this.groupId;
+    data['other_images'] = this.otherImages;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    if (this.productDiscount != null) {
-      data['discount'] = this.productDiscount!.toJson();
-    }
+    return data;
+  }
+}
+
+class Subcategory {
+  int id = 0;
+  String productId = "";
+  int groupId = 0;
+  String subcategoryId = "";
+  String createdAt = "";
+  String updatedAt = "";
+
+  Subcategory({
+    this.id = 0,
+    this.productId = "",
+    this.groupId = 0,
+    this.subcategoryId = "",
+    this.createdAt = "",
+    this.updatedAt = "",
+  });
+
+  Subcategory.fromJson(Map<String, dynamic> json) {
+    id = ParsingHelper.parseIntMethod(json['id']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    groupId = ParsingHelper.parseIntMethod(json['group_id']);
+    subcategoryId = ParsingHelper.parseStringMethod(json['subcategory_id']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['product_id'] = this.productId;
+    data['group_id'] = this.groupId;
+    data['subcategory_id'] = this.subcategoryId;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    return data;
+  }
+}
+
+class Links {
+  String url = "";
+  String label = "";
+  bool active = false;
+
+  Links({
+    this.url = "",
+    this.label = "",
+    this.active = false,
+  });
+
+  Links.fromJson(Map<String, dynamic> json) {
+    url = ParsingHelper.parseStringMethod(json['url']);
+    label = ParsingHelper.parseStringMethod(json['label']);
+    active = ParsingHelper.parseBoolMethod(json['active']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['url'] = this.url;
+    data['label'] = this.label;
+    data['active'] = this.active;
     return data;
   }
 }

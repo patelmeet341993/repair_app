@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
-import 'package:repair/feature/campaign/model/service_types.dart';
 import 'package:repair/feature/shop/features/product_campaign/model/product_types.dart';
 import 'package:repair/feature/shop/features/products/model/product_model.dart';
 import 'package:repair/feature/shop/features/products/repository/product_repo.dart';
+
+import '../../shop_category/controller/shop_category_controller.dart';
 
 class ProductController extends GetxController implements GetxService {
   final ProductRepo productRepo;
@@ -165,6 +166,7 @@ class ProductController extends GetxController implements GetxService {
       if (!isWithPagination) {
         _subCategoryBasedProductList = [];
       }
+      print("response productController : ${response.body}");
       if(ProductModel.fromJson(response.body).content != null) {
         _subCategoryBasedProductList!
             .addAll(ProductModel
@@ -197,7 +199,7 @@ class ProductController extends GetxController implements GetxService {
       Get.toNamed(RouteHelper.allProductScreenRoute("fromCampaign",
           campaignID: campaignID));
     } else {
-      customSnackBar('campaign_is_not_available_for_this_service'.tr);
+      customSnackBar('campaign_is_not_available_for_this_product'.tr);
       if (response.statusCode != 200) {
         ApiChecker.checkApi(response);
       }
@@ -225,7 +227,7 @@ class ProductController extends GetxController implements GetxService {
       });
       _isLoading = false;
       if (_campaignBasedProductList!.length == 0) {
-        Get.find<CategoryController>()
+        Get.find<ShopCategoryController>()
             .getCampaignBasedCategoryList(campaignID, false);
       } else {
         Get.toNamed(RouteHelper.allProductScreenRoute("fromCampaign",

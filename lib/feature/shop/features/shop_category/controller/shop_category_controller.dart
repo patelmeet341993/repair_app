@@ -2,15 +2,6 @@ import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/campaign/model/category_types_model.dart';
 import 'package:repair/feature/shop/features/products/model/product_model.dart';
-import 'package:repair/feature/shop/features/products/model/product_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
-import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
 import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
 
 import '../repository/shop_category_repo.dart';

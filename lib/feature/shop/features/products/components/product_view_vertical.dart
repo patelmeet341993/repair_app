@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
-import 'package:repair/components/service_widget_vertical.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/feature/shop/features/products/components/product_widget_vertical.dart';
-
 import '../model/product_model.dart';
 
 class ProductViewVertical extends GetView<ServiceController> {
@@ -15,6 +13,7 @@ class ProductViewVertical extends GetView<ServiceController> {
   final NoDataType? noDataType;
 
   final Function(String type)? onVegFilterTap;
+
   ProductViewVertical(
       {required this.product,
       this.isScrollable = false,
@@ -43,28 +42,20 @@ class ProductViewVertical extends GetView<ServiceController> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
                     mainAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
-                    childAspectRatio: ResponsiveHelper.isDesktop(context) ||
-                            ResponsiveHelper.isTab(context)
-                        ? .9
-                        : .70,
-                    mainAxisExtent:
-                        ResponsiveHelper.isMobile(context) ? 228 : 260,
+                    childAspectRatio: ResponsiveHelper.isDesktop(context) || ResponsiveHelper.isTab(context) ? .9 : .70,
+                    mainAxisExtent: ResponsiveHelper.isMobile(context) ? 230 : 260,
                     crossAxisCount: ResponsiveHelper.isMobile(context)
                         ? 2
                         : ResponsiveHelper.isTab(context)
                             ? 3
                             : 5,
                   ),
-                  physics: isScrollable!
-                      ? BouncingScrollPhysics()
-                      : NeverScrollableScrollPhysics(),
+                  physics: isScrollable! ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
                   shrinkWrap: isScrollable! ? false : true,
                   itemCount: product!.length,
                   padding: padding,
                   itemBuilder: (context, index) {
-                    bool _isAvailable =
-                        product![index].isActive == 0 ? false : true;
-                    // controller.getServiceDiscount(product![index]);
+                    bool _isAvailable = product![index].isActive == 0 ? false : true;
                     return ProductWidgetVertical(
                       product: product![index],
                       isAvailable: _isAvailable,
@@ -72,34 +63,25 @@ class ProductViewVertical extends GetView<ServiceController> {
                     );
                   },
                 )
-              : NoDataScreen(
-                  text:
-                      noDataText != null ? noDataText : 'no_services_found'.tr,
-                  type: noDataType)
+              : NoDataScreen(text: noDataText != null ? noDataText : 'no_product_found'.tr, type: noDataType)
           : GridView.builder(
               key: UniqueKey(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
                 mainAxisSpacing: Dimensions.PADDING_SIZE_DEFAULT,
-                childAspectRatio: ResponsiveHelper.isDesktop(context) ||
-                        ResponsiveHelper.isTab(context)
-                    ? 1
-                    : .70,
+                childAspectRatio: ResponsiveHelper.isDesktop(context) || ResponsiveHelper.isTab(context) ? 1 : .70,
                 crossAxisCount: ResponsiveHelper.isMobile(context)
                     ? 2
                     : ResponsiveHelper.isTab(context)
                         ? 3
                         : 5,
               ),
-              physics: isScrollable!
-                  ? BouncingScrollPhysics()
-                  : NeverScrollableScrollPhysics(),
+              physics: isScrollable! ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
               shrinkWrap: isScrollable! ? false : true,
               itemCount: shimmerLength,
               padding: padding,
               itemBuilder: (context, index) {
-                return ServiceShimmer(
-                    isEnabled: true, hasDivider: index != shimmerLength! - 1);
+                return ServiceShimmer(isEnabled: true, hasDivider: index != shimmerLength! - 1);
               },
             ),
     ]);

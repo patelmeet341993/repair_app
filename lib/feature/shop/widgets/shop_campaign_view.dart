@@ -77,7 +77,7 @@ class ShopCampaignView extends StatelessWidget {
                                       builder: (splashController) {
                                         return CustomImage(
                                           image:
-                                              '$_baseUrl/campaign/${shopCampaignController.campaignList![index].coverImage}',
+                                              '$_baseUrl/productcampaign/${shopCampaignController.campaignList![index].coverImage}',
                                           fit: BoxFit.cover,
                                           placeholder: Images.placeholder,
                                         );

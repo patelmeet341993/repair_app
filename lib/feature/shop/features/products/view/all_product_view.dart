@@ -9,14 +9,16 @@ import 'package:repair/feature/shop/features/products/components/product_view_ve
 import 'package:repair/feature/shop/features/products/components/product_widget_vertical.dart';
 import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
+import 'package:repair/feature/shop/features/shop_category/model/shop_category_model.dart';
 
 import '../model/product_model.dart';
 
 class AllProductView extends StatefulWidget {
   final String fromPage;
   final String campaignID;
+  List<Product> listTotalProduct = [];
 
-  AllProductView({required this.fromPage, required this.campaignID});
+  AllProductView({required this.fromPage, required this.campaignID, this.listTotalProduct = const []});
 
   @override
   State<AllProductView> createState() => _AllProductViewState();
@@ -26,14 +28,16 @@ class _AllProductViewState extends State<AllProductView> {
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
+    print("AllProductView list totalProduct campaignID ${widget.campaignID} : ${widget.listTotalProduct.length}");
 
     return Scaffold(
       appBar: CustomAppBar(
+        isFromProduct:true,
         title: widget.fromPage == 'allProduct'
             ? 'all_product'.tr
             : widget.fromPage == 'fromRecommendedScreen'
                 ? 'recommended_for_you'.tr
-                : widget.fromPage == 'fromPopularServiceView'
+                : widget.fromPage == 'fromPopularProductView'
                     ? 'popular_product'.tr
                     : 'available_product'.tr,
         showCart: true,
@@ -44,7 +48,7 @@ class _AllProductViewState extends State<AllProductView> {
   }
 
   Widget _buildBody(String fromPage, BuildContext context, ScrollController scrollController) {
-    if (fromPage == 'fromPopularServiceView') {
+    if (fromPage == 'fromPopularProductView') {
       return GetBuilder<ProductController>(
         initState: (state) {
           Get.find<ProductController>().getPopularProductList(1, true);
@@ -103,7 +107,7 @@ class _AllProductViewState extends State<AllProductView> {
           Get.find<ProductController>().getCampaignBasedProductList(widget.campaignID, true);
         },
         builder: (serviceController) {
-          return _buildWidget(serviceController.campaignBasedProductList, context);
+          return _buildWidget(serviceController.campaignBasedProductList, context, false);
         },
       );
     } else if (fromPage == 'fromRecommendedScreen') {
@@ -214,23 +218,26 @@ class _AllProductViewState extends State<AllProductView> {
     } else {
       return GetBuilder<ProductController>(
         initState: (state) {
-          Get.find<ProductController>().getSubCategoryBasedProductList(fromPage, false, isShouldUpdate: true);
+          // Get.find<ProductController>().getSubCategoryBasedProductList(widget.fromPage, false, isShouldUpdate: true);
         },
         builder: (serviceController) {
-          return _buildWidget(serviceController.subCategoryBasedProductList, context);
+          List<Product> productList = widget.listTotalProduct.map((e) {
+            return Product.fromJson(e.toJson());
+          }).toList();
+          return _buildWidget(productList, context, true);
         },
       );
     }
   }
 
-  Widget _buildWidget(List<Product>? productList, BuildContext context) {
+  Widget _buildWidget(List<Product>? productList, BuildContext context, bool isShopSubCategoryWidget) {
     return FooterBaseView(
       isCenter: (productList == null || productList.length == 0),
       child: SizedBox(
         width: Dimensions.WEB_MAX_WIDTH,
         child: (productList != null && productList.length == 0)
             ? NoDataScreen(
-                text: 'no_services_found'.tr,
+                text: 'no_product_found'.tr,
                 type: NoDataType.SERVICE,
               )
             : productList != null
@@ -263,6 +270,7 @@ class _AllProductViewState extends State<AllProductView> {
                               return ProductWidgetVertical(
                                 product: productList[index],
                                 isAvailable: true,
+                                isFromSubCategoryProductView: isShopSubCategoryWidget,
                                 fromType: widget.fromPage,
                               );
                             },

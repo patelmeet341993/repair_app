@@ -43,7 +43,7 @@ class ShopBannerController extends GetxController implements GetxService {
     switch (resourceType) {
       case 'category':
         Get.toNamed(
-            RouteHelper.subCategoryScreenRoute(categoryName, bannerID, 0));
+            RouteHelper.shopSubCategoryScreenRoute(categoryName, bannerID, 0));
         break;
 
       case 'link':
@@ -53,8 +53,8 @@ class ShopBannerController extends GetxController implements GetxService {
           throw 'Could not launch $link';
         }
         break;
-      case 'service':
-        Get.toNamed(RouteHelper.getServiceRoute(resourceID));
+      case 'product':
+        Get.toNamed(RouteHelper.getProductRoute(resourceID));
         break;
       default:
     }

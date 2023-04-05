@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
-import 'package:repair/feature/shop/features/products/controller/product_details_controller.dart';
-import 'package:repair/feature/shop/features/products/model/product_model.dart';
 import 'package:repair/feature/shop/features/products/repository/product_details_repo.dart';
 
 import '../model/product_review_model.dart';
@@ -79,7 +77,7 @@ class ProductTabController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    controller = TabController(vsync: this, length: [].length > 0 ? 3 : 2);
+    controller = TabController(vsync: this, length: 4);
   }
 
   Future<void> getProductReview(

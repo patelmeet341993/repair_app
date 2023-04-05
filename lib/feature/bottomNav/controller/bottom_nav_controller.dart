@@ -9,7 +9,7 @@ class BottomNavController extends GetxController {
     super.onInit();
   }
 
-  var currentPage = BnbItem.Repair.obs;
+  Rx<BnbItem> currentPage = BnbItem.Repair.obs;
   void changePage(BnbItem bnbItem) {
     print("name:${bnbItem.name}");
     currentPage.value = bnbItem;

@@ -523,6 +523,15 @@
   "all_product": "All Products",
   "available_product": "Available Product",
   "popular_product": "Popular Products",
-  "products": "Products"
+  "products": "Products",
+  "search_product": "Search Products",
+  "no_product_available": "No Product Available",
+  "overView": "OverView",
+  "features": "Features",
+  "no_features_available": "No Features Available",
+  "media": "Media",
+  "product_in_cart": "products in cart",
+  "product_cart": "Cart"
+
 
 }
