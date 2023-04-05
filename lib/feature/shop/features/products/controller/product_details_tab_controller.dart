@@ -11,47 +11,6 @@ class ProductTabController extends GetxController
   final ProductDetailsRepo productDetailsRepo;
   ProductTabController({required this.productDetailsRepo});
 
-  // List<ProductFaqs>? faqs = Get.find<ProductDetailsController>().product!.faqs;
-
-  // List<Widget> productDetailsTabs() {
-  //   if (faqs!.length > 0) {
-  //     return [
-  //       Tab(
-  //         child: Text(
-  //           "service_overview".tr,
-  //           maxLines: 2,
-  //         ),
-  //       ),
-  //       Tab(
-  //         child: Text(
-  //           "faqs".tr,
-  //           maxLines: 2,
-  //         ),
-  //       ),
-  //       Tab(
-  //         child: Text(
-  //           "reviews".tr,
-  //           maxLines: 2,
-  //         ),
-  //       ),
-  //     ];
-  //   }
-  //   return [
-  //     Tab(
-  //       child: Text(
-  //         "service_overview".tr,
-  //         maxLines: 2,
-  //       ),
-  //     ),
-  //     Tab(
-  //       child: Text(
-  //         "reviews".tr,
-  //         maxLines: 2,
-  //       ),
-  //     ),
-  //   ];
-  // }
-
   TabController? controller;
   var productPageCurrentState = ProductTabControllerState.serviceOverview;
   void updateServicePageCurrentState(
