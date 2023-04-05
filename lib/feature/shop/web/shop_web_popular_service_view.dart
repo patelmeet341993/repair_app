@@ -35,7 +35,7 @@ class ShopWebPopularServiceView extends StatelessWidget {
                                 fontSize: Dimensions.fontSizeExtraLarge)),
                         InkWell(
                           onTap: () => Get.toNamed(
-                              RouteHelper.allServiceScreenRoute(
+                              RouteHelper.allProductScreenRoute(
                                   "fromPopularServiceView")),
                           child: Text('see_all'.tr,
                               style: ubuntuRegular.copyWith(

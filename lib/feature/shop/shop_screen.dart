@@ -4,14 +4,16 @@ import 'package:repair/components/paginated_list_view.dart';
 import 'package:repair/components/service_view_vertical.dart';
 import 'package:repair/feature/home/widget/campaign_view.dart';
 import 'package:repair/core/core_export.dart';
-import 'package:repair/feature/home/widget/category_view.dart';
-import 'package:repair/feature/home/widget/random_campaign_view.dart';
+import 'package:repair/feature/shop/controller/shop_campaign_controller.dart';
+import 'package:repair/feature/shop/features/products/components/product_view_vertical.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
 import 'package:repair/feature/shop/features/shop_category/controller/shop_category_controller.dart';
 import 'package:repair/feature/shop/web_shop_screen.dart';
 import 'package:repair/feature/shop/widgets/shop_banner_view.dart';
 import 'package:repair/feature/shop/widgets/shop_campaign_view.dart';
 import 'package:repair/feature/shop/widgets/shop_category_view.dart';
 import 'package:repair/feature/shop/widgets/shop_popular_product_view.dart';
+import 'package:repair/feature/shop/widgets/shop_recommended_service_view.dart';
 
 import 'controller/shop_banner_controller.dart';
 
@@ -19,10 +21,10 @@ class ShopScreen extends StatefulWidget {
   static Future<void> loadData(bool reload) async {
     Get.find<ShopBannerController>().getShopBannerList(reload);
     Get.find<ShopCategoryController>().getCategoryList(1, reload);
-    Get.find<ServiceController>().getPopularServiceList(1, reload);
-    Get.find<CampaignController>().getCampaignList(reload);
-    Get.find<ServiceController>().getRecommendedServiceList(1, reload);
-    Get.find<ServiceController>().getAllServiceList(1, reload);
+    Get.find<ProductController>().getPopularProductList(1, reload);
+    Get.find<ShopCampaignController>().getCampaignList(reload);
+    Get.find<ProductController>().getRecommendedProductList(1, reload);
+    Get.find<ProductController>().getAllProductList(1, reload);
   }
 
   const ShopScreen({Key? key}) : super(key: key);
@@ -62,13 +64,13 @@ class _ShopScreenState extends State<ShopScreen> {
             onRefresh: () async {
               await Get.find<ShopBannerController>().getShopBannerList(true);
               await Get.find<ShopCategoryController>().getCategoryList(1, true);
-              await Get.find<ServiceController>().getPopularServiceList(
+              await Get.find<ProductController>().getPopularProductList(
                 1,
                 true,
               );
-              await Get.find<CampaignController>().getCampaignList(true);
-              await Get.find<ServiceController>().getRecommendedServiceList(1, true);
-              await Get.find<ServiceController>().getAllServiceList(1, true);
+              await Get.find<ShopCampaignController>().getCampaignList(true);
+              await Get.find<ProductController>().getRecommendedProductList(1, true);
+              await Get.find<ProductController>().getAllProductList(1, true);
             },
             child: GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -104,7 +106,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                       borderRadius: BorderRadius.circular(22),
                                       color: Theme.of(context).cardColor),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                    Text('search_services'.tr, style: ubuntuRegular.copyWith(color: Theme.of(context).hintColor)),
+                                    Text('search_product'.tr, style: ubuntuRegular.copyWith(color: Theme.of(context).hintColor)),
                                     Padding(
                                       padding: EdgeInsets.only(right: Dimensions.PADDING_SIZE_RADIUS),
                                       child: Container(
@@ -136,10 +138,11 @@ class _ShopScreenState extends State<ShopScreen> {
                                   child: ShopCategoryView(),
                                 ),
                                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-                                ShopCampaignView(),
+                                // ShopCampaignView(),
                                 ShopPopularProductView(),
-                                CampaignView(),
-                                RecommendedServiceView(),
+                                // CampaignView(),
+                                ShopCampaignView(),
+                                ShopRecommendedServiceView(),
                                 SizedBox(
                                   height: Dimensions.PADDING_SIZE_DEFAULT,
                                 ),
@@ -152,23 +155,23 @@ class _ShopScreenState extends State<ShopScreen> {
                                     Dimensions.PADDING_SIZE_SMALL,
                                   ),
                                   child: TitleWidget(
-                                    title: 'all_service'.tr,
-                                    onTap: () => Get.toNamed(RouteHelper.allServiceScreenRoute("allServices")),
+                                    title: 'all_product'.tr,
+                                    onTap: () => Get.toNamed(RouteHelper.allProductScreenRoute("allServices")),
                                   ),
                                 )
                                     : SizedBox.shrink(),
-                                GetBuilder<ServiceController>(builder: (serviceController) {
+                                GetBuilder<ProductController>(builder: (productController) {
                                   return PaginatedListView(
                                     scrollController: _scrollController,
-                                    totalSize: serviceController.serviceContent != null ? serviceController.serviceContent!.total! : null,
-                                    offset: serviceController.serviceContent != null
-                                        ? serviceController.serviceContent!.currentPage != null
-                                        ? serviceController.serviceContent!.currentPage!
+                                    totalSize: productController.productContent != null ? productController.productContent!.total! : null,
+                                    offset: productController.productContent != null
+                                        ? productController.productContent!.currentPage != null
+                                        ? productController.productContent!.currentPage!
                                         : null
                                         : null,
-                                    onPaginate: (int offset) async => await serviceController.getAllServiceList(offset, false),
-                                    itemView: ServiceViewVertical(
-                                      service: serviceController.serviceContent != null ? serviceController.allService : null,
+                                    onPaginate: (int offset) async => await productController.getAllProductList(offset, false),
+                                    itemView: ProductViewVertical(
+                                      product: productController.productContent != null ? productController.allProduct : null,
                                       padding: EdgeInsets.symmetric(
                                         horizontal:
                                         ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_DEFAULT,

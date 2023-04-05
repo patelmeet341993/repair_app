@@ -532,6 +532,26 @@
   "email_is_not_editable": "Email is not editable",
   "please_agree_with_terms_conditions": "Please agree with the Terms & Conditions",
   "app_version": "App Version:",
-  "available_product": "Available Product"
+  "available_product": "Available Product",
+  "all_product": "All Products",
+  "popular_product": "Popular Products",
+  "products": "Products",
+  "campaign_is_not_available_for_this_product": "Campaign is not available for this product ",
+  "no_product_found": "No product available !",
+  "product_details": "Product Details",
+  "search_product": "Search Products",
+  "no_product_available": "No Product Available",
+  "overView": "OverView",
+  "features": "Features",
+  "media": "Media",
+  "key_features": "Key Features",
+  "no_features_available": "No Features Available",
+  "specification": "Specifications",
+  "no_specification_available": "No Specifications Available",
+  "product_in_cart": "products in cart",
+  "product_cart": "Cart"
+
+
+
 
 }

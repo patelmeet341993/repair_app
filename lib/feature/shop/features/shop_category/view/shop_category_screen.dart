@@ -81,12 +81,12 @@ class _ShopCategoryScreenState extends State<ShopCategoryScreen> {
                             Get.find<CategoryController>().getSubCategoryList(
                                 categoryList[index].id!,
                                 index); //banner id is category here
-                            Get.toNamed(RouteHelper.subCategoryScreenRoute(
+                            Get.toNamed(RouteHelper.shopSubCategoryScreenRoute(
                                 categoryList[index].name!,
                                 categoryList[index].id!,
                                 index));
                           } else {
-                            Get.toNamed(RouteHelper.getCategoryProductRoute(
+                            Get.toNamed(RouteHelper.getShopCategoryProductRoute(
                                 categoryList[index].id!,
                                 categoryList[index].name!,
                                 index.toString()));

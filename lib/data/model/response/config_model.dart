@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:repair/utils/parsing_helper.dart';
+
+
 class ConfigModel {
   String? responseCode;
   String? message;
@@ -257,15 +260,15 @@ class Location {
 }
 
 class MinimumVersion {
-  String? minVersionForAndroid;
-  String? minVersionForIos;
+  double minVersionForAndroid = 0.0;
+  double minVersionForIos = 0.0;
 
-  MinimumVersion({this.minVersionForAndroid, this.minVersionForIos});
+  MinimumVersion({this.minVersionForAndroid = 0.0, this.minVersionForIos = 0.0});
 
 
   MinimumVersion.fromJson(Map<String, dynamic> json) {
-    minVersionForAndroid = json['min_version_for_android'];
-    minVersionForIos = json['min_version_for_ios'];
+    minVersionForAndroid = ParsingHelper.parseDoubleMethod(json['min_version_for_android']);
+    minVersionForIos = ParsingHelper.parseDoubleMethod(json['min_version_for_ios']);
   }
 
   Map<String, dynamic> toJson() {

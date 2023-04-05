@@ -1,20 +1,23 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
-import 'package:repair/feature/home/model/campaign_model.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
+import 'package:repair/feature/shop/features/shop_category/controller/shop_category_controller.dart';
 
+import '../features/products/model/product_model.dart';
+import '../model/shop_campaign_model.dart';
 import '../repository/shop_campaign_repo.dart';
 
 class ShopCampaignController extends GetxController implements GetxService {
   final ShopCampaignRepo shopCampaignRepo;
   ShopCampaignController({required this.shopCampaignRepo});
 
-  List<CampaignData>? _campaignList;
-  List<Service>? _itemCampaignList;
+  List<ShopCampaignData>? _campaignList;
+  List<Product>? _itemCampaignList;
   int? _currentIndex = 0;
   bool? _isLoading = false;
 
-  List<CampaignData>? get campaignList => _campaignList;
-  List<Service>? get itemCampaignList => _itemCampaignList;
+  List<ShopCampaignData>? get campaignList => _campaignList;
+  List<Product>? get itemCampaignList => _itemCampaignList;
   int? get currentIndex => _currentIndex;
   bool? get isLoading => _isLoading;
 
@@ -24,7 +27,7 @@ class ShopCampaignController extends GetxController implements GetxService {
       if (response!.statusCode == 200) {
         _campaignList = [];
         response.body['content']['data'].forEach(
-            (campaign) => _campaignList!.add(CampaignData.fromJson(campaign)));
+            (campaign) => _campaignList!.add(ShopCampaignData.fromJson(campaign)));
       } else {
         ApiChecker.checkApi(response);
       }
@@ -45,13 +48,13 @@ class ShopCampaignController extends GetxController implements GetxService {
     _isLoading = true;
     update();
     if (discountType == 'category') {
-      Get.find<CategoryController>()
+      Get.find<ShopCategoryController>()
           .getCampaignBasedCategoryList(campaignID, false);
     } else if (discountType == 'mixed') {
-      Get.find<ServiceController>().getMixedCampaignList(campaignID, false);
+      Get.find<ProductController>().getMixedCampaignList(campaignID, false);
     } else {
-      Get.find<ServiceController>()
-          .getCampaignBasedServiceList(campaignID, true);
+      Get.find<ProductController>()
+          .getCampaignBasedProductList(campaignID, true);
     }
     _isLoading = false;
     update();

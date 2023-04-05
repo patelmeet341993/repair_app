@@ -1,22 +1,27 @@
+import 'package:flutter_html/flutter_html.dart';
 import 'package:repair/feature/home/web/web_campaign_view.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/product_coupon/model/product_coupon_model.dart';
+import 'package:repair/feature/shop/features/products/controller/product_controller.dart';
+
+import '../../../components/product_cart_widget.dart';
+import '../componants/product_center_dialog.dart';
+import '../features/products/model/product_model.dart';
 
 class ShopWebRecommendedServiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ServiceController>(
+    return GetBuilder<ProductController>(
       initState: (state) {
-        Get.find<ServiceController>().getRecommendedServiceList(1, false);
+        Get.find<ProductController>().getRecommendedProductList(1, false);
       },
-      builder: (serviceController) {
-        if (serviceController.recommendedServiceList != null &&
-            serviceController.recommendedServiceList!.length == 0) {
+      builder: (productController) {
+        if (productController.recommendedProductList != null && productController.recommendedProductList!.length == 0) {
           return SizedBox();
         } else {
-          if (serviceController.recommendedServiceList != null) {
-            List<Service>? _recommendedServiceList =
-                serviceController.recommendedServiceList;
+          if (productController.recommendedProductList != null) {
+            List<Product>? _recommendedProductList = productController.recommendedProductList;
             return Container(
               width: Dimensions.WEB_MAX_WIDTH / 3.5,
               child: Column(
@@ -24,31 +29,22 @@ class ShopWebRecommendedServiceView extends StatelessWidget {
                 children: [
                   SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: Dimensions.PADDING_SIZE_SMALL),
-                    child: Text('recommended_for_you'.tr,
-                        style: ubuntuMedium.copyWith(
-                            fontSize: Dimensions.fontSizeExtraLarge)),
+                    padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
+                    child: Text('recommended_for_you'.tr, style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
                   ),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: _recommendedServiceList!.length > 2
-                        ? 3
-                        : _recommendedServiceList.length,
+                    itemCount: _recommendedProductList!.length > 2 ? 3 : _recommendedProductList.length,
                     itemBuilder: (context, index) {
-                      Discount _discount = PriceConverter.discountCalculation(
-                          serviceController.recommendedServiceList![index]);
+                      CouponProductDiscount _discount = PriceConverter.productDiscountCalculation(productController.recommendedProductList![index]);
 
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                        padding: const EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                         child: InkWell(
-                          onTap: () => Get.toNamed(RouteHelper.getServiceRoute(
-                              _recommendedServiceList[index].id!)),
-                          child: ServiceModelView(
-                            serviceList:
-                                serviceController.recommendedServiceList!,
+                          onTap: () => Get.toNamed(RouteHelper.getServiceRoute(_recommendedProductList[index].id)),
+                          child: ProductModelView(
+                            serviceList: productController.recommendedProductList!,
                             discountAmountType: _discount.discountAmountType,
                             discountAmount: _discount.discountAmount,
                             index: index,
@@ -58,14 +54,10 @@ class ShopWebRecommendedServiceView extends StatelessWidget {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.PADDING_SIZE_LARGE,
-                        horizontal: Dimensions.PADDING_SIZE_EXTRA_LARGE),
+                    padding: const EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_LARGE, horizontal: Dimensions.PADDING_SIZE_EXTRA_LARGE),
                     child: CustomButton(
                       buttonText: 'see_all'.tr,
-                      onPressed: () => Get.toNamed(
-                          RouteHelper.allServiceScreenRoute(
-                              "fromRecommendedScreen")),
+                      onPressed: () => Get.toNamed(RouteHelper.allProductScreenRoute("fromRecommendedScreen")),
                     ),
                   ),
                 ],
@@ -82,49 +74,31 @@ class ShopWebRecommendedServiceView extends StatelessWidget {
   }
 }
 
-class ServiceModelView extends StatelessWidget {
-  final List<Service> serviceList;
+class ProductModelView extends StatelessWidget {
+  final List<Product> serviceList;
   final int index;
   final num? discountAmount;
   final String? discountAmountType;
 
-  const ServiceModelView({
+  const ProductModelView({
     Key? key,
     required this.serviceList,
     required this.index,
-    required this.discountAmount,
-    required this.discountAmountType,
+    this.discountAmount,
+    this.discountAmountType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double _lowestPrice = 0.0;
-    if (serviceList[index].variationsAppFormat!.zoneWiseVariations != null) {
-      _lowestPrice = serviceList[index]
-          .variationsAppFormat!
-          .zoneWiseVariations![0]
-          .price!
-          .toDouble();
-      for (var i = 0;
-          i <
-              serviceList[index]
-                  .variationsAppFormat!
-                  .zoneWiseVariations!
-                  .length;
-          i++) {
-        if (serviceList[index]
-                .variationsAppFormat!
-                .zoneWiseVariations![i]
-                .price! <
-            _lowestPrice) {
-          _lowestPrice = serviceList[index]
-              .variationsAppFormat!
-              .zoneWiseVariations![i]
-              .price!
-              .toDouble();
-        }
-      }
-    }
+    // if (serviceList[index].variationsAppFormat!.zoneWiseVariations != null) {
+    //   _lowestPrice = serviceList[index].variationsAppFormat!.zoneWiseVariations![0].price!.toDouble();
+    //   for (var i = 0; i < serviceList[index].variationsAppFormat!.zoneWiseVariations!.length; i++) {
+    //     if (serviceList[index].variationsAppFormat!.zoneWiseVariations![i].price! < _lowestPrice) {
+    //       _lowestPrice = serviceList[index].variationsAppFormat!.zoneWiseVariations![i].price!.toDouble();
+    //     }
+    //   }
+    // }
     return Container(
       padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
       decoration: BoxDecoration(
@@ -133,124 +107,134 @@ class ServiceModelView extends StatelessWidget {
         boxShadow: Get.isDarkMode ? null : cardShadow,
       ),
       child: Row(children: [
-        Container(
-          // padding: EdgeInsets.symmetric(
-          //   horizontal: Dimensions.PADDING_SIZE_SMALL,
-          //   vertical: Dimensions.PADDING_SIZE_SMALL,
-          // ),
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                child: CustomImage(
-                  image:
-                      '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/service/${serviceList[index].thumbnail}',
-                  height: 111,
-                  width: 90,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              if (discountAmount != null &&
-                  discountAmountType != null &&
-                  discountAmount! > 0)
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding:
-                          EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).errorColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft:
-                              Radius.circular(Dimensions.RADIUS_DEFAULT),
-                          topRight: Radius.circular(Dimensions.RADIUS_SMALL),
-                        ),
-                      ),
-                      child: Text(
-                        PriceConverter.percentageOrAmount(
-                            '$discountAmount', discountAmountType!),
-
-                        style: ubuntuMedium.copyWith(
-                            color: Theme.of(context).primaryColorLight),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+        ClipRRect(
+          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+          child: CustomImage(
+            image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${serviceList[index].image}',
+            height: 111,
+            width: 90,
+            fit: BoxFit.cover,
           ),
         ),
-        SizedBox(width: 15,),
+        // Container(
+        //   // padding: EdgeInsets.symmetric(
+        //   //   horizontal: Dimensions.PADDING_SIZE_SMALL,
+        //   //   vertical: Dimensions.PADDING_SIZE_SMALL,
+        //   // ),
+        //   child: Stack(
+        //     children: [
+        //
+        //       // if (discountAmount != null && discountAmountType != null && discountAmount! > 0)
+        //       //   Positioned.fill(
+        //       //     child: Align(
+        //       //       alignment: Alignment.topRight,
+        //       //       child: Container(
+        //       //         padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+        //       //         decoration: BoxDecoration(
+        //       //           color: Theme.of(context).errorColor,
+        //       //           borderRadius: BorderRadius.only(
+        //       //             bottomLeft: Radius.circular(Dimensions.RADIUS_DEFAULT),
+        //       //             topRight: Radius.circular(Dimensions.RADIUS_SMALL),
+        //       //           ),
+        //       //         ),
+        //       //         child: Text(
+        //       //           PriceConverter.percentageOrAmount('$discountAmount', discountAmountType!),
+        //       //           style: ubuntuMedium.copyWith(color: Theme.of(context).primaryColorLight),
+        //       //         ),
+        //       //       ),
+        //       //     ),
+        //       //   ),
+        //     ],
+        //   ),
+        // ),
+        SizedBox(
+          width: 15,
+        ),
         Expanded(
           child: Container(
             // padding: EdgeInsets.symmetric(
             //     horizontal: Dimensions.PADDING_SIZE_SMALL,
             //     vertical: Dimensions.PADDING_SIZE_MINI),
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    serviceList[index].name!,
-                    style: ubuntuMedium.copyWith(
-                        fontSize: Dimensions.fontSizeSmall),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height:2),
-                  //SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  RatingBar(
-                    rating:
-                        double.parse(serviceList[index].avgRating.toString()),
-                    size: 15,
-                    ratingCount: serviceList[index].ratingCount,
-                  ),
-                  SizedBox(height:2),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  serviceList[index].name,
+                  style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 2),
+                //SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                RatingBar(
+                  rating: double.parse(serviceList[index].avgRating.toString()),
+                  size: 15,
+                  ratingCount: serviceList[index].ratingCount,
+                ),
+                SizedBox(height: 2),
 
-                 // SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  Text(
-                    serviceList[index].shortDescription!,
-                    style: ubuntuLight.copyWith(
-                        fontSize: Dimensions.fontSizeExtraSmall,
-                        color: Theme.of(context).disabledColor),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height:2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CommonSubmitButton(
-                        text: 'Book Now'.tr,
-                        fontSize: Dimensions.fontSizeSmall,
-                        onTap:  (){
-                          Get.toNamed(
-                            RouteHelper.getServiceRoute(
-                                serviceList![index].id!),
-                            arguments: ServiceDetailsScreen(
-                                serviceID: serviceList![index].id!),
-                          );
-                        }
-
+                // SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                Html(
+                  data: serviceList[index].description,
+                  style: {
+                    'body': Style(
+                      margin: Margins.all(0),
+                      padding: EdgeInsets.zero,
+                      fontSize: FontSize( Dimensions.fontSizeExtraSmall),
+                      maxLines: 1,
+                      color: Theme.of(context).disabledColor
+                      // textOverflow: TextOverflow.ellipsis
+                      // overflow: TextOverflow.ellipsis,
+                      // lineHeight: LineHeight(.5),
+                    ),
+                  },
+                ),
+                // Text(
+                //   serviceList[index].description,
+                //   style: ubuntuLight.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
+                //   maxLines: 1,
+                //   overflow: TextOverflow.ellipsis,
+                // ),
+                SizedBox(height: 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      // onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => ProductCenterDialog(
+                            product: serviceList[index],
+                            isFromDetails: true,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
+                        padding: EdgeInsets.all(2),
+                        child:
+                            ProductCartWidget(color: Get.isDarkMode ? Theme.of(context).primaryColor : Colors.white, size: Dimensions.PRODUCT_CART_WIDGET_SIZE),
                       ),
-                      // SizedBox(
-                      //  // height: 30.0,
-                      //   width: 100.0,
-                      //   child: CustomButtonSmall(
-                      //     buttonText: 'Book Now'.tr,
-                      //     onPressed: () {
-                      //       Get.toNamed(
-                      //         RouteHelper.getServiceRoute(
-                      //             serviceList![index].id!),
-                      //         arguments: ServiceDetailsScreen(
-                      //             serviceID: serviceList![index].id!),
-                      //       );
-                      //     },
-                      //   ),
-                      // )
-                    ],
-                  ),
-                ]),
+                    )
+                    // CommonSubmitButton(
+                    //   text: 'Book Now'.tr,
+                    //   fontSize: Dimensions.fontSizeSmall,
+                    //   onTap: () {
+                    //     Get.toNamed(
+                    //       RouteHelper.getServiceRoute(serviceList[index].id),
+                    //       arguments: ServiceDetailsScreen(serviceID: serviceList[index].id),
+                    //     );
+                    //   },
+                    // ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ]),

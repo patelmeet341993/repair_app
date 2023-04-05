@@ -135,37 +135,37 @@ class PriceConverter {
       {bool addCampaign = false}) {
     num? _discountAmount = 0;
     String? _discountAmountType;
-
-    if (product.productDiscount != null &&
-        product.productDiscount!.isNotEmpty) {
-      CouponProductDiscount _discount = _getProductDiscount(
-          product.productDiscount, _discountAmount, _discountAmountType);
-      _discountAmount = _discount.discountAmount;
-
-      _discountAmountType = _discount.discountAmountType;
-    } else if (product.campaignDiscount != null &&
-        product.campaignDiscount!.isNotEmpty &&
-        addCampaign) {
-      CouponProductDiscount _discount = _getProductDiscount(
-          product.campaignDiscount, _discountAmount, _discountAmountType);
-      _discountAmount = _discount.discountAmount;
-      _discountAmountType = _discount.discountAmountType;
-    } else {
-      if (product.category?.categoryDiscount != null &&
-          product.category!.categoryDiscount!.isNotEmpty) {
-        CouponProductDiscount _discount = _getProductDiscount(product.category?.categoryDiscount,
+    //
+    // if (product.productDiscount != null &&
+    //     product.productDiscount!.isNotEmpty) {
+    //   CouponProductDiscount _discount = _getProductDiscount(
+    //       product.productDiscount, _discountAmount, _discountAmountType);
+    //   _discountAmount = _discount.discountAmount;
+    //
+    //   _discountAmountType = _discount.discountAmountType;
+    // } else if (product.campaignDiscount != null &&
+    //     product.campaignDiscount!.isNotEmpty &&
+    //     addCampaign) {
+    //   CouponProductDiscount _discount = _getProductDiscount(
+    //       product.campaignDiscount, _discountAmount, _discountAmountType);
+    //   _discountAmount = _discount.discountAmount;
+    //   _discountAmountType = _discount.discountAmountType;
+    // } else {
+    //   if (product.category?.categoryDiscount != null &&
+    //       product.category!.categoryDiscount!.isNotEmpty) {
+    //     CouponProductDiscount _discount = _getProductDiscount(product.category?.categoryDiscount,
+    //         _discountAmount, _discountAmountType);
+    //     _discountAmount = _discount.discountAmount;
+    //     _discountAmountType = _discount.discountAmountType;
+    //   } else if (product.category?.campaignDiscount != null &&
+    //       product.category!.campaignDiscount!.isNotEmpty &&
+    //       addCampaign) {
+        CouponProductDiscount _discount = _getProductDiscount([],
             _discountAmount, _discountAmountType);
         _discountAmount = _discount.discountAmount;
         _discountAmountType = _discount.discountAmountType;
-      } else if (product.category?.campaignDiscount != null &&
-          product.category!.campaignDiscount!.isNotEmpty &&
-          addCampaign) {
-        CouponProductDiscount _discount = _getProductDiscount(product.category?.campaignDiscount,
-            _discountAmount, _discountAmountType);
-        _discountAmount = _discount.discountAmount;
-        _discountAmountType = _discount.discountAmountType;
-      }
-    }
+      // }
+    // }
 
     return CouponProductDiscount(
         discountAmount: _discountAmount,
@@ -173,20 +173,20 @@ class PriceConverter {
   }
 
 
-  static CouponProductDiscount _getProductDiscount(List<ProductDiscount>? productDiscountList,
+  static CouponProductDiscount _getProductDiscount(List<CouponProductDiscount>? productDiscountList,
       num? _discountAmount, String? _discountAmountType) {
-    ProductDiscount? productDiscount =
+    CouponProductDiscount? productDiscount =
     (productDiscountList != null && productDiscountList.length > 0)
         ? productDiscountList.first
         : null;
     if (productDiscount != null) {
-      num? _getDiscount = productDiscount.productDiscount?.discountAmount;
-      if (_getDiscount! > productDiscount.productDiscount!.maxDiscountAmount! &&
-          productDiscount.productDiscount!.discountType == 'percent') {
-        _getDiscount = productDiscount.productDiscount!.maxDiscountAmount!;
+      num? _getDiscount = productDiscount.discountAmount;
+      if (_getDiscount! > productDiscount.maxDiscountAmount! &&
+          productDiscount.discountType == 'percent') {
+        _getDiscount = productDiscount.maxDiscountAmount!;
       }
       _discountAmount = (_discountAmount! + _getDiscount);
-      _discountAmountType = productDiscount.productDiscount!.discountAmountType!;
+      _discountAmountType = productDiscount.discountAmountType!;
     }
     return CouponProductDiscount(
         discountAmount: _discountAmount,
