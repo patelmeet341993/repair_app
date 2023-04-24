@@ -348,6 +348,7 @@ class CompanyData {
     String? zoneId,
     int? subscribedServicesCount,
     int? bookingsCount,
+    int? bookingsCompletedCount,
     Owner? owner,
     Zone? zone,
   }) {
@@ -384,6 +385,7 @@ class CompanyData {
     _zoneId = zoneId;
     _subscribedServicesCount = subscribedServicesCount;
     _bookingsCount = bookingsCount;
+    _bookingsCompletedCount = bookingsCompletedCount;
     _owner = owner;
     _zone = zone;
   }
@@ -422,6 +424,7 @@ class CompanyData {
     _zoneId = json['zone_id'];
     _subscribedServicesCount = json['subscribed_services_count'];
     _bookingsCount = json['bookings_count'];
+    _bookingsCompletedCount = json['bookings_completed_count'];
     _owner = json['owner'] != null ? Owner.fromJson(json['owner']) : null;
     _zone = json['zone'] != null ? Zone.fromJson(json['zone']) : null;
   }
@@ -458,6 +461,7 @@ class CompanyData {
   String? _zoneId;
   int? _subscribedServicesCount;
   int? _bookingsCount;
+  int? _bookingsCompletedCount;
   Owner? _owner;
   Zone? _zone;
   CompanyData copyWith({
@@ -494,6 +498,7 @@ class CompanyData {
     String? zoneId,
     int? subscribedServicesCount,
     int? bookingsCount,
+    int? bookingsCompletedCount,
     Owner? owner,
     Zone? zone,
   }) =>
@@ -533,6 +538,7 @@ class CompanyData {
         subscribedServicesCount:
             subscribedServicesCount ?? _subscribedServicesCount,
         bookingsCount: bookingsCount ?? _bookingsCount,
+        bookingsCompletedCount: bookingsCompletedCount ?? _bookingsCompletedCount,
         owner: owner ?? _owner,
         zone: zone ?? _zone,
       );
@@ -569,6 +575,7 @@ class CompanyData {
   String? get zoneId => _zoneId;
   int? get subscribedServicesCount => _subscribedServicesCount;
   int? get bookingsCount => _bookingsCount;
+  int? get bookingsCompletedCount => _bookingsCompletedCount;
   Owner? get owner => _owner;
   Zone? get zone => _zone;
 
@@ -607,6 +614,7 @@ class CompanyData {
     map['zone_id'] = _zoneId;
     map['subscribed_services_count'] = _subscribedServicesCount;
     map['bookings_count'] = _bookingsCount;
+    map['bookings_completed_count'] = _bookingsCompletedCount;
     if (_owner != null) {
       map['owner'] = _owner?.toJson();
     }

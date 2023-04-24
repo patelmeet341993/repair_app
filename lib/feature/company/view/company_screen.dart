@@ -56,7 +56,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
       endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
       appBar: AppBar(
           title: Text(
-            "Select Companies",
+            "Select Companiesss",
             style: TextStyle(fontSize: Dimensions.fontSizeLarge),
           ),
           actions: [
@@ -446,7 +446,7 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                       height: 3,
                                     ),
                                     Text(
-                                      "${widget.chipName[index].orderCount} Successful Orders",
+                                      "${widget.chipName[index].bookingsCompletedCount ?? 0} Successful Orders",
                                       style: ubuntuRegular.copyWith(
                                           fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeDefault,
                                           color: Colors.green,
