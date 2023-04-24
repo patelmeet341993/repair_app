@@ -306,18 +306,20 @@ class ProductBookingHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ProductBookingDetailsTabsController>(
       builder: (bookingDetailsTabController) {
-        if (bookingDetailsTabController.productBookingDetailsContent!.detail != null) {
-          List<StatusHistories> _statusSchedule = bookingDetailsTabController
-              .productBookingDetailsContent!.scheduleHistories!;
-          List<StatusHistories> _statusHistory = bookingDetailsTabController
-              .productBookingDetailsContent!.statusHistories!;
+        if(bookingDetailsTabController.productBookingDetailsContent != null) {
+          if (bookingDetailsTabController.productBookingDetailsContent!.detail != null) {
+            List<StatusHistories> _statusSchedule = bookingDetailsTabController
+                .productBookingDetailsContent!.scheduleHistories!;
+            List<StatusHistories> _statusHistory = bookingDetailsTabController
+                .productBookingDetailsContent!.statusHistories!;
 
-          _statusScheduleList.add(_statusSchedule.elementAt(0));
-          _statusScheduleList.addAll(_statusHistory);
-          _statusScheduleList.addAll(_statusSchedule);
+            _statusScheduleList.add(_statusSchedule.elementAt(0));
+            _statusScheduleList.addAll(_statusHistory);
+            _statusScheduleList.addAll(_statusSchedule);
+          }
         }
 
-        return !bookingDetailsTabController.isLoading
+        return bookingDetailsTabController.productBookingDetailsContent != null
             ? SingleChildScrollView(
                 child: Column(
                   children: [
@@ -326,7 +328,7 @@ class ProductBookingHistory extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${'booking_place'.tr} : ',
+                          '${'order_place'.tr} : ',
                           style: ubuntuMedium.copyWith(
                               fontSize: Dimensions.fontSizeDefault,
                               color:
@@ -388,7 +390,7 @@ class ProductBookingHistory extends StatelessWidget {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: '${'booking_status'.tr} : ',
+                        text: '${'order_status'.tr} : ',
                         style: ubuntuMedium.copyWith(
                             fontSize: Dimensions.fontSizeDefault,
                             color:
@@ -420,7 +422,7 @@ class ProductBookingHistory extends StatelessWidget {
                   ],
                 ),
               )
-            : SizedBox();
+            : CustomLoader();
       },
     );
   }
