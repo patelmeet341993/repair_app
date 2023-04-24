@@ -25,6 +25,7 @@ class ShopCategoryModel {
   List<Product>? product;
   int totalproductsCount = 0;
   List<Product> totalproducts = [];
+  List<ProductVariations>? productvariants;
 
 
   ShopCategoryModel(
@@ -41,7 +42,8 @@ class ShopCategoryModel {
         this.globalKey,
         this.product,
         this.totalproducts = const [],
-        this.totalproductsCount = 0
+        this.totalproductsCount = 0,
+        this.productvariants
       });
 
   ShopCategoryModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +62,12 @@ class ShopCategoryModel {
       totalproducts = <Product>[];
       json['totalproducts'].forEach((v) {
         totalproducts.add(new Product.fromJson(v));
+      });
+    }
+    if (json['productvariants'] != null) {
+      productvariants = <ProductVariations>[];
+      json['productvariants'].forEach((v) {
+        productvariants!.add(new ProductVariations.fromJson(ParsingHelper.parseMapMethod(v)));
       });
     }
     globalKey = GlobalKey(debugLabel: json['id']);

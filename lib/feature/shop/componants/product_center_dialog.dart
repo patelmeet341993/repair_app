@@ -11,8 +11,10 @@ class ProductCenterDialog extends StatefulWidget {
   final CartModel? cart;
   final int? cartIndex;
   final bool? isFromDetails;
+  final bool isFromSubCategory;
+  List<ProductVariations>? productVariations;
 
-  ProductCenterDialog({required this.product, this.cart, this.cartIndex, this.isFromDetails = false});
+  ProductCenterDialog({required this.product, this.cart, this.cartIndex, this.isFromDetails = false, this.isFromSubCategory = false, this.productVariations});
 
   @override
   State<ProductCenterDialog> createState() => _ProductBottomSheetState();
@@ -21,8 +23,10 @@ class ProductCenterDialog extends StatefulWidget {
 class _ProductBottomSheetState extends State<ProductCenterDialog> {
   @override
   void initState() {
-    Get.find<ProductCartController>().setInitialCartList(widget.product!);
+    Get.find<ProductCartController>().setInitialCartList(widget.product!,widget.productVariations, widget.isFromSubCategory);
     super.initState();
+
+    print("productVariationList :isFromSubCategory${widget.isFromSubCategory} ${widget.productVariations?.length}");
   }
 
   int count = 1;
@@ -52,7 +56,7 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
           ),
           child: GetBuilder<ProductCartController>(builder: (productCartControllerInit) {
             return GetBuilder<ProductController>(builder: (serviceController) {
-              if (widget.product!.variations != null)
+              if (widget.product!.variations != null || widget.isFromSubCategory)
                 return Stack(
                   children: [
                     Padding(
@@ -82,9 +86,10 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                       bottom: Dimensions.PADDING_SIZE_EXTRA_LARGE,
                                     ),
                                     physics: NeverScrollableScrollPhysics(),
-                                    itemCount: widget.product!.variations!.length,
+                                    itemCount: widget.isFromSubCategory ? widget.productVariations?.length : widget.product!.variations!.length,
                                     itemBuilder: (context, index) {
                                       //variation item
+                                      ProductVariations productVariation =   widget.isFromSubCategory ?  widget.productVariations![index]: widget.product!.variations![index];
                                       return Padding(
                                         padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
                                         child: Container(
@@ -103,7 +108,7 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
                                                         Text(
-                                                          "${widget.product!.variations![index].attributeName} - ${widget.product!.variations![index].attributeValue}",
+                                                          "${productVariation.attributeName} - ${productVariation.attributeValue}",
                                                           style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                                                           maxLines: 2,
                                                           overflow: TextOverflow.ellipsis,
@@ -113,7 +118,7 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                                         ),
                                                         Text(
                                                             PriceConverter.convertPrice(
-                                                                double.parse(widget.product!.variations![index].packateMeasurementDiscountPrice),
+                                                                double.parse(productVariation.packateMeasurementDiscountPrice),
                                                                 isShowLongPrice: true),
                                                             style: ubuntuMedium.copyWith(
                                                                 color: Get.isDarkMode ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
@@ -151,7 +156,11 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                                         productCartControllerInit.initialCartList[index].quantity > 0
                                                             ? InkWell(
                                                                 onTap: () {
-                                                                  // cartController.updateQuantity(index, false);
+                                                                  if (count > 1) {
+                                                                    count -= 1;
+                                                                    setState(() {});
+                                                                  }
+                                                                  productCartControllerInit.updateQuantity(index, false);
                                                                 },
                                                                 child: Container(
                                                                   height: 30,
@@ -168,13 +177,13 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                                                 ),
                                                               )
 
-                                                        // Text(
-                                                        //   "$count",
-                                                        // ),
-                                                          : SizedBox(),
+                                                            // Text(
+                                                            //   "$count",
+                                                            // ),
+                                                            : SizedBox(),
                                                         productCartControllerInit.initialCartList[index].quantity > 0
                                                             ? Text(
-                                                                "1",
+                                                                "${productCartControllerInit.initialCartList[index].quantity}",
                                                               )
                                                             : SizedBox(),
                                                         GestureDetector(
@@ -275,7 +284,7 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                     height: Dimensions.PADDING_SIZE_MINI,
                                   ),
                                   Text(
-                                    "${widget.product!.variations!.length} ${'options_available'.tr}",
+                                    "${widget.isFromSubCategory? widget.productVariations?.length: widget.product!.variations!.length} ${'options_available'.tr}",
                                     style: ubuntuRegular.copyWith(color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(.5)),
                                   ),
                                 ]),
@@ -299,8 +308,7 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                           _addToCart = false;
                                           if (Get.find<AuthController>().isLoggedIn()) {
                                             await productCartController.addCartToServer(context);
-                                            await productCartController
-                                                .getCartListFromServer();
+                                            await productCartController.getCartListFromServer();
                                             // Get.back();
                                           } else {
                                             productCartController.addDataToCart();
@@ -309,10 +317,9 @@ class _ProductBottomSheetState extends State<ProductCenterDialog> {
                                         }
                                       }
                                     : null,
-                                buttonText:
-                                    (productCartController.cartList.length > 0 && productCartController.cartList.elementAt(0).id == widget.product!.id)
-                                        ? 'update_cart'.tr
-                                        : 'add_to_cart'.tr);
+                                buttonText: (productCartController.cartList.length > 0 && productCartController.cartList.elementAt(0).id == widget.product!.id)
+                                    ? 'update_cart'.tr
+                                    : 'add_to_cart'.tr);
                       }),
                     )
                   ],

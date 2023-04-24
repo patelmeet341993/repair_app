@@ -186,10 +186,13 @@ class ApiClient extends GetxService {
   Future<Response> deleteData(String? uri,
       {Map<String, String>? headers}) async {
     try {
+      printLog('====> ApiCall: $uri');
+      printLog('====> Header: $_mainHeaders');
       Http.Response _response = await Http.delete(
         Uri.parse(appBaseUrl! + uri!),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
+      printLog('====> response: ${(_response.body)}');
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);

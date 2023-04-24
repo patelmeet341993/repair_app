@@ -9,6 +9,9 @@ import 'package:repair/feature/checkout/widget/order_complete_section/complete_p
 import 'package:repair/feature/checkout/widget/order_details_section/order_details_page.dart';
 import 'package:repair/feature/checkout/widget/order_details_section/order_details_page_web.dart';
 import 'package:repair/feature/checkout/widget/payment_section/payment_page.dart';
+import 'package:repair/feature/shop/features/cart/controller/product_cart_controller.dart';
+
+import '../../shop/features/cart/model/product_cart_model.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final String pageState;
@@ -47,8 +50,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: Scaffold(
         endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
         appBar: CustomAppBar(
-            title: (widget.isFromProduct ?? false) ? "product_checkout" : 'checkout'.tr,
+            title: (widget.isFromProduct ?? false) ? "product_checkout".tr : 'checkout'.tr,
             onBackPressed: () {
+
               if (widget.pageState == 'payment' || Get.find<CheckOutController>().currentPage == PageState.payment) {
                 print("inside_here_true");
                 Get.find<CheckOutController>().updateDigitalPaymentOption(PaymentMethodName.COS, shouldUpdate: false);
@@ -409,7 +413,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         AddressModel? addressModel = Get.find<LocationController>().selectedAddress;
 
                                         if (!Get.find<ScheduleController>().checkScheduleTime()) {
-                                          customSnackBar('set_your_schedule_time'.tr);
+                                          if(!widget.isFromProduct){
+                                            customSnackBar('set_your_schedule_time'.tr);
+                                          }
                                         } else if (addressModel == null || addressModel.contactPersonNumber == "null") {
                                           customSnackBar('add_address_first'.tr);
                                         } else {
@@ -429,13 +435,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             print("address_model_id:${addressModel.id.toString()}");
                                             if (Get.find<CheckOutController>().selectedPaymentMethod == PaymentMethodName.COS) {
                                               String paymentMethod = "cash_after_service";
-                                              Get.find<ServiceBookingController>().placeBookingRequest(
-                                                context: context,
-                                                paymentMethod: paymentMethod,
-                                                userID: userId,
-                                                serviceAddressId: addressModel.id.toString(),
-                                                schedule: schedule,
-                                              );
+                                              if(widget.isFromProduct){
+                                                List<CartProductModel> cartList =  Get.find<ProductCartController>().cartList;
+                                                print("product: ${cartList.first.toJson()}");
+                                                if(cartList.isNotEmpty){
+                                                  Get.find<ServiceBookingController>().placeProductBookingRequest(
+                                                    context: context,
+                                                    productId:"${cartList.first.productVariant!.productId}",
+                                                    quantity: cartList.first.quantity,
+                                                    variantId: "${cartList.first.productVariantId}",
+                                                    paymentMethod: paymentMethod,
+                                                    userID: userId,
+                                                    serviceAddressId: addressModel.id.toString(),
+                                                    schedule: schedule,
+                                                  );
+                                                }
+                                              } else {
+                                                Get.find<ServiceBookingController>().placeBookingRequest(
+                                                  context: context,
+                                                  paymentMethod: paymentMethod,
+                                                  userID: userId,
+                                                  serviceAddressId: addressModel.id.toString(),
+                                                  schedule: schedule,
+                                                );
+                                              }
                                             }
                                           }
                                         }

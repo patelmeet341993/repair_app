@@ -83,7 +83,26 @@ class ProductCartScreen extends StatelessWidget {
                                       itemCount: cartController.cartList.length,
                                       itemBuilder: (context, index) {
                                         return cartController.cartList[index].productVariant != null
-                                            ? ProductCartWidget(cart: cartController.cartList[index], cartIndex: index)
+                                            ? ProductCartWidget(
+                                                cart: cartController.cartList[index],
+                                                cartIndex: index,
+                                                onMinusTap: () {
+                                                  if (Get.find<AuthController>().isLoggedIn()) {
+                                                    Get.find<ProductCartController>().updateCartQuantityToApi(
+                                                        cartController.cartList[index].id, cartController.cartList[index].quantity - 1);
+                                                  } else {
+                                                    Get.find<ProductCartController>().setQuantity(false, cartController.cartList[index]);
+                                                  }
+                                                },
+                                                onPlusTap: () {
+                                                  if (Get.find<AuthController>().isLoggedIn()) {
+                                                    Get.find<ProductCartController>().updateCartQuantityToApi(
+                                                        cartController.cartList[index].id, cartController.cartList[index].quantity + 1);
+                                                  } else {
+                                                    Get.find<ProductCartController>().setQuantity(true, cartController.cartList[index]);
+                                                  }
+                                                },
+                                              )
                                             : SizedBox();
                                       },
                                     ),
@@ -135,7 +154,8 @@ class ProductCartScreen extends StatelessWidget {
                                                     onPressed: () {
                                                       if (Get.find<AuthController>().isLoggedIn()) {
                                                         Get.find<CheckOutController>().updateState(PageState.orderDetails);
-                                                        Get.toNamed(RouteHelper.getCheckoutRoute(RouteHelper.checkout, 'orderDetails', 'null',isFromProduct: true));
+                                                        Get.toNamed(
+                                                            RouteHelper.getCheckoutRoute(RouteHelper.checkout, 'orderDetails', 'null', isFromProduct: true));
                                                       } else {
                                                         Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
                                                       }
@@ -209,7 +229,7 @@ class ProductCartScreen extends StatelessWidget {
                           onPressed: () {
                             if (Get.find<AuthController>().isLoggedIn()) {
                               Get.find<CheckOutController>().updateState(PageState.orderDetails);
-                              Get.toNamed(RouteHelper.getCheckoutRoute('cart', 'orderDetails', 'null',isFromProduct: true));
+                              Get.toNamed(RouteHelper.getCheckoutRoute('cart', 'orderDetails', 'null', isFromProduct: true));
                             } else {
                               Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
                             }

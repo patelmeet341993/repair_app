@@ -1,19 +1,21 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 
-class BookingSummeryWidget extends StatelessWidget {
+import '../controller/product_booking_details_tabs_controller.dart';
+
+class ProductBookingSummeryWidget extends StatelessWidget {
   final BookingDetailsContent bookingDetailsContent;
 
-  const BookingSummeryWidget({Key? key, required this.bookingDetailsContent}) : super(key: key);
+  const ProductBookingSummeryWidget({Key? key, required this.bookingDetailsContent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double _serviceDiscount = 0;
     bookingDetailsContent.detail?.forEach((service) {
-      _serviceDiscount = _serviceDiscount + service.discountAmount!;
+      _serviceDiscount = _serviceDiscount + service.discountAmount;
     });
 
-    return GetBuilder<BookingDetailsTabsController>(builder: (bookingDetailsController) {
+    return GetBuilder<ProductBookingDetailsTabsController>(builder: (bookingDetailsController) {
       if (!bookingDetailsController.isLoading)
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,10 +34,10 @@ class BookingSummeryWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('service_info'.tr,
+                    Text('product_info'.tr,
                         style: ubuntuBold.copyWith(
                             fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1!.color!, decoration: TextDecoration.none)),
-                    Text('service_cost'.tr,
+                    Text('product_cost'.tr,
                         style: ubuntuBold.copyWith(
                             fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1!.color!, decoration: TextDecoration.none)),
                   ],
@@ -44,14 +46,14 @@ class BookingSummeryWidget extends StatelessWidget {
             ),
             ListView.builder(
               itemBuilder: (context, index) {
-                return ServiceInfoItem(
+                return ProductInfoItem(
                   bookingDetailsContent: bookingDetailsContent,
-                  bookingService: bookingDetailsController.bookingDetailsContent!.detail![index],
+                  bookingService: bookingDetailsController.productBookingDetailsContent!.detail![index],
                   bookingDetailsController: bookingDetailsController,
                   index: index,
                 );
               },
-              itemCount: bookingDetailsController.bookingDetailsContent!.detail?.length,
+              itemCount: bookingDetailsController.productBookingDetailsContent!.detail?.length,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
             ),
@@ -93,7 +95,7 @@ class BookingSummeryWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      child: Text('service_discount'.tr,
+                      child: Text('product_discount'.tr,
                           style:
                               ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
                           overflow: TextOverflow.ellipsis)),
@@ -118,7 +120,7 @@ class BookingSummeryWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '(-) ${PriceConverter.convertPrice(bookingDetailsController.bookingDetailsContent!.totalCouponDiscountAmount!.toDouble())}',
+                    '(-) ${PriceConverter.convertPrice(bookingDetailsController.productBookingDetailsContent!.totalCouponDiscountAmount!.toDouble())}',
                     style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
                   ),
                 ],
@@ -138,7 +140,7 @@ class BookingSummeryWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '(-) ${PriceConverter.convertPrice(bookingDetailsController.bookingDetailsContent!.totalCampaignDiscountAmount!.toDouble())}',
+                    '(-) ${PriceConverter.convertPrice(bookingDetailsController.productBookingDetailsContent!.totalCampaignDiscountAmount!.toDouble())}',
                     style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
                   ),
                 ],
@@ -152,12 +154,12 @@ class BookingSummeryWidget extends StatelessWidget {
                 children: [
                   Container(
                       child: Text(
-                    'service_vat'.tr,
+                    'product_vat'.tr,
                     style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
                     overflow: TextOverflow.ellipsis,
                   )),
                   Text(
-                    '(+) ${PriceConverter.convertPrice(bookingDetailsController.bookingDetailsContent!.totalTaxAmount!.toDouble(), isShowLongPrice: true)}',
+                    '(+) ${PriceConverter.convertPrice(bookingDetailsController.productBookingDetailsContent!.totalTaxAmount!.toDouble(), isShowLongPrice: true)}',
                     style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color),
                   ),
                 ],
@@ -181,7 +183,7 @@ class BookingSummeryWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${PriceConverter.convertPrice(bookingDetailsController.bookingDetailsContent!.totalBookingAmount!.toDouble(), isShowLongPrice: true)}',
+                    '${PriceConverter.convertPrice(bookingDetailsController.productBookingDetailsContent!.totalBookingAmount!.toDouble(), isShowLongPrice: true)}',
                     style: ubuntuBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyText1!.color),
                   ),
                 ],
@@ -195,13 +197,13 @@ class BookingSummeryWidget extends StatelessWidget {
   }
 }
 
-class ServiceInfoItem extends StatelessWidget {
+class ProductInfoItem extends StatelessWidget {
   final BookingDetailsContent bookingDetailsContent;
   final int index;
-  final BookingDetailsTabsController bookingDetailsController;
+  final ProductBookingDetailsTabsController bookingDetailsController;
   final BookingContentDetailsItem bookingService;
 
-  const ServiceInfoItem(
+  const ProductInfoItem(
       {Key? key, required this.bookingService, required this.bookingDetailsController, required this.index, required this.bookingDetailsContent})
       : super(key: key);
 
@@ -228,7 +230,7 @@ class ServiceInfoItem extends StatelessWidget {
                     Container(
                       width: Get.width / 2,
                       child: Text(
-                        bookingService.serviceName != null ? bookingService.serviceName! : '',
+                        bookingService.productName,
                         style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -248,13 +250,13 @@ class ServiceInfoItem extends StatelessWidget {
                 Container(
                   width: Get.width / 1.5,
                   child: Text(
-                    '${bookingService.variantKey!}',
+                    '${bookingService.productVariantId ?? ""}',
                     style:
                         ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
                   ),
                 ),
                 Gaps.verticalGapOf(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                priceText('unit_price'.tr, bookingService.serviceCost!.toDouble(), context, mainAxisAlignmentStart: true),
+                priceText('unit_price'.tr, bookingService.totalCost.toDouble(), context, mainAxisAlignmentStart: true),
                 Row(
                   children: [
                     Text(
@@ -269,14 +271,14 @@ class ServiceInfoItem extends StatelessWidget {
                     )
                   ],
                 ),
-                bookingService.discountAmount! > 0
-                    ? priceText('discount'.tr, bookingService.discountAmount!.toDouble(), context, mainAxisAlignmentStart: true)
+                bookingService.discountAmount> 0
+                    ? priceText('discount'.tr, bookingService.discountAmount.toDouble(), context, mainAxisAlignmentStart: true)
                     : SizedBox(),
-                bookingService.campaignDiscountAmount! > 0
-                    ? priceText('campaign'.tr, bookingService.campaignDiscountAmount!.toDouble(), context, mainAxisAlignmentStart: true)
+                bookingService.campaignDiscountAmount> 0
+                    ? priceText('campaign'.tr, bookingService.campaignDiscountAmount.toDouble(), context, mainAxisAlignmentStart: true)
                     : SizedBox(),
-                bookingService.overallCouponDiscountAmount! > 0
-                    ? priceText('coupon'.tr, bookingService.overallCouponDiscountAmount!.toDouble(), context)
+                bookingService.overallCouponDiscountAmount> 0
+                    ? priceText('coupon'.tr, bookingService.overallCouponDiscountAmount.toDouble(), context)
                     : SizedBox(),
               ],
             ),
@@ -290,10 +292,10 @@ class ServiceInfoItem extends StatelessWidget {
                       onPressed: () {
                         Get.bottomSheet(ReviewRecommendationDialog(
                           index: index,
-                          serviceID: bookingDetailsContent.detail![index].serviceId!,
-                          bookingID: bookingDetailsContent.detail![index].bookingId!,
+                          serviceID: bookingDetailsContent.detail![index].serviceId,
+                          bookingID: bookingDetailsContent.detail![index].bookingId,
                           bookingDetailsContent: bookingDetailsContent,
-                          variantKey: bookingService.variantKey!,
+                          variantKey: bookingService.variantKey,
                         ));
                       },
                       child: Center(

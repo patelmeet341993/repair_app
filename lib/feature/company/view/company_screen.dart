@@ -1,3 +1,4 @@
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:repair/components/footer_base_view.dart';
 import 'package:repair/components/menu_drawer.dart';
@@ -416,15 +417,31 @@ class _FilterchipWidgetState extends State<FilterchipWidget> {
                                     ),
                                     SizedBox(
                                       height: 3,
+                                    ),Html(
+                                      data: widget.chipName[index].aboutCompany,
+                                      style: {
+                                        'body': Style(
+                                            margin: Margins.all(0),
+                                            padding: EdgeInsets.zero,
+                                            fontSize: FontSize(
+                                              MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
+                                            ),
+                                            maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
+                                            color: Theme.of(context).disabledColor
+                                          // textOverflow: TextOverflow.ellipsis
+                                          // overflow: TextOverflow.ellipsis,
+                                          // lineHeight: LineHeight(.5),
+                                        ),
+                                      },
                                     ),
-                                    Text(
-                                      "${widget.chipName[index].aboutCompany} ",
-                                      style: ubuntuRegular.copyWith(
-                                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
-                                          fontWeight: FontWeight.w500),
-                                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    // Text(
+                                    //   "${widget.chipName[index].aboutCompany} ",
+                                    //   style: ubuntuRegular.copyWith(
+                                    //       fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeExtraSmall : Dimensions.fontSizeSmall,
+                                    //       fontWeight: FontWeight.w500),
+                                    //   maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 2,
+                                    //   overflow: TextOverflow.ellipsis,
+                                    // ),
                                     SizedBox(
                                       height: 3,
                                     ),

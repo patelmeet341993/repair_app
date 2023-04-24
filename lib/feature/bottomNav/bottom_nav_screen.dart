@@ -134,9 +134,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                         context: context),
                     _bnbItem(
                         icon: Images.bookingsBlack,
-                        bnbItem: BnbItem.Booking,
+                        bnbItem: BnbItem.Orders,
                         onTap: () {
-                          Get.find<BottomNavController>().changePage(BnbItem.Booking);
+                          Get.find<BottomNavController>().changePage(BnbItem.Orders);
                         },
                         context: context),
                     _bnbItem(
@@ -196,7 +196,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         } else {
           return Get.toNamed(RouteHelper.getCartRoute());
         }
-      case BnbItem.Booking:
+      case BnbItem.Orders:
         return BookingScreen();
       //no page will will be return shows only menu dialog from _bnbItem tap
       case BnbItem.More:

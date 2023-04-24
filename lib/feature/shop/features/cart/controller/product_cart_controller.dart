@@ -78,17 +78,21 @@ class ProductCartController extends GetxController implements GetxService {
   }
 
   Future<List<CartProductModel>> getCartData() async {
-    _isLoading = false;
-    _cartList = [];
-    _cartList.addAll(productCartRepo.getCartList());
-    _cartList.forEach((cart) {
+    try {
+      print("in getCarData");
+      _isLoading = false;
+      _cartList = [];
+      _cartList.addAll(productCartRepo.getCartList());
+      _cartList.forEach((cart) {
+        _amount = _amount + (cart.discountedPrice * cart.quantity);
+      });
 
-      _amount = _amount + (cart.discountedPrice * cart.quantity);
-    });
-
-    _isLoading = false;
-    _cartTotalCost();
-    update();
+      _isLoading = false;
+      _cartTotalCost();
+      update();
+    } catch (e, s) {
+      print("error in getCartData $e ");
+    }
     return _cartList;
   }
 
@@ -101,29 +105,36 @@ class ProductCartController extends GetxController implements GetxService {
 
   Future<void> getCartListFromServer({bool shouldUpdate = true}) async {
     _isLoading = true;
-    Response response = await productCartRepo.getCartListFromServer();
-    if (response.statusCode == 200) {
-      _cartList = [];
-      response.body['content']['data'].forEach((cart) {
-        _cartList.add(CartProductModel.fromJson(cart));
+    try {
+      print("in getCartListFromServer");
+
+      Response response = await productCartRepo.getCartListFromServer();
+      if (response.statusCode == 200) {
+        _cartList = [];
+        response.body['content']['data'].forEach((cart) {
+          _cartList.add(CartProductModel.fromJson(cart));
+        });
+      } else {
+        ApiChecker.checkApi(response);
+      }
+
+      _totalPrice = 0.0;
+      double _couponDiscount = 0.0;
+      _cartList.forEach((cartModel) {
+        _totalPrice = _totalPrice + cartModel.price;
+        _couponDiscount = _couponDiscount + cartModel.discountedPrice;
       });
-    } else {
-      ApiChecker.checkApi(response);
-    }
+      if (_couponDiscount == 0) {
+        Get.find<CouponController>().removeCouponData(false);
+      }
 
-    _totalPrice = 0.0;
-    double _couponDiscount = 0.0;
-    _cartList.forEach((cartModel) {
-      _totalPrice = _totalPrice + cartModel.price;
-      _couponDiscount = _couponDiscount + cartModel.discountedPrice;
-    });
-    if (_couponDiscount == 0) {
-      Get.find<CouponController>().removeCouponData(false);
-    }
-
-    _isLoading = false;
-    if (shouldUpdate) {
-      update();
+      _isLoading = false;
+      if (shouldUpdate) {
+        update();
+      }
+    } catch (e, s) {
+      print("error in getCartListFromServer $e ");
+      print("$s");
     }
   }
 
@@ -147,10 +158,13 @@ class ProductCartController extends GetxController implements GetxService {
 
   Future<void> updateCartQuantityToApi(String cartID, int quantity) async {
     print("In updateCartQuantity api");
+    _isLoading = true;
     Response response = await productCartRepo.updateCartQuantity(cartID, quantity);
     if (response.statusCode == 200) {
       getCartListFromServer();
     }
+    _isLoading = false;
+    update();
   }
 
   void removeFromCartVariation(CartProductModel? cartModel) {
@@ -266,11 +280,11 @@ class ProductCartController extends GetxController implements GetxService {
 
           // Get.toNamed(RouteHelper.getCompanyRoute(id!,subCategoryId),
           //     arguments: CompanyScreen(serviceID: id, subCategoryId:subCategoryId));
-          Get.dialog(
-            CustomLoader(),
-            barrierDismissible: false,
-          );
-          await productCartRepo.removeAllCartFromServer();
+          // Get.dialog(
+          //   CustomLoader(),
+          //   barrierDismissible: false,
+          // );
+          // await productCartRepo.removeAllCartFromServer();
           if (_initialCartList.length > 0) {
             for (int index = 0; index < _initialCartList.length; index++) {
               await addToCartApi(_initialCartList[index]);
@@ -353,7 +367,7 @@ class ProductCartController extends GetxController implements GetxService {
   Future<void> addToCartApi(CartProductModel cartModel) async {
     await productCartRepo.addToCartListToServer(
       ProductCartModelBody(
-        productId: cartModel.id,
+        productId: cartModel.isFromSubCategory ? cartModel.productId : cartModel.id,
         variantKey: cartModel.productVariantId.toString(),
         quantity: cartModel.quantity.toString(),
       ),
@@ -386,18 +400,32 @@ class ProductCartController extends GetxController implements GetxService {
     return _index;
   }
 
-  setInitialCartList(Product service) {
+  setInitialCartList(Product service, List<ProductVariations>? productVariations, bool isFromSubCategory) {
     _initialCartList = [];
-    service.variations?.forEach((variation) {
-      CartProductModel _cartModel = CartProductModel.fromJson(service.toJson());
-      _cartModel.productVariantId = variation.id;
-      // CartProductModel _cartModel = CartProductModel();
-      int _index = isAvailableInCart(_cartModel, CartProductModel.fromJson(service.toJson()));
-      if (_index != -1) {
-        _cartModel.copyWith(cartId: _cartList[_index].id, cartQuantity: _cartList[_index].quantity);
-      }
-      _initialCartList.add(_cartModel);
-    });
+    if (isFromSubCategory) {
+      productVariations?.forEach((variation) {
+        print("pvId: ${variation.pvID}");
+        CartProductModel _cartModel = CartProductModel.fromJson(service.toJson()).copyWith(subisFromSubCategory: isFromSubCategory);
+        _cartModel.productVariantId = variation.pvID;
+        // CartProductModel _cartModel = CartProductModel();
+        int _index = isAvailableInCart(_cartModel, CartProductModel.fromJson(service.toJson()));
+        if (_index != -1) {
+          _cartModel.copyWith(cartId: _cartList[_index].id, cartQuantity: _cartList[_index].quantity);
+        }
+        _initialCartList.add(_cartModel);
+      });
+    } else {
+      service.variations?.forEach((variation) {
+        CartProductModel _cartModel = CartProductModel.fromJson(service.toJson());
+        _cartModel.productVariantId = variation.id;
+        // CartProductModel _cartModel = CartProductModel();
+        int _index = isAvailableInCart(_cartModel, CartProductModel.fromJson(service.toJson()));
+        if (_index != -1) {
+          _cartModel.copyWith(cartId: _cartList[_index].id, cartQuantity: _cartList[_index].quantity);
+        }
+        _initialCartList.add(_cartModel);
+      });
+    }
     print("initialCartList :  ${initialCartList.length}");
     _isButton = false;
   }

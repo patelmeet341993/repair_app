@@ -100,12 +100,16 @@ class AppConstants {
   static const String PRODUCT_GET_CART_LIST = '/api/v1/customer/product/list?limit=100&offset=1';
 
   static const String REMOVE_SINGLE_CART_ITEM = '/api/v1/customer/product/remove/';
-  static const String UPDATE_PRODUCT_CART_QUANTITY = '/api/v1/customer/product/update-product-quantity?limit=20&offset=1&id=';
+  static const String UPDATE_PRODUCT_CART_QUANTITY = '/api/v1/customer/product/product-cart-update?limit=20&offset=1&id=';
+  static const String PRODUCT_REMOVE_CART_ITEM = '/api/v1/customer/product/remove';
+  static const String PRODUCT_REMOVE_FROM_CART_ITEM = '/api/v1/customer/product/product-cart-remove';
 
 
+  static const String PRODUCT_PLACE_REQUEST = '/api/v1/customer/product/request/send';
 
+  static const String PRODUCT_BOOKING_LIST = '/api/v1/customer/product/product_booking_list';
 
-
+  static const String PRODUCT_BOOKING_DETAILS = '/api/v1/customer/product';
 
 
   //end region

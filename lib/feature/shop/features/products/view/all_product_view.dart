@@ -16,9 +16,9 @@ import '../model/product_model.dart';
 class AllProductView extends StatefulWidget {
   final String fromPage;
   final String campaignID;
-  List<Product> listTotalProduct = [];
+  ShopCategoryModel? shopCategoryModel;
 
-  AllProductView({required this.fromPage, required this.campaignID, this.listTotalProduct = const []});
+  AllProductView({required this.fromPage, required this.campaignID, this.shopCategoryModel });
 
   @override
   State<AllProductView> createState() => _AllProductViewState();
@@ -28,7 +28,7 @@ class _AllProductViewState extends State<AllProductView> {
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
-    print("AllProductView list totalProduct campaignID ${widget.campaignID} : ${widget.listTotalProduct.length}");
+    print("AllProductView list totalProduct campaignID ${widget.campaignID} : ${widget.shopCategoryModel!.totalproducts.length}");
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -221,7 +221,8 @@ class _AllProductViewState extends State<AllProductView> {
           // Get.find<ProductController>().getSubCategoryBasedProductList(widget.fromPage, false, isShouldUpdate: true);
         },
         builder: (serviceController) {
-          List<Product> productList = widget.listTotalProduct.map((e) {
+          List<Product> productList =
+          widget.shopCategoryModel!.totalproducts.map((e) {
             return Product.fromJson(e.toJson());
           }).toList();
           return _buildWidget(productList, context, true);
@@ -267,9 +268,13 @@ class _AllProductViewState extends State<AllProductView> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               Get.find<ProductController>().getProductDiscount(productList[index]);
+                              List<ProductVariations> productVariationList = widget.shopCategoryModel!.productvariants!.where((element) {
+                                return element.productId == productList[index].productId;
+                              }).toList();
                               return ProductWidgetVertical(
                                 product: productList[index],
                                 isAvailable: true,
+                                productVariations: productVariationList,
                                 isFromSubCategoryProductView: isShopSubCategoryWidget,
                                 fromType: widget.fromPage,
                               );

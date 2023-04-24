@@ -3,8 +3,7 @@ import 'package:repair/core/core_export.dart';
 
 class ServiceRequestSectionMenu extends SliverPersistentHeaderDelegate {
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Theme.of(context).cardColor,
       width: Dimensions.WEB_MAX_WIDTH,
@@ -19,8 +18,44 @@ class ServiceRequestSectionMenu extends SliverPersistentHeaderDelegate {
                   title: BookingStatusTabs.values.elementAt(index).name,
                 ),
                 onTap: () {
-                  controller.updateBookingStatusTabs(
-                      BookingStatusTabs.values.elementAt(index));
+                  controller.updateBookingStatusTabs(BookingStatusTabs.values.elementAt(index));
+                },
+              );
+            });
+          }),
+    );
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+
+class ProductRequestSectionMenu extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Theme.of(context).cardColor,
+      width: Dimensions.WEB_MAX_WIDTH,
+      padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
+      child: ListView.builder(
+          itemCount: ProductBookingStatusTabs.values.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return GetBuilder<ServiceBookingController>(builder: (controller) {
+              return InkWell(
+                child: ProductBookingStatusTabItem(
+                  title: ProductBookingStatusTabs.values.elementAt(index).name,
+                ),
+                onTap: () {
+                  controller.updateProductBookingStatusTabs(ProductBookingStatusTabs.values.elementAt(index));
                 },
               );
             });

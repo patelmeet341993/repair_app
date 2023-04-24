@@ -1,15 +1,20 @@
+import 'package:repair/utils/parsing_helper.dart';
+
 class ServiceBookingList {
   String? responseCode;
   String? message;
   BookingContent? content;
 
-  ServiceBookingList({this.responseCode, this.message, this.content,});
+  ServiceBookingList({
+    this.responseCode,
+    this.message,
+    this.content,
+  });
 
   ServiceBookingList.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'];
     message = json['message'];
     content = json['content'] != null ? new BookingContent.fromJson(json['content']) : null;
-
   }
 
   Map<String, dynamic> toJson() {
@@ -37,16 +42,7 @@ class BookingContent {
   int? total;
 
   BookingContent(
-      {this.currentPage,
-        this.bookingModel,
-        this.firstPageUrl,
-        this.from,
-        this.lastPage,
-        this.lastPageUrl,
-        this.path,
-        this.perPage,
-        this.to,
-        this.total});
+      {this.currentPage, this.bookingModel, this.firstPageUrl, this.from, this.lastPage, this.lastPageUrl, this.path, this.perPage, this.to, this.total});
 
   BookingContent.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -85,67 +81,67 @@ class BookingContent {
 }
 
 class BookingModel {
-  String? id;
-  int? readableId;
-  String? customerId;
-  String? providerId;
-  String? zoneId;
-  String? bookingStatus;
-  int? isPaid;
-  String? paymentMethod;
-  String? transactionId;
-  num? totalBookingAmount;
-  num? totalTaxAmount;
-  num? totalDiscountAmount;
-  String? serviceSchedule;
-  String? serviceAddressId;
-  String? createdAt;
-  String? updatedAt;
-  String? categoryId;
-  String? subCategoryId;
-  String? servicemanId;
+  String id = "";
+  int readableId = 0;
+  String customerId = "";
+  String providerId = "";
+  String zoneId = "";
+  String bookingStatus = "";
+  int isPaid = 0;
+  String paymentMethod = "";
+  String transactionId = "";
+  double totalBookingAmount = 0.0;
+  double totalTaxAmount = 0.0;
+  double totalDiscountAmount = 0.0;
+  String serviceSchedule = "";
+  String serviceAddressId = "";
+  String createdAt = "";
+  String updatedAt = "";
+  String categoryId = "";
+  String subCategoryId = "";
+  String servicemanId = "";
 
   BookingModel(
-      {this.id,
-        this.readableId,
-        this.customerId,
-        this.providerId,
-        this.zoneId,
-        this.bookingStatus,
-        this.isPaid,
-        this.paymentMethod,
-        this.transactionId,
-        this.totalBookingAmount,
-        this.totalTaxAmount,
-        this.totalDiscountAmount,
-        this.serviceSchedule,
-        this.serviceAddressId,
-        this.createdAt,
-        this.updatedAt,
-        this.categoryId,
-        this.subCategoryId,
-        this.servicemanId});
+      {this.id = "",
+      this.readableId = 0,
+      this.customerId = "",
+      this.providerId = "",
+      this.zoneId = "",
+      this.bookingStatus = "",
+      this.isPaid = 0,
+      this.paymentMethod = "",
+      this.transactionId = "",
+      this.totalBookingAmount = 0.0,
+      this.totalTaxAmount = 0.0,
+      this.totalDiscountAmount = 0.0,
+      this.serviceSchedule = "",
+      this.serviceAddressId = "",
+      this.createdAt = "",
+      this.updatedAt = "",
+      this.categoryId = "",
+      this.subCategoryId = "",
+      this.servicemanId = ""});
 
   BookingModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    readableId = json['readable_id'];
-    customerId = json['customer_id'];
-    providerId = json['provider_id'];
-    zoneId = json['zone_id'];
-    bookingStatus = json['booking_status'];
-    isPaid = json['is_paid'];
-    paymentMethod = json['payment_method'];
-    transactionId = json['transaction_id'];
-    totalBookingAmount = json['total_booking_amount'];
-    totalTaxAmount = json['total_tax_amount'];
-    totalDiscountAmount = json['total_discount_amount'];
-    serviceSchedule = json['service_schedule'];
-    serviceAddressId = json['service_address_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    categoryId = json['category_id'];
-    subCategoryId = json['sub_category_id'];
-    servicemanId = json['serviceman_id'];
+    id = ParsingHelper.parseStringMethod(json['id']);
+    readableId = ParsingHelper.parseIntMethod(json['readable_id']);
+    customerId = ParsingHelper.parseStringMethod(json['customer_id']);
+    providerId = ParsingHelper.parseStringMethod(json['provider_id']);
+    zoneId = ParsingHelper.parseStringMethod(json['zone_id']);
+    bookingStatus = ParsingHelper.parseStringMethod(json['booking_status']);
+    isPaid = ParsingHelper.parseIntMethod(json['is_paid']);
+    paymentMethod = ParsingHelper.parseStringMethod(json['payment_method']);
+    transactionId = ParsingHelper.parseStringMethod(json['transaction_id']);
+    totalBookingAmount = ParsingHelper.parseDoubleMethod(json['total_booking_amount']);
+    totalTaxAmount = ParsingHelper.parseDoubleMethod(json['total_tax_amount']);
+    totalDiscountAmount = ParsingHelper.parseDoubleMethod(json['total_discount_amount']);
+    serviceSchedule = ParsingHelper.parseStringMethod(json['service_schedule']);
+    serviceAddressId = ParsingHelper.parseStringMethod(json['service_address_id']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
+    categoryId = ParsingHelper.parseStringMethod(json['category_id']);
+    subCategoryId = ParsingHelper.parseStringMethod(json['sub_category_id']);
+    servicemanId = ParsingHelper.parseStringMethod(json['serviceman_id']);
   }
 
   Map<String, dynamic> toJson() {

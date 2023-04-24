@@ -1,6 +1,5 @@
 import 'package:repair/utils/parsing_helper.dart';
 
-
 class ProductCartModel {
   String responseCode = "";
   String message = "";
@@ -109,15 +108,18 @@ class ProductContent {
 
 class CartProductModel {
   String id = "";
+  String productId = "";
   String orderNo = "";
   String orderNoVendor = "";
   String userId = "";
   int orderId = 0;
+  int pvID = 0;
   int productVariantId = 0;
   int quantity = 0;
   double price = 0.0;
   double discountedPrice = 0.0;
   double campaignDiscount = 0.0;
+  double couponDiscount = 0.0;
   double taxAmount = 0.0;
   int discount = 0;
   double subTotal = 0.0;
@@ -127,6 +129,7 @@ class CartProductModel {
   int cartStatus = 0;
   String dateAdded = "";
   int isActive = 0;
+  bool isFromSubCategory = false;
   String createdAt = "";
   String updatedAt = "";
   String productName = "";
@@ -135,15 +138,18 @@ class CartProductModel {
 
   CartProductModel(
       {this.id = "",
+      this.productId = "",
       this.orderNo = "",
       this.orderNoVendor = "",
       this.userId = "",
       this.orderId = 0,
+      this.pvID = 0,
       this.productVariantId = 0,
       this.quantity = 0,
       this.price = 0,
       this.discountedPrice = 0,
       this.campaignDiscount = 0,
+      this.couponDiscount = 0,
       this.taxAmount = 0,
       this.discount = 0,
       this.subTotal = 0,
@@ -155,6 +161,7 @@ class CartProductModel {
       this.isActive = 0,
       this.createdAt = "",
       this.updatedAt = "",
+      this.isFromSubCategory = false,
       this.productName = "",
       this.customer,
       this.productVariant});
@@ -170,6 +177,7 @@ class CartProductModel {
     price = ParsingHelper.parseDoubleMethod(json['price']);
     discountedPrice = ParsingHelper.parseDoubleMethod(json['discounted_price']);
     campaignDiscount = ParsingHelper.parseDoubleMethod(json['campaign_discount']);
+    couponDiscount = ParsingHelper.parseDoubleMethod(json['coupon_discount']);
     taxAmount = ParsingHelper.parseDoubleMethod(json['tax_amount']);
     discount = ParsingHelper.parseIntMethod(json['discount']);
     subTotal = ParsingHelper.parseDoubleMethod(json['sub_total']);
@@ -179,13 +187,15 @@ class CartProductModel {
     cartStatus = ParsingHelper.parseIntMethod(json['cart_status']);
     dateAdded = ParsingHelper.parseStringMethod(json['date_added']);
     isActive = ParsingHelper.parseIntMethod(json['is_active']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
     createdAt = ParsingHelper.parseStringMethod(json['created_at']);
     updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
     productName = ParsingHelper.parseStringMethod(json['product_name']);
     customer = json['customer'] != null ? new Customer.fromJson(json['customer']) : null;
     productVariant = json['productvariant'] != null ? new ProductVariant.fromJson(json['productvariant']) : null;
   }
-  CartProductModel copyWith({String? cartId, int? cartQuantity}) {
+
+  CartProductModel copyWith({String? cartId, int? cartQuantity, bool subisFromSubCategory = false }) {
     if (cartId != null) {
       id = cartId;
     }
@@ -193,8 +203,12 @@ class CartProductModel {
     if (cartQuantity != null) {
       quantity = cartQuantity;
     }
+    if(subisFromSubCategory) {
+      isFromSubCategory = subisFromSubCategory;
+    }
     return this;
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
@@ -208,6 +222,7 @@ class CartProductModel {
     data['discounted_price'] = this.discountedPrice;
     data['discount'] = this.discount;
     data['campaign_discount'] = this.campaignDiscount;
+    data['coupon_discount'] = this.couponDiscount;
     data['tax_amount'] = this.taxAmount;
     data['sub_total'] = this.subTotal;
     data['deliver_by'] = this.deliverBy;
@@ -216,6 +231,7 @@ class CartProductModel {
     data['cart_status'] = this.cartStatus;
     data['date_added'] = this.dateAdded;
     data['is_active'] = this.isActive;
+    data['product_id'] = this.productId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['product_name'] = this.productName;
