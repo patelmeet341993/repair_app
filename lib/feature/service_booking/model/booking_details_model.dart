@@ -2,6 +2,17 @@ import 'package:repair/core/common_model/provider_model.dart';
 import 'package:repair/core/common_model/serviceman_model.dart';
 import 'package:repair/core/common_model/user_model.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
+import 'package:repair/utils/parsing_helper.dart';
 
 class BookingDetailsModel {
   String? responseCode;
@@ -13,9 +24,7 @@ class BookingDetailsModel {
   BookingDetailsModel.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'];
     message = json['message'];
-    content = json['content'] != null
-        ? new BookingDetailsContent.fromJson(json['content'])
-        : null;
+    content = json['content'] != null ? new BookingDetailsContent.fromJson(json['content']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -127,18 +136,10 @@ class BookingDetailsContent {
       });
     }
 
-    serviceAddress = json['service_address'] != null
-        ? new ServiceAddress.fromJson(json['service_address'])
-        : null;
-    customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
-        : null;
-    provider = json['provider'] != null
-        ? new ProviderModel.fromJson(json['provider'])
-        : null;
-    serviceman = json['serviceman'] != null
-        ? new Serviceman.fromJson(json['serviceman'])
-        : null;
+    serviceAddress = json['service_address'] != null ? new ServiceAddress.fromJson(json['service_address']) : null;
+    customer = json['customer'] != null ? new Customer.fromJson(json['customer']) : null;
+    provider = json['provider'] != null ? new ProviderModel.fromJson(json['provider']) : null;
+    serviceman = json['serviceman'] != null ? new Serviceman.fromJson(json['serviceman']) : null;
     totalCampaignDiscountAmount = json['total_campaign_discount_amount'];
     totalCouponDiscountAmount = json['total_coupon_discount_amount'];
   }
@@ -167,12 +168,10 @@ class BookingDetailsContent {
       data['detail'] = this.detail!.map((v) => v.toJson()).toList();
     }
     if (this.scheduleHistories != null) {
-      data['schedule_histories'] =
-          this.scheduleHistories!.map((v) => v.toJson()).toList();
+      data['schedule_histories'] = this.scheduleHistories!.map((v) => v.toJson()).toList();
     }
     if (this.statusHistories != null) {
-      data['status_histories'] =
-          this.statusHistories!.map((v) => v.toJson()).toList();
+      data['status_histories'] = this.statusHistories!.map((v) => v.toJson()).toList();
     }
     if (this.serviceAddress != null) {
       data['service_address'] = this.serviceAddress!.toJson();
@@ -191,62 +190,78 @@ class BookingDetailsContent {
 }
 
 class BookingContentDetailsItem {
-  int? id;
-  String? bookingId;
-  String? serviceId;
-  String? variantKey;
-  num? serviceCost;
-  int? quantity;
-  num? discountAmount;
-  num? taxAmount;
-  num? totalCost;
-  String? createdAt;
-  String? updatedAt;
+  int id = 0;
+  String productCartBookingId = "";
+  String productId = "";
+  String productName = "";
+  int productVariantId = 0;
+  String bookingId = "";
+  String serviceId = "";
+  String variantKey = "";
+  int serviceCost = 0;
+  int quantity = 0;
+  double discountAmount = 0.0;
+  int taxAmount = 0;
+  double totalCost = 0.0;
+  String createdAt = "";
+  String updatedAt = "";
+  int campaignDiscountAmount = 0;
+  int overallCouponDiscountAmount = 0;
   Service? service;
-  num? campaignDiscountAmount;
-  num? overallCouponDiscountAmount;
-  String? serviceName;
+  String serviceName = "";
 
   BookingContentDetailsItem({
-    this.id,
-    this.bookingId,
-    this.serviceId,
-    this.variantKey,
-    this.serviceCost,
-    this.quantity,
-    this.discountAmount,
-    this.taxAmount,
-    this.totalCost,
-    this.createdAt,
-    this.updatedAt,
+    this.id = 0,
+    this.bookingId = "",
+    this.serviceId = "",
+    this.variantKey = "",
+    this.productCartBookingId = "",
+    this.productId = "",
+    this.productName = "",
+    this.productVariantId = 0,
+    this.serviceCost = 0,
+    this.quantity = 0,
+    this.discountAmount = 0.0,
+    this.taxAmount = 0,
+    this.totalCost = 0.0,
+    this.createdAt = "",
+    this.updatedAt = "",
     this.service,
-    this.campaignDiscountAmount,
-    this.overallCouponDiscountAmount,
-    this.serviceName,
+    this.campaignDiscountAmount = 0,
+    this.overallCouponDiscountAmount = 0,
+    this.serviceName = "",
   });
 
   BookingContentDetailsItem.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    bookingId = json['booking_id'];
-    serviceId = json['service_id'];
-    variantKey = json['variant_key'];
-    serviceCost = json['service_cost'];
-    quantity = json['quantity'];
-    discountAmount = json['discount_amount'];
-    taxAmount = json['tax_amount'];
-    totalCost = json['total_cost'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    service =
-        json['service'] != null ? new Service.fromJson(json['service']) : null;
-    campaignDiscountAmount = json['campaign_discount_amount'];
-    overallCouponDiscountAmount = json['overall_coupon_discount_amount'];
-    serviceName = json['service_name'];
+    id = ParsingHelper.parseIntMethod(json['id']);
+    productCartBookingId = ParsingHelper.parseStringMethod(json['product_cart_booking_id']);
+    productId = ParsingHelper.parseStringMethod(json['product_id']);
+    productName = ParsingHelper.parseStringMethod(json['product_name']);
+    productVariantId = ParsingHelper.parseIntMethod(json['product_variant_id']);
+    bookingId = ParsingHelper.parseStringMethod(json['booking_id']);
+    serviceId = ParsingHelper.parseStringMethod(json['service_id']);
+    variantKey = ParsingHelper.parseStringMethod(json['variant_key']);
+    serviceCost = ParsingHelper.parseIntMethod(json['service_cost']);
+    quantity = ParsingHelper.parseIntMethod(json['quantity']);
+    discountAmount = ParsingHelper.parseDoubleMethod(json['discount_amount']);
+    taxAmount = ParsingHelper.parseIntMethod(json['tax_amount']);
+
+    totalCost = ParsingHelper.parseDoubleMethod(json['total_cost']);
+    createdAt = ParsingHelper.parseStringMethod(json['created_at']);
+    updatedAt = ParsingHelper.parseStringMethod(json['updated_at']);
+    service = json['service'] != null ? new Service.fromJson(json['service']) : null;
+    campaignDiscountAmount = ParsingHelper.parseIntMethod(json['campaign_discount_amount']);
+    overallCouponDiscountAmount = ParsingHelper.parseIntMethod(json['overall_coupon_discount_amount']);
+    serviceName = ParsingHelper.parseStringMethod(json['service_name']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['product_cart_booking_id'] = this.productCartBookingId;
+    data['product_id'] = this.productId;
+    data['product_name'] = this.productName;
+    data['product_variant_id'] = this.productVariantId;
     data['booking_id'] = this.bookingId;
     data['service_id'] = this.serviceId;
     data['variant_key'] = this.variantKey;
@@ -275,13 +290,7 @@ class ScheduleHistories {
   String? createdAt;
   String? updatedAt;
 
-  ScheduleHistories(
-      {this.id,
-      this.bookingId,
-      this.changedBy,
-      this.schedule,
-      this.createdAt,
-      this.updatedAt});
+  ScheduleHistories({this.id, this.bookingId, this.changedBy, this.schedule, this.createdAt, this.updatedAt});
 
   ScheduleHistories.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -314,15 +323,7 @@ class StatusHistories {
   String? updatedAt;
   User? user;
 
-  StatusHistories(
-      {this.id,
-      this.bookingId,
-      this.changedBy,
-      this.bookingStatus,
-      this.schedule,
-      this.createdAt,
-      this.updatedAt,
-      this.user});
+  StatusHistories({this.id, this.bookingId, this.changedBy, this.bookingStatus, this.schedule, this.createdAt, this.updatedAt, this.user});
 
   StatusHistories.fromJson(Map<String, dynamic> json) {
     id = json['id'];

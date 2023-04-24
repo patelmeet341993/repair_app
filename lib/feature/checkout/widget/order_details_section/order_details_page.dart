@@ -12,7 +12,7 @@ class OrderDetailsPage extends StatelessWidget {
         children: [
           isFromProduct ? Container() : ServiceSchedule(),
           isFromProduct ? AddressInformation() : ServiceInformation(),
-          ShowVoucher(),
+          isFromProduct ? ProductShowVoucher() : ShowVoucher(),
           isFromProduct ? ProductCartSummery() : CartSummery(),
         ],
       ),

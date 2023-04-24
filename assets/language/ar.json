@@ -532,7 +532,26 @@
   "media": "Media",
   "product_in_cart": "products in cart",
   "product_cart": "Cart",
-  "popular_products": "Popular Products"
+  "popular_products": "Popular Products",
+  "product_checkout": "Checkout",
+  "product_booking_successfully": "Product booked successfully",
+  "address_information": "Address Information",
+  "my_orders": "My Orders",
+  "service_bookings": "Service Bookings",
+  "product_orders": "Product Orders",
+  "processed": "Processed",
+  "shipped": "Shipped",
+  "delivered": "Delivered",
+  "received": "Received",
+  "cancelled": "Cancelled",
+  "product_info": "Product Info",
+  "product_cost": "Product Cost",
+  "product_discount": "Product Discount",
+  "product_vat": "Product vat",
+  "product": "Product",
+  "product_booked_by_customer": "Product Booked By Customer",
+  "product_processed_by_customer": "Product Processed By Customer"
+
 
 
 }

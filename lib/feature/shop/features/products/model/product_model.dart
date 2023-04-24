@@ -454,6 +454,7 @@ class ProductVariations {
   int id = 0;
   String productId = "";
   int groupId = 0;
+  int pvID = 0;
   String packateMeasurementAttributeId = "";
   String packateMeasurementAttributeValue = "";
   double packateMeasurementSellPrice = 0;
@@ -474,6 +475,7 @@ class ProductVariations {
       {this.id = 0,
       this.productId = "",
       this.groupId = 0,
+      this.pvID = 0,
       this.packateMeasurementAttributeId = "",
       this.packateMeasurementAttributeValue = "",
       this.packateMeasurementSellPrice = 0,
@@ -494,6 +496,7 @@ class ProductVariations {
     id = ParsingHelper.parseIntMethod(json['id']);
     productId = ParsingHelper.parseStringMethod(json['product_id']);
     groupId = ParsingHelper.parseIntMethod(json['group_id']);
+    pvID = ParsingHelper.parseIntMethod(json['pvID']);
     packateMeasurementAttributeId = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_id']);
     packateMeasurementAttributeValue = ParsingHelper.parseStringMethod(json['packate_measurement_attribute_value']);
     packateMeasurementSellPrice = ParsingHelper.parseDoubleMethod(json['packate_measurement_sell_price']);
@@ -516,6 +519,7 @@ class ProductVariations {
     data['id'] = this.id;
     data['product_id'] = this.productId;
     data['group_id'] = this.groupId;
+    data['pvID'] = this.pvID;
     data['packate_measurement_attribute_id'] = this.packateMeasurementAttributeId;
     data['packate_measurement_attribute_value'] = this.packateMeasurementAttributeValue;
     data['packate_measurement_sell_price'] = this.packateMeasurementSellPrice;

@@ -27,7 +27,7 @@ class CouponController extends GetxController implements GetxService{
     print(response.body);
     if (response.statusCode == 200) {
       _couponList = [];
-      response.body["content"]["data"].forEach((category) {
+      response.body["content"]["active_coupons"]["data"].forEach((category) {
         if('${category['is_active']}' == '1' ) {
           _couponList!.add(CouponModel.fromJson(category));
         }

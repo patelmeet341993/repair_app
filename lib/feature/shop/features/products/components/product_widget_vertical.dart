@@ -15,14 +15,11 @@ class ProductWidgetVertical extends StatelessWidget {
   final bool isAvailable;
   final String fromType;
   final bool isFromSubCategoryProductView;
+  List<ProductVariations>? productVariations;
 
-  ProductWidgetVertical({
-    Key? key,
-    required this.product,
-    required this.isAvailable,
-    required this.fromType,
-    this.isFromSubCategoryProductView = false
-  }) : super(key: key);
+  ProductWidgetVertical(
+      {Key? key, required this.product, required this.isAvailable, required this.fromType, this.productVariations, this.isFromSubCategoryProductView = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,7 @@ class ProductWidgetVertical extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
 
-        // color: Theme.of(context).cardColor,
+          // color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
           boxShadow: Get.isDarkMode ? null : cardShadow),
       child: MyRippleButton(
@@ -68,9 +65,7 @@ class ProductWidgetVertical extends StatelessWidget {
           // margin: EdgeInsets.only(right: Dimensions.PADDING_SIZE_DEFAULT),
           padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS).copyWith(bottom: 4),
           decoration: BoxDecoration(
-            color: Theme
-                .of(context)
-                .cardColor,
+            color: Theme.of(context).cardColor,
             // color: Colors.red,
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
             //  boxShadow: Get.isDarkMode ? null : cardShadow,
@@ -84,11 +79,7 @@ class ProductWidgetVertical extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(Dimensions.RADIUS_SMALL)),
                     child: CustomImage(
-                      image: '${Get
-                          .find<SplashController>()
-                          .configModel
-                          .content!
-                          .imageBaseUrl!}/product/${product.image}',
+                      image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${product.image}',
                       fit: BoxFit.cover,
                       width: double.maxFinite,
                       height: Dimensions.HOME_IMAGE_SIZE,
@@ -154,13 +145,13 @@ class ProductWidgetVertical extends StatelessWidget {
                           'body': Style(
                               margin: Margins.all(0),
                               padding: EdgeInsets.zero,
-                              fontSize: FontSize( Dimensions.fontSizeExtraSmall),
+                              fontSize: FontSize(Dimensions.fontSizeExtraSmall),
                               maxLines: 1,
                               color: Theme.of(context).disabledColor
-                            // textOverflow: TextOverflow.ellipsis
-                            // overflow: TextOverflow.ellipsis,
-                            // lineHeight: LineHeight(.5),
-                          ),
+                              // textOverflow: TextOverflow.ellipsis
+                              // overflow: TextOverflow.ellipsis,
+                              // lineHeight: LineHeight(.5),
+                              ),
                         },
                       ),
                       // Text(
@@ -181,32 +172,25 @@ class ProductWidgetVertical extends StatelessWidget {
                             InkWell(
                               // onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
                               onTap: () {
+                                print("productId: ${isFromSubCategoryProductView} product id: ${product.productId}");
                                 showModalBottomSheet(
-                                    context: context,
-                                    useRootNavigator: true,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context) =>
-                                        ProductCenterDialog(
-                                          product: product,
-                                          isFromDetails: true,
-                                        ));
+                                  context: context,
+                                  useRootNavigator: true,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => ProductCenterDialog(
+                                    isFromSubCategory: isFromSubCategoryProductView,
+                                    productVariations: productVariations,
+                                    product: product,
+                                    isFromDetails: true,
+                                  ),
+                                );
                               },
                               child: Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Theme
-                                        .of(context)
-                                        .primaryColor
-                                ),
+                                decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
                                 padding: EdgeInsets.all(2),
                                 child: ProductCartWidget(
-                                    color: Get.isDarkMode
-                                        ? Theme
-                                        .of(context)
-                                        .primaryColor
-                                        : Colors.white,
-                                    size: Dimensions.PRODUCT_CART_WIDGET_SIZE),
+                                    color: Get.isDarkMode ? Theme.of(context).primaryColor : Colors.white, size: Dimensions.PRODUCT_CART_WIDGET_SIZE),
                               ),
                             )
                             // CommonSubmitButton(

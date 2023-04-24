@@ -21,7 +21,7 @@ class ShopSubCategoryWidget extends GetView<ServiceController> {
         Get.find<ProductController>().cleanSubCategory();
         Get.toNamed(
           RouteHelper.allProductScreenRoute("${categoryModel!.id!.toString()}"),
-          arguments: categoryModel!.totalproducts,
+          arguments: categoryModel ?? CategoryModel(),
         );
       },
       child: Container(

@@ -7,10 +7,13 @@ import 'package:repair/feature/shop/features/cart/model/product_cart_model.dart'
 class ProductCartWidget extends StatelessWidget {
   final CartProductModel cart;
   final int cartIndex;
+  final Function()? onMinusTap, onPlusTap;
 
   ProductCartWidget({
     required this.cart,
     required this.cartIndex,
+    required this.onMinusTap,
+    required this.onPlusTap,
   });
 
   @override
@@ -116,13 +119,7 @@ class ProductCartWidget extends StatelessWidget {
                   child: Row(children: [
                     if (cart.quantity > 1)
                       QuantityButton(
-                        onTap: () {
-                          if (Get.find<AuthController>().isLoggedIn()) {
-                            Get.find<ProductCartController>().updateCartQuantityToApi(cart.id, cart.quantity - 1);
-                          } else {
-                            Get.find<ProductCartController>().setQuantity(false, cart);
-                          }
-                        },
+                        onTap: onMinusTap,
                         isIncrement: false,
                       ),
                     if (cart.quantity == 1)
@@ -135,9 +132,9 @@ class ProductCartWidget extends StatelessWidget {
                                   isLogOut: true,
                                   onYesPressed: () {
                                     if (Get.find<AuthController>().isLoggedIn()) {
-                                      Get.find<CartController>().removeCartFromServer(cart.id);
+                                      Get.find<ProductCartController>().removeCartFromServer(cart.id);
                                     } else {
-                                      Get.find<CartController>().removeFromCart(cartIndex);
+                                      Get.find<ProductCartController>().removeFromCart(cartIndex);
                                     }
                                     Get.back();
                                   }),
@@ -151,13 +148,7 @@ class ProductCartWidget extends StatelessWidget {
                       ),
                     Text(cart.quantity.toString(), style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
                     QuantityButton(
-                      onTap: () {
-                        if (Get.find<AuthController>().isLoggedIn()) {
-                          Get.find<ProductCartController>().updateCartQuantityToApi(cart.id, cart.quantity + 1);
-                        } else {
-                          Get.find<ProductCartController>().setQuantity(true, cart);
-                        }
-                      },
+                      onTap: onPlusTap,
                       isIncrement: true,
                     ),
                   ]),

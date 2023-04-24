@@ -33,6 +33,7 @@ class ProductCartRepo {
   }
 
   Future<Response> addToCartListToServer(ProductCartModelBody cartModel) async {
+
     return await apiClient.postData(
         AppConstants.PRODUCT_ADD_TO_CART, cartModel.toJson());
   }
@@ -44,7 +45,7 @@ class ProductCartRepo {
 
   Future<Response> removeCartFromServer(String cartID) async {
     return await apiClient
-        .deleteData(AppConstants.REMOVE_SINGLE_CART_ITEM + "$cartID");
+        .postData(AppConstants.PRODUCT_REMOVE_FROM_CART_ITEM,{"id": cartID});
   }
 
   Future<Response> removeAllCartFromServer() async {
@@ -55,9 +56,11 @@ class ProductCartRepo {
   //   return await apiClient.putData(
   //       AppConstants.UPDATE_PRODUCT_CART_QUANTITY + "$cartID", {'quantity': quantity});
   // }
-  Future<Response> updateCartQuantity(String cartID, int quantity) async {
+  Future<Response> updateCartQuantity(String cartId, int quantity) async {
     return await apiClient.postData(
-        AppConstants.UPDATE_PRODUCT_CART_QUANTITY + "$cartID", {'quantity': quantity});
+        AppConstants.UPDATE_PRODUCT_CART_QUANTITY, {
+          "id":"$cartId",
+          'quantity': quantity});
   }
 
 

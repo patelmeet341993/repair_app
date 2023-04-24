@@ -19,6 +19,7 @@ import 'package:repair/utils/html_type.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:repair/utils/parsing_helper.dart';
 
+import '../../feature/service_booking/view/product_booking_details_screen.dart';
 import '../../feature/shop/features/products/model/product_model.dart';
 import '../../feature/shop/features/products/view/all_product_view.dart';
 import '../../feature/shop/features/products/view/product_details_screen.dart';
@@ -74,7 +75,9 @@ class RouteHelper {
   static const String settingScreen = '/settingScreen';
   static const String languageScreen = '/language-screen';
   static const String voucherScreen = '/voucherScreen';
+  static const String productVoucherScreen = '/productVoucherScreen';
   static const String bookingDetailsScreen = '/bookingDetailsScreen';
+  static const String productBookingDetailsScreen = '/productBookingDetailsScreen';
   static const String rateReviewScreen = '/rateReviewScreen';
   static const String allServiceScreen = '/allServiceScreen';
   static const String allProductScreen = '/allProductScreen';
@@ -151,8 +154,8 @@ class RouteHelper {
 
   static String getOrderSuccessRoute(String status) => '$orderSuccess?payment_status=$status';
 
-  static String getCheckoutRoute(String page, String currentPage, String addressId, {bool isFromProduct = false}) {
-    return '$checkout?currentPage=$currentPage&addressID=$addressId&isFromProduct=$isFromProduct';
+  static String getCheckoutRoute(String page, String currentPage, String addressId, {bool isFromProduct = false, String productId = ""}) {
+    return '$checkout?currentPage=$currentPage&addressID=$addressId&isFromProduct=$isFromProduct&productId=$productId';
   }
 
   static String getOrderTrackingRoute(int id) => '$orderTracking?id=$id';
@@ -212,9 +215,14 @@ class RouteHelper {
   static String getInboxScreenRoute() => '$chatInbox';
 
   static String getVoucherRoute() => '$voucherScreen';
+  static String getProductVoucherRoute() => '$productVoucherScreen';
 
   static String getBookingDetailsScreen(String bookingID, String fromPage) {
     return '$bookingDetailsScreen?bookingID=$bookingID&fromPage=$fromPage';
+  }
+
+  static String getProductBookingDetailsScreen(String bookingID, String fromPage) {
+    return '$productBookingDetailsScreen?bookingID=$bookingID&fromPage=$fromPage';
   }
 
   static String getRateReviewScreen(String serviceID, String bookingIDForReview, BookingDetailsContent bookingDetailsContent, int index, String variantKey) {
@@ -390,6 +398,7 @@ class RouteHelper {
             ));
           print("isFromProductisFromProduct: ${Get.parameters['isFromProduct']}");
           return getRoute(CheckoutScreen(
+
             Get.parameters.containsKey('payment_status') && Get.parameters['payment_status']! == 'success' ? 'complete' : Get.parameters['currentPage']!,
             Get.parameters['addressID'] != null ? Get.parameters['addressID']! : 'null',
             isFromProduct: ParsingHelper.parseBoolMethod(Get.parameters['isFromProduct'] != null ? Get.parameters['isFromProduct'] : false),
@@ -482,9 +491,21 @@ class RouteHelper {
       page: () => CouponScreen(),
     ),
     GetPage(
+      name: productVoucherScreen,
+      page: () => ProductCouponScreen(),
+    ),
+    GetPage(
       binding: BookingBinding(),
       name: bookingDetailsScreen,
       page: () => BookingDetailsScreen(
+        bookingID: Get.parameters['bookingID']!,
+        fromPage: Get.parameters['fromPage']!,
+      ),
+    ),
+    GetPage(
+      binding: ProductBookingBinding(),
+      name: productBookingDetailsScreen,
+      page: () => ProductBookingDetailsScreen(
         bookingID: Get.parameters['bookingID']!,
         fromPage: Get.parameters['fromPage']!,
       ),
@@ -505,11 +526,10 @@ class RouteHelper {
       page: () {
 
         // dynamic totalList = Get.parameters['totalProduct'];
-        dynamic totalList = Get.arguments;
-        if (totalList is List<Product>) {}
+        dynamic shopCategoryModel = Get.arguments;
         return getRoute(
           AllProductView(
-            listTotalProduct: totalList is List<Product> ? totalList : [],
+            shopCategoryModel: (shopCategoryModel is ShopCategoryModel) ? shopCategoryModel : ShopCategoryModel(),
             fromPage: Get.parameters['fromPage']!,
             campaignID: Get.parameters['campaignID']!,
           ),
