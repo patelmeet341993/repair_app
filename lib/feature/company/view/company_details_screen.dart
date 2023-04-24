@@ -20,7 +20,7 @@ class CompanyDetailsScreen extends StatelessWidget {
   final company_rating;
   companyModel.CompanyData? companyData;
 
-  CompanyDetailsScreen({Key? key, required this.company_image, required this.company_name, required this.company_rating, this.companyData}) : super(key: key);
+   CompanyDetailsScreen({Key? key, required this.company_image, required this.company_name, required this.company_rating, this.companyData}) : super(key: key);
 
   final ScrollController scrollController = ScrollController();
   final scaffoldState = GlobalKey<ScaffoldState>();

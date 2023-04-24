@@ -238,7 +238,7 @@ class ProductBookingInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${'booking'.tr} #${bookingDetailsContent.readableId}',
+                      '${'order'.tr} #${bookingDetailsContent.readableId}',
                       style: ubuntuMedium.copyWith(
                           fontSize: Dimensions.fontSizeLarge,
                           color: Theme.of(context).textTheme.bodyText1!.color,
@@ -249,16 +249,16 @@ class ProductBookingInfo extends StatelessWidget {
                           top: Dimensions.PADDING_SIZE_DEFAULT),
                       child: ElevatedButton(
                         onPressed: () async {
-                          // var pdfFile =
-                          // await InvoiceController.generateUint8List(
-                          //     bookingDetailsContent,
-                          //     bookingDetailsTabController.invoiceItems,
-                          //     bookingDetailsTabController);
-                          // Printing.layoutPdf(
-                          //   onLayout: (PdfPageFormat format) {
-                          //     return pdfFile;
-                          //   },
-                          // );
+                          var pdfFile =
+                          await ProductInvoiceController.generateUint8List(
+                              bookingDetailsContent,
+                              bookingDetailsTabController.invoiceItems,
+                              bookingDetailsTabController);
+                          Printing.layoutPdf(
+                            onLayout: (PdfPageFormat format) {
+                              return pdfFile;
+                            },
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -320,9 +320,9 @@ class ProductBookingInfo extends StatelessWidget {
             Gaps.verticalGapOf(Dimensions.PADDING_SIZE_DEFAULT),
             BookingItem(
               img: Images.iconCalendar,
-              title: "${'booking_date'.tr} : ",
+              title: "${'order_delivery_date'.tr} : ",
               date:
-              "${DateConverter.dateMonthYearTimeTwentyFourFormat(DateConverter.isoUtcStringToLocalDate(bookingDetailsContent.createdAt!))}",
+                "${DateConverter.dateMonthYearTimeTwentyFourFormat(DateConverter.isoUtcStringToLocalDate(bookingDetailsContent.createdAt!))}",
             ),
             // Gaps.verticalGapOf(Dimensions.PADDING_SIZE_EXTRA_SMALL),
             // BookingItem(

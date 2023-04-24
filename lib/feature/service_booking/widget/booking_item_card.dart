@@ -143,7 +143,7 @@ class ProductBookingItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(children: [
-                Expanded(child: Text('${'booking'.tr}# ${bookingModel.readableId}', style: ubuntuBold.copyWith())),
+                Expanded(child: Text('${'order'.tr}# ${bookingModel.readableId}', style: ubuntuBold.copyWith())),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
@@ -182,7 +182,7 @@ class ProductBookingItemCard extends StatelessWidget {
               ]),
               Row(
                 children: [
-                  Text('${'booking_date'.tr} : ',
+                  Text('${'order_placed'.tr} : ',
                       style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(.6))),
                   Text("${DateConverter.dateMonthYearTimeTwentyFourFormat(DateConverter.isoUtcStringToLocalDate(bookingModel.createdAt.toString()))}",
                       textDirection: TextDirection.ltr,

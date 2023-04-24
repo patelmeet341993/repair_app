@@ -41,7 +41,7 @@ class _ProductBookingDetailsScreenState extends State<ProductBookingDetailsScree
           key: scaffoldState,
           endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
           appBar: CustomAppBar(
-            title: "booking_details".tr,
+            title: "order_details".tr,
             centerTitle: true,
             isBackButtonExist: true,
             onBackPressed: () {
@@ -153,7 +153,7 @@ class BookingTabBar extends StatelessWidget {
                 labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                 tabs: [
                   Tab(
-                    child: Text('booking_details'.tr),
+                    child: Text('order_details'.tr),
                   ),
                   Tab(
                     child: Text('status'.tr),

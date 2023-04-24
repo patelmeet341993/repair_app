@@ -549,9 +549,12 @@
   "product_discount": "Product Discount",
   "product_vat": "Product vat",
   "product": "Product",
-  "product_booked_by_customer": "Product Booked By Customer",
-  "product_processed_by_customer": "Product Processed By Customer"
-
-
-
+  "product_booked_by_customer": "Product Order By Customer",
+  "product_processed_by_customer": "Product Processed By Customer",
+  "order": "Order",
+  "order_placed": "Order Placed",
+  "order_delivery_date": "Order Delivery Date",
+  "order_place": "Order Place",
+  "order_status": "Order Status",
+  "product_order": "Product Ordered"
 }

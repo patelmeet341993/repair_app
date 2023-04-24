@@ -22,7 +22,7 @@ class ProductBookingSummeryWidget extends StatelessWidget {
           children: [
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT),
-                child: Text('booking_summery'.tr,
+                child: Text('order_summary'.tr,
                     style: ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyText1!.color))),
             Gaps.verticalGapOf(Dimensions.PADDING_SIZE_DEFAULT),
             Padding(
