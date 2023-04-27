@@ -101,6 +101,7 @@ class ProductCartController extends GetxController implements GetxService {
     _cartList.forEach((cartModel) {
       _totalPrice = _totalPrice + (cartModel.price * cartModel.quantity);
     });
+    print("total price : $totalPrice");
   }
 
   Future<void> getCartListFromServer({bool shouldUpdate = true}) async {
@@ -121,8 +122,9 @@ class ProductCartController extends GetxController implements GetxService {
       _totalPrice = 0.0;
       double _couponDiscount = 0.0;
       _cartList.forEach((cartModel) {
-        _totalPrice = _totalPrice + cartModel.price;
+        _totalPrice = _totalPrice + cartModel.subTotal;
         _couponDiscount = _couponDiscount + cartModel.discountedPrice;
+
       });
       if (_couponDiscount == 0) {
         Get.find<CouponController>().removeCouponData(false);

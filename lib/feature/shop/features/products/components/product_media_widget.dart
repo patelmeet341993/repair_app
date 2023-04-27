@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:repair/feature/shop/features/cart/widget/image_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../components/custom_image.dart';
@@ -71,10 +72,19 @@ class _ProductMediaWidgetState extends State<ProductMediaWidget> {
               width: Dimensions.WEB_MAX_WIDTH,
               height: ResponsiveHelper.isDesktop(context) ? 280 : 150,
               decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CustomImage(
-                  image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${media.otherImages}',
+              child: InkWell(
+                onTap: (){
+                  showDialog(context: context, builder: (BuildContext context) {
+                    return ImageViewPage(
+                      isDialog: true,
+                      images: widget.product.media ?? [],initialIndex: index,);
+                  });
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CustomImage(
+                    image: '${Get.find<SplashController>().configModel.content!.imageBaseUrl!}/product/${media.otherImages}',
+                  ),
                 ),
               ),
             );

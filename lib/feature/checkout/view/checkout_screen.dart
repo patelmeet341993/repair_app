@@ -185,7 +185,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           CustomText(
-                                              text: "booking_details".tr,
+                                              text: widget.isFromProduct ? "order_details".tr:"booking_details".tr,
                                               isActive: controller.currentPage == PageState.orderDetails && PageState.orderDetails.name == widget.pageState),
                                           Padding(
                                             padding: EdgeInsets.only(right: 25.0),
@@ -219,7 +219,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   ? PaymentPage(
                                       addressId: widget.addressId,
                                     )
-                                  : const CompletePage();
+                                  :  CompletePage(isFromProduct: widget.isFromProduct,);
                         }),
                         if (!ResponsiveHelper.isMobile(context))
                           GetBuilder<CheckOutController>(builder: (controller) {

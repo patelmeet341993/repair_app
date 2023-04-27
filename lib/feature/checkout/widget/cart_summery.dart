@@ -133,8 +133,8 @@ class ProductCartSummery extends GetView<CartController> {
         double _couponDisCount = 0;
         double _vat = 0;
         cartController.cartList.forEach((cartModel) {
-          _subTotalPrice = _subTotalPrice + (cartModel.price * cartModel.quantity); //(without any discount and coupons)
-          _disCount = _disCount + cartModel.discountedPrice;
+          _subTotalPrice = _subTotalPrice + (cartModel.discountedPrice * cartModel.quantity); //(without any discount and coupons)
+          // _disCount = _disCount + cartModel.discountedPrice;
           _campaignDisCount = _campaignDisCount + cartModel.campaignDiscount;
           _couponDisCount = _couponDisCount + cartModel.couponDiscount;
 
@@ -192,7 +192,7 @@ class ProductCartSummery extends GetView<CartController> {
                     ),
                     SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     RowText(title: 'sub_total'.tr, price: _subTotalPrice),
-                    RowText(title: 'discount'.tr, price: _disCount),
+                    // RowText(title: 'discount'.tr, price: _disCount),
                     RowText(title: 'campaign_discount'.tr, price: _campaignDisCount),
                     RowText(title: 'coupon_discount'.tr, price: _couponDisCount),
                     RowText(title: 'vat'.tr, price: _vat),

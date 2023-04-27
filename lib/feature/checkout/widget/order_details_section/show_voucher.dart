@@ -79,7 +79,7 @@ class ProductShowVoucher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CouponController>(builder: (couponController) {
+    return GetBuilder<ProductCouponController>(builder: (couponController) {
       return couponController.coupon != null
           ? Container(
         width: MediaQuery.of(context).size.width,

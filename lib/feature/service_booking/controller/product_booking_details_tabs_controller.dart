@@ -83,7 +83,7 @@ class ProductBookingDetailsTabsController extends GetxController with GetSingleT
       _productBookingDetailsContent = BookingDetailsContent.fromJson(response.body['content']);
       if (_productBookingDetailsContent!.detail != null) {
         _productBookingDetailsContent!.detail!.forEach((element) {
-          _unitTotalCost.add(element.totalCost.toDouble() * element.quantity);
+          _unitTotalCost.add(element.discountAmount.toDouble() * element.quantity);
         });
         _unitTotalCost.forEach((element) {
           _allTotalCost = _allTotalCost + element;
@@ -104,6 +104,7 @@ class ProductBookingDetailsTabsController extends GetxController with GetSingleT
           unitPrice: element.serviceCost.toDouble(),
         ));
       });
+      print("Invoice item : ${_invoiceItems.length}");
       update();
     } else {
       ApiChecker.checkApi(response);

@@ -320,7 +320,7 @@ class ProductBookingInfo extends StatelessWidget {
             Gaps.verticalGapOf(Dimensions.PADDING_SIZE_DEFAULT),
             BookingItem(
               img: Images.iconCalendar,
-              title: "${'order_delivery_date'.tr} : ",
+              title: "${'order_placed_date'.tr} : ",
               date:
                 "${DateConverter.dateMonthYearTimeTwentyFourFormat(DateConverter.isoUtcStringToLocalDate(bookingDetailsContent.createdAt!))}",
             ),

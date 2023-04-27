@@ -102,7 +102,7 @@ class ProductCartWidget extends StatelessWidget {
                               ),
                               SizedBox(height: 5),
                               Text(
-                                '${PriceConverter.convertPrice(cart.discountedPrice.toDouble())}',
+                                '${PriceConverter.convertPrice(cart.subTotal.toDouble())}',
                                 style: ubuntuMedium.copyWith(
                                     fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(.6)),
                               ),

@@ -566,5 +566,10 @@
   "order_delivery_date": "Order Delivery Date",
   "order_place": "Order Place",
   "order_status": "Order Status",
-  "product_order": "Product Ordered"
+  "product_order": "Product Ordered",
+  "your_product_is_failed_to_place": "Your order is failed to place",
+  "your_order_has_been_placed_successfully": "Your order has been placed successfully",
+  "order_placed_date": "Order Placed Date"
+
+
 }

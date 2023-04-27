@@ -2,7 +2,8 @@ import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 
 class CompletePage extends StatelessWidget {
-  const CompletePage({Key? key}) : super(key: key);
+final  bool isFromProduct;
+  const CompletePage({Key? key, this.isFromProduct = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class CompletePage extends StatelessWidget {
                   ? Column(
                       children: [
                         Text(
-                          'you_placed_the_booking_successfully'.tr,
+                          isFromProduct?"your_order_has_been_placed_successfully".tr: 'you_placed_the_booking_successfully'.tr,
                           style: ubuntuMedium.copyWith(
                               fontSize: Dimensions.fontSizeExtraLarge,
                               color: Colors.blue),
@@ -41,7 +42,7 @@ class CompletePage extends StatelessWidget {
                       ],
                     )
                   : Text(
-                      'your_bookings_is_failed_to_place'.tr,
+                isFromProduct ? "your_product_is_failed_to_place": 'your_bookings_is_failed_to_place'.tr,
                       style: ubuntuMedium.copyWith(
                           fontSize: Dimensions.fontSizeExtraLarge,
                           color: Colors.red),

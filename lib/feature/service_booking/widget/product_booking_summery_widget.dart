@@ -88,24 +88,24 @@ class ProductBookingSummeryWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Gaps.verticalGapOf(Dimensions.PADDING_SIZE_SMALL),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      child: Text('product_discount'.tr,
-                          style:
-                              ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
-                          overflow: TextOverflow.ellipsis)),
-                  Text(
-                    "(-) ${PriceConverter.convertPrice(_serviceDiscount)}",
-                    style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
-                  ),
-                ],
-              ),
-            ),
+            // Gaps.verticalGapOf(Dimensions.PADDING_SIZE_SMALL),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Container(
+            //           child: Text('product_discount'.tr,
+            //               style:
+            //                   ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
+            //               overflow: TextOverflow.ellipsis)),
+            //       Text(
+            //         "(-) ${PriceConverter.convertPrice(_serviceDiscount)}",
+            //         style: ubuntuRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Gaps.verticalGapOf(Dimensions.PADDING_SIZE_SMALL),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT),
@@ -256,7 +256,7 @@ class ProductInfoItem extends StatelessWidget {
                   ),
                 ),
                 Gaps.verticalGapOf(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                priceText('unit_price'.tr, bookingService.totalCost.toDouble(), context, mainAxisAlignmentStart: true),
+                priceText('unit_price'.tr, bookingService.discountAmount.toDouble(), context, mainAxisAlignmentStart: true),
                 Row(
                   children: [
                     Text(
@@ -271,9 +271,9 @@ class ProductInfoItem extends StatelessWidget {
                     )
                   ],
                 ),
-                bookingService.discountAmount> 0
-                    ? priceText('discount'.tr, bookingService.discountAmount.toDouble(), context, mainAxisAlignmentStart: true)
-                    : SizedBox(),
+                // bookingService.discountAmount> 0
+                //     ? priceText('discount'.tr, bookingService.discountAmount.toDouble(), context, mainAxisAlignmentStart: true)
+                //     : SizedBox(),
                 bookingService.campaignDiscountAmount> 0
                     ? priceText('campaign'.tr, bookingService.campaignDiscountAmount.toDouble(), context, mainAxisAlignmentStart: true)
                     : SizedBox(),

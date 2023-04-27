@@ -221,10 +221,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                             Container(child: SingleChildScrollView(child: featuresTab(service.features ?? [], service.specifications ?? []))),
                             Container(
-                                child: SingleChildScrollView(
-                                    child: ProductMediaWidget(
-                              product: service,
-                            ))),
+                              child: SingleChildScrollView(
+                                child: ProductMediaWidget(
+                                  product: service,
+                                ),
+                              ),
+                            ),
                             // Container(
                             //   child:ProductDetailsReview(rating: , reviewList: [], serviceID: '',),
                             // )
@@ -263,7 +265,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             //     }
                             //   },
                             // ),
-
                           ],
                         ),
                       ),

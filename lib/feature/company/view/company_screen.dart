@@ -56,7 +56,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
       endDrawer: ResponsiveHelper.isDesktop(context) ? MenuDrawer() : null,
       appBar: AppBar(
           title: Text(
-            "Select Companiesss",
+            "Select Companies",
             style: TextStyle(fontSize: Dimensions.fontSizeLarge),
           ),
           actions: [

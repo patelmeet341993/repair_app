@@ -22,6 +22,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => CartController(cartRepo: CartRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
   Get.lazyPut(() => ProductCartController(productCartRepo: ProductCartRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
   Get.lazyPut(() => CouponController(couponRepo: CouponRepo(apiClient: Get.find())));
+  Get.lazyPut(() => ProductCouponController(couponRepo: ProductCouponRepo(apiClient: Get.find())));
   Get.lazyPut(() => AuthController(authRepo: AuthRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
   Get.lazyPut(() => UserController(userRepo: UserRepo(apiClient: Get.find())));
   Get.lazyPut(() => WebLandingController(WebLandingRepo(apiClient: Get.find())));

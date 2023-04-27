@@ -113,6 +113,8 @@ class CartController extends GetxController implements GetxService {
     _cartList.forEach((cartModel) {
       _totalPrice = _totalPrice + cartModel.totalCost;
       _couponDiscount = _couponDiscount + cartModel.couponDiscountPrice;
+      print("total price: ${_totalPrice} cart price: ${cartModel.totalCost}");
+
     });
     if (_couponDiscount == 0) {
       Get.find<CouponController>().removeCouponData(false);

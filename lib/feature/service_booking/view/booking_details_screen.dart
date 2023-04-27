@@ -22,8 +22,8 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    Get.find<BookingDetailsTabsController>()
-        .getBookingDetails(bookingId: widget.bookingID);
+    // Get.find<BookingDetailsTabsController>()
+    //     .getBookingDetails(bookingId: widget.bookingID);
     super.initState();
   }
 

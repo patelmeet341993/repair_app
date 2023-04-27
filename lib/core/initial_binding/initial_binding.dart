@@ -38,6 +38,8 @@ class InitialBinding extends Bindings {
         () => UserController(userRepo: UserRepo(apiClient: Get.find())));
     Get.lazyPut(
         () => CouponController(couponRepo: CouponRepo(apiClient: Get.find())));
+    Get.lazyPut(
+        () => ProductCouponController(couponRepo: ProductCouponRepo(apiClient: Get.find())));
     Get.lazyPut(() => ScheduleController());
     Get.lazyPut(() => BookingDetailsTabsController(
         bookingDetailsRepo: BookingDetailsRepo(
