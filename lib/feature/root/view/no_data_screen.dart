@@ -13,6 +13,7 @@ enum NoDataType {
   BOOKING,
   SEARCH,
   SERVICE,
+  PRODUCT,
   INBOX,
   CATEGORY_SUBCATEGORY
 }

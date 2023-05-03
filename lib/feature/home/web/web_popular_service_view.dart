@@ -3,6 +3,8 @@ import 'package:repair/feature/home/web/web_campaign_view.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
 
+import '../../company/view/company_screen.dart';
+
 class WebPopularServiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -208,16 +210,21 @@ class WebPopularServiceView extends StatelessWidget {
                                           flex: 1,
                                           child: InkWell(
                                             onTap: () {
-                                              showModalBottomSheet(
-                                                  useRootNavigator: true,
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      ServiceCenterDialog(
-                                                          service: _serviceList[
-                                                              index]));
+
+                                              Get.toNamed(RouteHelper.getCompanyRoute(_serviceList[index].id ?? "",_serviceList[index].subCategoryId ?? ""),
+                                                  arguments: CompanyScreen(serviceID: _serviceList[index].id ?? "", subCategoryId:_serviceList[index].subCategoryId ?? ""));
+
+                                              // showModalBottomSheet(
+                                              //     useRootNavigator: true,
+                                              //     isScrollControlled: true,
+                                              //     backgroundColor:
+                                              //         Colors.transparent,
+                                              //     context: context,
+                                              //     builder: (context) =>
+                                              //         ServiceCenterDialog(
+                                              //             service: _serviceList[
+                                              //                 index]),
+                                              // );
                                             },
                                             child: Icon(Icons.add,
                                                 color: Get.isDarkMode

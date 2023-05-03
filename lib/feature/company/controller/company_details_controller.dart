@@ -1,14 +1,26 @@
 import 'package:repair/feature/company/repository/company_details_repo.dart';
 import 'package:get/get.dart';
 import 'package:repair/data/provider/checker_api.dart';
+import 'package:repair/feature/company/repository/company_repo.dart';
 import 'package:repair/feature/service/model/service_model.dart';
+
+import '../../../core/helper/help_me.dart';
+import '../model/company_model.dart';
 
 class CompanyDetailsController extends GetxController {
   final CompanyDetailsRepo serviceDetailsRepo;
-  CompanyDetailsController({required this.serviceDetailsRepo});
+  final CompanyRepo? companyRepo;
+  CompanyDetailsController({required this.serviceDetailsRepo, this.companyRepo});
 
   Service? _service;
   bool? _isLoading;
+  int? _offset = 1;
+  List<CompanyData>? _companyContent;
+  int? _pageSize;
+
+  List<CompanyData>? get companyContent => _companyContent;
+  int? get pageSize => _pageSize;
+  int? get offset => _offset;
   Service? get service => _service;
   bool get isLoading => _isLoading!;
 
@@ -34,6 +46,43 @@ class CompanyDetailsController extends GetxController {
     _isLoading = false;
 
     update();
+  }
+
+  Future<void> getCompanyList(int offset, bool reload, String serviceID, String subCategoryId) async {
+
+    print("in get company list");
+    _offset = offset;
+    try {
+      if (_companyContent == null || reload) {
+        print("===> subCategoryId: ${subCategoryId}");
+
+        Response response = await companyRepo!.getCompanyList(offset, subCategoryId);
+        print("===> Response: ${response.body}");
+        // print("===> Request: ${response.request}");
+        if (response.statusCode == 200) {
+          _companyContent = [];
+          // _service = Service.fromJson(response.body['content']);
+          printLog('====> _service: ${_service?.id}');
+
+          response.body['content'].forEach((element){
+            // ['data'].forEach((company) {
+            // if(element != null || element.length != 0) {
+              _companyContent!.add(CompanyData.fromJson(element[0]));
+            // }
+            // });
+          });
+          // _pageSize = response.body['content']['last_page'];
+        } else {
+          ApiChecker.checkApi(response);
+        }
+        printLog('====> company: $_companyContent $_isLoading');
+
+        _isLoading = false;
+        update();
+      }
+    } catch(e,s){
+      printLog('====> Error: $e $s');
+    }
   }
 
   Future<void> getServiceDiscount() async {

@@ -1,34 +1,30 @@
+import 'package:flutter_html/flutter_html.dart';
 import 'package:repair/components/web_shadow_wrap.dart';
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/company/model/company_model.dart';
 
 class CompanyOverview extends StatelessWidget {
   final String description;
-  const CompanyOverview({Key? key, required this.description})
-      : super(key: key);
+  CompanyData? companyData;
+
+  CompanyOverview({Key? key, required this.description, this.companyData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: WebShadowWrap(
         child: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: Dimensions.PADDING_SIZE_SMALL,
-              vertical: Dimensions.PADDING_SIZE_RADIUS),
+          padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_RADIUS),
           width: Dimensions.WEB_MAX_WIDTH,
           constraints: ResponsiveHelper.isDesktop(context)
               ? BoxConstraints(
-                  minHeight: !ResponsiveHelper.isDesktop(context) &&
-                          Get.size.height < 600
-                      ? Get.size.height
-                      : Get.size.height - 550,
+                  minHeight: !ResponsiveHelper.isDesktop(context) && Get.size.height < 600 ? Get.size.height : Get.size.height - 550,
                 )
               : null,
           child: Card(
               elevation: ResponsiveHelper.isMobile(context) ? 1 : 0,
-              color: ResponsiveHelper.isMobile(context)
-                  ? Theme.of(context).cardColor
-                  : Colors.transparent,
+              color: ResponsiveHelper.isMobile(context) ? Theme.of(context).cardColor : Colors.transparent,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,10 +37,7 @@ class CompanyOverview extends StatelessWidget {
                     child: Text(
                       "About Company:",
                       style: ubuntuRegular.copyWith(
-                          fontSize: MediaQuery.of(context).size.width < 300
-                              ? Dimensions.fontSizeLarge
-                              : Dimensions.fontSizeLarge,
-                          fontWeight: FontWeight.bold),
+                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge, fontWeight: FontWeight.bold),
                       maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -54,15 +47,22 @@ class CompanyOverview extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Hawally,",
-                      style: ubuntuRegular.copyWith(
-                          fontSize: MediaQuery.of(context).size.width < 300
-                              ? Dimensions.fontSizeLarge
-                              : Dimensions.fontSizeLarge,
-                          fontWeight: FontWeight.w400),
-                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
-                      overflow: TextOverflow.ellipsis,
+                    child: Html(
+                      data: companyData?.aboutCompany,
+                      style: {
+                        'body': Style(
+                            margin: Margins.all(0),
+                            padding: EdgeInsets.zero,
+                            fontSize: FontSize(
+                              MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge,
+                            ),
+                            maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 4,
+                            color: Theme.of(context).disabledColor
+                            // textOverflow: TextOverflow.ellipsis
+                            // overflow: TextOverflow.ellipsis,
+                            // lineHeight: LineHeight(.5),
+                            ),
+                      },
                     ),
                   ),
                   SizedBox(
@@ -71,12 +71,9 @@ class CompanyOverview extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Tel: 25865314 / 25879612",
+                      "Tel: ${companyData?.companyPhone}",
                       style: ubuntuRegular.copyWith(
-                          fontSize: MediaQuery.of(context).size.width < 300
-                              ? Dimensions.fontSizeLarge
-                              : Dimensions.fontSizeLarge,
-                          fontWeight: FontWeight.w400),
+                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge, fontWeight: FontWeight.w400),
                       maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -86,10 +83,7 @@ class CompanyOverview extends StatelessWidget {
                     child: Text(
                       "Mob: 66895236 / 66789632",
                       style: ubuntuRegular.copyWith(
-                          fontSize: MediaQuery.of(context).size.width < 300
-                              ? Dimensions.fontSizeLarge
-                              : Dimensions.fontSizeLarge,
-                          fontWeight: FontWeight.w400),
+                          fontSize: MediaQuery.of(context).size.width < 300 ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge, fontWeight: FontWeight.w400),
                       maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -97,46 +91,46 @@ class CompanyOverview extends StatelessWidget {
                   SizedBox(
                     height: 50,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Work We Done:",
-                      style: ubuntuRegular.copyWith(
-                          fontSize: MediaQuery.of(context).size.width < 300
-                              ? Dimensions.fontSizeLarge
-                              : Dimensions.fontSizeLarge,
-                          fontWeight: FontWeight.bold),
-                      maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Image.asset(
-                            Images.r1,
-                            width: 170,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Image.asset(
-                            Images.r1,
-                            width: 170,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Text(
+                  //     "Work We Done:",
+                  //     style: ubuntuRegular.copyWith(
+                  //         fontSize: MediaQuery.of(context).size.width < 300
+                  //             ? Dimensions.fontSizeLarge
+                  //             : Dimensions.fontSizeLarge,
+                  //         fontWeight: FontWeight.bold),
+                  //     maxLines: MediaQuery.of(context).size.width < 300 ? 1 : 3,
+                  //     overflow: TextOverflow.ellipsis,
+                  //   ),
+                  // ),
+                  // Row(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: [
+                  //     Container(
+                  //       padding: EdgeInsets.all(5.0),
+                  //       child: Card(
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(10.0)),
+                  //         child: Image.asset(
+                  //           Images.r1,
+                  //           width: 170,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       padding: EdgeInsets.all(5.0),
+                  //       child: Card(
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(10.0)),
+                  //         child: Image.asset(
+                  //           Images.r1,
+                  //           width: 170,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // )
                 ],
               )),
         ),

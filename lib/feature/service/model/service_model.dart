@@ -1,4 +1,5 @@
 import '../../../core/core_export.dart';
+import '../../../utils/parsing_helper.dart';
 
 class ServiceModel {
   String? responseCode;
@@ -116,6 +117,8 @@ class ServiceContent {
 
 class Service {
   String? id;
+  int? groupId;
+  int? langId;
   String? name;
   String? shortDescription;
   String? description;
@@ -139,6 +142,8 @@ class Service {
 
   Service(
       {this.id,
+        this.langId,
+        this.groupId,
         this.name,
         this.shortDescription,
         this.description,
@@ -163,6 +168,8 @@ class Service {
 
   Service.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    groupId = json['group_id'];
+    langId = json['lang_id'];
     name = json['name'];
     shortDescription = json['short_description'];
     description = json['description'];
@@ -174,7 +181,7 @@ class Service {
     orderCount = json['order_count'];
     isActive = json['is_active'];
     ratingCount = json['rating_count'];
-    avgRating = json['avg_rating'].toDouble();
+    avgRating = ParsingHelper.parseDoubleMethod(json['avg_rating']);
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     variationsAppFormat = json['variations_app_format'] != null
@@ -214,6 +221,8 @@ class Service {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['group_id'] = this.groupId;
+    data['lang_id'] = this.langId;
     data['name'] = this.name;
     data['short_description'] = this.shortDescription;
     data['description'] = this.description;
@@ -351,6 +360,7 @@ class ZoneWiseVariations {
     return data;
   }
 }
+
 class ServiceCategory {
   String? id;
   String? parentId;
@@ -434,6 +444,7 @@ class ServiceCategory {
     return data;
   }
 }
+
 class ZonesBasicInfo {
   String? id;
   String? name;
@@ -483,6 +494,7 @@ class ZonesBasicInfo {
     return data;
   }
 }
+
 class Faqs {
   String? id;
   String? question;
@@ -523,6 +535,7 @@ class Faqs {
     return data;
   }
 }
+
 class ServiceDiscount {
   int? id;
   String? discountId;

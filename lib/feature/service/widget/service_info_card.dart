@@ -2,6 +2,8 @@ import 'package:repair/components/service_center_dialog.dart';
 import 'package:repair/core/core_export.dart';
 import 'package:get/get.dart';
 
+import '../../company/view/company_screen.dart';
+
 class ServiceInformationCard extends StatelessWidget {
   final Discount? discount;
   final Service service;
@@ -236,15 +238,19 @@ class ServiceInformationCard extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  useRootNavigator: true,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) => ServiceCenterDialog(
-                                        service: service,
-                                        isFromDetails: true,
-                                      ));
+
+                              Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
+                                  arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
+
+                              // showModalBottomSheet(
+                              //     context: context,
+                              //     useRootNavigator: true,
+                              //     isScrollControlled: true,
+                              //     backgroundColor: Colors.transparent,
+                              //     builder: (context) => ServiceCenterDialog(
+                              //           service: service,
+                              //           isFromDetails: true,
+                              //         ));
                             },
                             child: Text(
                               "add".tr + ' +',

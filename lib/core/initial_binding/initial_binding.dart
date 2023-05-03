@@ -8,6 +8,9 @@ import 'package:repair/feature/html/repository/html_repo.dart';
 import 'package:repair/feature/notification/repository/notification_repo.dart';
 import 'package:repair/feature/service_booking/repo/booking_details_repo.dart';
 import 'package:repair/feature/voucher/controller/coupon_controller.dart';
+
+import '../../feature/shop/features/products/controller/product_controller.dart';
+import '../../feature/shop/features/products/repository/product_repo.dart';
 export 'package:repair/feature/cart/repository/cart_repo.dart';
 
 class InitialBinding extends Bindings {
@@ -35,6 +38,8 @@ class InitialBinding extends Bindings {
         () => UserController(userRepo: UserRepo(apiClient: Get.find())));
     Get.lazyPut(
         () => CouponController(couponRepo: CouponRepo(apiClient: Get.find())));
+    Get.lazyPut(
+        () => ProductCouponController(couponRepo: ProductCouponRepo(apiClient: Get.find())));
     Get.lazyPut(() => ScheduleController());
     Get.lazyPut(() => BookingDetailsTabsController(
         bookingDetailsRepo: BookingDetailsRepo(
@@ -44,6 +49,8 @@ class InitialBinding extends Bindings {
             SearchRepo(apiClient: Get.find(), sharedPreferences: Get.find())));
     Get.lazyPut(() =>
         ServiceController(serviceRepo: ServiceRepo(apiClient: Get.find())));
+    Get.lazyPut(() =>
+        ProductController(productRepo: ProductRepo(apiClient: Get.find())));
     Get.lazyPut(() => HtmlViewController(
         htmlRepository: HtmlRepository(apiClient: Get.find())));
     Get.lazyPut(() => ConversationController(

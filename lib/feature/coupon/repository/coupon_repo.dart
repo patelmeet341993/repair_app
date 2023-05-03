@@ -15,3 +15,17 @@ class CouponRepo {
         .postData('${AppConstants.APPLY_COUPON}', {'coupon_code': couponCode});
   }
 }
+
+class ProductCouponRepo {
+  final ApiClient apiClient;
+  ProductCouponRepo({required this.apiClient});
+
+  Future<Response> getCouponList() async {
+    return await apiClient.getData(AppConstants.COUPON_URI);
+  }
+
+  Future<Response> applyCoupon(String couponCode) async {
+    return await apiClient
+        .postData('${AppConstants.APPLY_COUPON}', {'coupon_code': couponCode});
+  }
+}

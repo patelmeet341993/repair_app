@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/feature/shop/features/products/model/product_model.dart';
+
+import '../../feature/shop/features/product_coupon/model/product_coupon_model.dart';
 
 class PriceConverter {
   static String getCurrency() {
@@ -10,7 +13,7 @@ class PriceConverter {
         currencySymbol = cc.symbol!;
       }
     });
-    return currencySymbol;
+    return "$currencySymbol ";
   }
 
   static String convertPrice(double? price,
@@ -127,6 +130,70 @@ class PriceConverter {
         discountAmount: _discountAmount,
         discountAmountType: _discountAmountType);
   }
+
+  static CouponProductDiscount productDiscountCalculation(Product product,
+      {bool addCampaign = false}) {
+    num? _discountAmount = 0;
+    String? _discountAmountType;
+    //
+    // if (product.productDiscount != null &&
+    //     product.productDiscount!.isNotEmpty) {
+    //   CouponProductDiscount _discount = _getProductDiscount(
+    //       product.productDiscount, _discountAmount, _discountAmountType);
+    //   _discountAmount = _discount.discountAmount;
+    //
+    //   _discountAmountType = _discount.discountAmountType;
+    // } else if (product.campaignDiscount != null &&
+    //     product.campaignDiscount!.isNotEmpty &&
+    //     addCampaign) {
+    //   CouponProductDiscount _discount = _getProductDiscount(
+    //       product.campaignDiscount, _discountAmount, _discountAmountType);
+    //   _discountAmount = _discount.discountAmount;
+    //   _discountAmountType = _discount.discountAmountType;
+    // } else {
+    //   if (product.category?.categoryDiscount != null &&
+    //       product.category!.categoryDiscount!.isNotEmpty) {
+    //     CouponProductDiscount _discount = _getProductDiscount(product.category?.categoryDiscount,
+    //         _discountAmount, _discountAmountType);
+    //     _discountAmount = _discount.discountAmount;
+    //     _discountAmountType = _discount.discountAmountType;
+    //   } else if (product.category?.campaignDiscount != null &&
+    //       product.category!.campaignDiscount!.isNotEmpty &&
+    //       addCampaign) {
+        CouponProductDiscount _discount = _getProductDiscount([],
+            _discountAmount, _discountAmountType);
+        _discountAmount = _discount.discountAmount;
+        _discountAmountType = _discount.discountAmountType;
+      // }
+    // }
+
+    return CouponProductDiscount(
+        discountAmount: _discountAmount,
+        discountAmountType: _discountAmountType);
+  }
+
+
+  static CouponProductDiscount _getProductDiscount(List<CouponProductDiscount>? productDiscountList,
+      num? _discountAmount, String? _discountAmountType) {
+    CouponProductDiscount? productDiscount =
+    (productDiscountList != null && productDiscountList.length > 0)
+        ? productDiscountList.first
+        : null;
+    if (productDiscount != null) {
+      num? _getDiscount = productDiscount.discountAmount;
+      if (_getDiscount! > productDiscount.maxDiscountAmount! &&
+          productDiscount.discountType == 'percent') {
+        _getDiscount = productDiscount.maxDiscountAmount!;
+      }
+      _discountAmount = (_discountAmount! + _getDiscount);
+      _discountAmountType = productDiscount.discountAmountType!;
+    }
+    return CouponProductDiscount(
+        discountAmount: _discountAmount,
+        discountAmountType: _discountAmountType);
+  }
+
+
 
   static double getDiscountToAmount(Discount discount, double amount) {
     double _amount = 0;

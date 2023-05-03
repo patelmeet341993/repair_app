@@ -12,7 +12,7 @@ class CustomButtonSmall extends StatelessWidget {
   final IconData? icon;
   CustomButtonSmall(
       {this.onPressed,
-      @required this.buttonText,
+      required this.buttonText,
       this.transparent = false,
       this.margin,
       this.width,
@@ -168,7 +168,7 @@ class CommonSubmitButton extends StatelessWidget {
   double borderRadius;
   Widget? icon;
   Widget? suffixIcon;
-  bool isSelected = true;
+  bool isSelected = false;
   CommonSubmitButton({
     required this.onTap,
     required this.text,
@@ -180,7 +180,7 @@ class CommonSubmitButton extends StatelessWidget {
     this.suffixIcon,
     this.borderRadius=5,
     this.horizontalPadding=20,
-    this.isSelected=true,
+    this.isSelected=false,
   });
 
   @override
@@ -190,7 +190,7 @@ class CommonSubmitButton extends StatelessWidget {
       child: Container(
           padding: EdgeInsets.symmetric(vertical: verticalPadding,horizontal: horizontalPadding),
           decoration: BoxDecoration(
-            color:Theme.of(context).colorScheme.primary,
+            color:isSelected ? Colors.green :  Theme.of(context).colorScheme.primary,
 
             borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           ),

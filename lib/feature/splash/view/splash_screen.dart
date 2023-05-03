@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:repair/utils/parsing_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   final String? bookingID;
+
   SplashScreen({@required this.bookingID});
 
   @override
@@ -18,15 +20,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     bool _firstTime = true;
-    _onConnectivityChanged = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+    _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (!_firstTime) {
-        bool isNotConnected = result != ConnectivityResult.wifi &&
-            result != ConnectivityResult.mobile;
-        isNotConnected
-            ? SizedBox()
-            : ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        bool isNotConnected = result != ConnectivityResult.wifi && result != ConnectivityResult.mobile;
+        isNotConnected ? SizedBox() : ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: isNotConnected ? Colors.red : Colors.green,
           duration: Duration(seconds: isNotConnected ? 6000 : 3),
@@ -58,38 +55,16 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isSuccess) {
         Timer(Duration(seconds: 1), () async {
           double _minimumVersion = 1.0;
-          if (GetPlatform.isAndroid &&
-              Get.find<SplashController>()
-                      .configModel
-                      .content!
-                      .minimumVersion !=
-                  null) {
-            _minimumVersion = double.parse(Get.find<SplashController>()
-                .configModel
-                .content!
-                .minimumVersion!
-                .minVersionForAndroid!
-                .toString());
-          } else if (GetPlatform.isIOS &&
-              Get.find<SplashController>()
-                      .configModel
-                      .content!
-                      .minimumVersion !=
-                  null) {
-            _minimumVersion = double.parse(Get.find<SplashController>()
-                .configModel
-                .content!
-                .minimumVersion!
-                .minVersionForIos!
-                .toString());
+          if (GetPlatform.isAndroid && Get.find<SplashController>().configModel.content!.minimumVersion != null) {
+            _minimumVersion = ParsingHelper.parseDoubleMethod(Get.find<SplashController>().configModel.content!.minimumVersion!.minVersionForAndroid!.toString());
+          } else if (GetPlatform.isIOS && Get.find<SplashController>().configModel.content!.minimumVersion != null) {
+            _minimumVersion = ParsingHelper.parseDoubleMethod(Get.find<SplashController>().configModel.content!.minimumVersion!.minVersionForIos!.toString());
           }
           if (AppConstants.APP_VERSION < _minimumVersion) {
-            Get.offNamed(RouteHelper.getUpdateRoute(
-                AppConstants.APP_VERSION < _minimumVersion));
+            Get.offNamed(RouteHelper.getUpdateRoute(AppConstants.APP_VERSION < _minimumVersion));
           } else {
             if (widget.bookingID != null) {
-              Get.offNamed(RouteHelper.getBookingDetailsScreen(
-                  widget.bookingID!, 'fromNotification'));
+              Get.offNamed(RouteHelper.getBookingDetailsScreen(widget.bookingID!, 'fromNotification'));
             } else {
               if (Get.find<AuthController>().isLoggedIn()) {
                 Get.find<AuthController>().updateToken();
@@ -121,10 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
         return Container(
           padding: EdgeInsets.all(25.0),
           constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(Images.backgroundImage),
-                  fit: BoxFit.cover)),
+          decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Images.backgroundImage), fit: BoxFit.cover)),
           child: Center(
             child: splashController.hasConnection
                 ? Column(
@@ -146,8 +118,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
                     ],
                   )
-                : NoInternetScreen(
-                    child: SplashScreen(bookingID: widget.bookingID)),
+                : NoInternetScreen(child: SplashScreen(bookingID: widget.bookingID)),
           ),
         );
       }),

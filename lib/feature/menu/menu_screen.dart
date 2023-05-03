@@ -33,7 +33,7 @@ class MenuScreen extends StatelessWidget {
           route: RouteHelper.getSettingRoute()),
       MenuModel(
           icon: Images.bookingsIcon,
-          title: 'bookings'.tr,
+          title: 'Orders'.tr,
           route: _isLoggedIn
               ? RouteHelper.getBookingScreenRoute(true)
               : RouteHelper.getNotLoggedScreen('my_bookings'.tr)),

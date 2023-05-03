@@ -45,7 +45,7 @@ class ServiceViewVertical extends GetView<ServiceController> {
                         ? .9
                         : .70,
                     mainAxisExtent:
-                        ResponsiveHelper.isMobile(context) ? 225 : 260,
+                        ResponsiveHelper.isMobile(context) ? 228 : 260,
                     crossAxisCount: ResponsiveHelper.isMobile(context)
                         ? 2
                         : ResponsiveHelper.isTab(context)

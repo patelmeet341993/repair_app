@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 import 'package:repair/components/ripple_button.dart';
 import 'package:repair/components/service_center_dialog.dart';
 import 'package:repair/core/core_export.dart';
+import 'package:touch_ripple_effect/touch_ripple_effect.dart';
+
+import '../../company/view/company_screen.dart';
 
 class PopularServiceView extends GetView<ServiceController> {
   @override
@@ -34,7 +37,7 @@ class PopularServiceView extends GetView<ServiceController> {
                   SizedBox(
                     height: Get.find<LocalizationController>().isLtr
                         ? ResponsiveHelper.isMobile(context)
-                            ? 250
+                            ? 245
                             : 260
                         : 260,
                     child: ListView.builder(
@@ -81,21 +84,30 @@ class PopularServiceView extends GetView<ServiceController> {
                           margin: EdgeInsets.only(
                               right: Dimensions.PADDING_SIZE_DEFAULT
                           ),
+                          decoration: BoxDecoration(
+
+                              // color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.RADIUS_SMALL),
+                              boxShadow: Get.isDarkMode ? null : cardShadow
+                          ),
+
                           child: MyRippleButton(
-                              onTap: () => Get.toNamed(
-                                RouteHelper.getServiceRoute(
-                                    service.id!),
-                              ),
+                            onTap: () => Get.toNamed(
+                              RouteHelper.getServiceRoute(
+                                  service.id!),
+                            ),
                             child: Container(
                               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_RADIUS),
-                              // padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                             width: Get.width / 2.3,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
+                                 color: Colors.white,
+
+                                  // color: Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(
                                       Dimensions.RADIUS_SMALL),
-                                  boxShadow:
-                                      Get.isDarkMode ? null : cardShadow),
+                                  //boxShadow: Get.isDarkMode ? null : cardShadow
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -202,16 +214,21 @@ class PopularServiceView extends GetView<ServiceController> {
                                             CommonSubmitButton(
                                               text: 'Book Now'.tr,
                                               fontSize: Dimensions.fontSizeSmall,
-                                              onTap:  () => showModalBottomSheet(
-                                                  context: context,
-                                                  useRootNavigator: true,
-                                                  isScrollControlled: true,
-                                                  builder: (context) =>
-                                                      ServiceCenterDialog(
-                                                        service: service,
-                                                      ),
-                                                  backgroundColor:
-                                                  Colors.transparent),
+                                              onTap:  () {
+                                                Get.toNamed(RouteHelper.getCompanyRoute(service.id ?? "",service.subCategoryId ?? ""),
+                                                    arguments: CompanyScreen(serviceID: service.id ?? "", subCategoryId:service.subCategoryId ?? ""));
+
+                                              }
+                                                  // showModalBottomSheet(
+                                                  // context: context,
+                                                  // useRootNavigator: true,
+                                                  // isScrollControlled: true,
+                                                  // builder: (context) =>
+                                                  //     ServiceCenterDialog(
+                                                  //       service: service,
+                                                  //     ),
+                                                  // backgroundColor:
+                                                  // Colors.transparent),
 
                                             ),
                                           ],

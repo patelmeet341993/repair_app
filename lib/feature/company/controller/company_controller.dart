@@ -9,7 +9,7 @@ class CompanyController extends GetxController implements GetxService {
 
   CompanyController({required this.companyRepo});
 
-  List<Data>? _companyContent;
+  List<CompanyData>? _companyContent;
 
   bool _isLoading = false;
   int? _pageSize;
@@ -18,13 +18,13 @@ class CompanyController extends GetxController implements GetxService {
   String? _searchText = '';
   int? _offset = 1;
 
-  List<Data>? get companyContent => _companyContent;
-  bool get isLoading => _isLoading;
+  List<CompanyData>? get companyContent => _companyContent;
   int? get pageSize => _pageSize;
+  int? get offset => _offset;
+  bool get isLoading => _isLoading;
   bool? get isSearching => _isSearching;
   String? get type => _type;
   String? get searchText => _searchText;
-  int? get offset => _offset;
 
   final ScrollController scrollController = ScrollController();
 
@@ -46,11 +46,11 @@ class CompanyController extends GetxController implements GetxService {
   Future<void> getCompanyList(int offset, bool reload) async {
     _offset = offset;
     if (_companyContent == null || reload) {
-      Response response = await companyRepo.getCompanyList(offset);
+      Response response = await companyRepo.getCompanyList(offset,"");
       if (response.statusCode == 200) {
         _companyContent = [];
         response.body['content']['data'].forEach((company) {
-          _companyContent!.add(Data.fromJson(company));
+          _companyContent!.add(CompanyData.fromJson(company));
         });
         _pageSize = response.body['content']['last_page'];
       } else {
